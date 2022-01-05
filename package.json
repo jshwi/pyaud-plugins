@@ -1,0 +1,60 @@
+{
+  "name": "pyaud-plugins",
+  "version": "0.1.0",
+  "description": "Plugin package for Pyaud",
+  "private": true,
+  "directories": {
+    "doc": "docs",
+    "test": "tests"
+  },
+  "scripts": {
+    "toml:sort": "poetry run toml-sort pyproject.toml --in-place --all",
+    "audit": "npm run toml:sort && poetry run pyaud audit",
+    "bump:major": "poetry run bump2version major",
+    "bump:minor": "poetry run bump2version minor",
+    "bump:patch": "poetry run bump2version patch",
+    "clean": "poetry run pyaud clean",
+    "format": "npm-run-all format:*",
+    "format:misc": "prettier -w .",
+    "format:py": "npm-run-all format:py:*",
+    "format:py:code": "poetry run pyaud format",
+    "format:py:docs": "poetry run pyaud format-docs",
+    "format:py:str": "poetry run pyaud format-str",
+    "lint": "poetry run pyaud lint",
+    "test": "poetry run pyaud tests",
+    "types": "poetry run pyaud typecheck"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jshwi/pyaud-plugins.git"
+  },
+  "keywords": [
+        "audit",
+        "black",
+        "codecov",
+        "coverage",
+        "docformatter",
+        "flynt",
+        "isort",
+        "mypy",
+        "pipfile-requirements",
+        "pylint",
+        "pytest-cov",
+        "pytest",
+        "python3.8",
+        "readmetester",
+        "sphinx",
+        "toml",
+        "vulture"
+  ],
+  "author": "Stephen Whitlock",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jshwi/pyaud-plugins/issues"
+  },
+  "homepage": "https://jshwi.github.io/pyaud-plugins/",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.5.1"
+  }
+}
