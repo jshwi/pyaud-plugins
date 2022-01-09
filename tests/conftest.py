@@ -13,6 +13,8 @@ from pathlib import Path
 import pyaud
 import pytest
 
+import pyaud_plugins
+
 from . import DEBUG, GH_EMAIL, GH_NAME, GH_TOKEN, REPO, NoColorCapsys
 
 
@@ -269,7 +271,7 @@ def fixture_init_remote() -> None:
 
     :return: Function for using this fixture.
     """
-    pyaud.git.init("--bare", pyaud.environ.GH_REMOTE, devnull=True)
+    pyaud.git.init("--bare", pyaud_plugins.environ.GH_REMOTE, devnull=True)
     pyaud.git.remote("add", "origin", "origin", devnull=True)
 
 
