@@ -1,6 +1,6 @@
 """
-plugins.modules
-===============
+pyaud_plugins.modules
+=====================
 """
 import os
 import shutil

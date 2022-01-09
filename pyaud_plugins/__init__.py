@@ -1,6 +1,6 @@
 """
-plugins
-=======
+pyaud_plugins
+=============
 """
 from . import modules
 from ._version import __version__

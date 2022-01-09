@@ -1,6 +1,6 @@
 """
-pyaud._version
-==============
+pyaud_plugins._version
+======================
 
 Contains the version of this package.
 
