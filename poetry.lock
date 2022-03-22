@@ -286,6 +286,17 @@ astor = "*"
 tomli = ">=1.1.0"
 
 [[package]]
+name = "gitspy"
+version = "0.1.1"
+description = "Intuitive Git for Python"
+category = "dev"
+optional = false
+python-versions = ">=3.8,<4.0"
+
+[package.dependencies]
+spall = ">=0.1.0,<0.2.0"
+
+[[package]]
 name = "idna"
 version = "3.3"
 description = "Internationalized Domain Names in Applications (IDNA)"
@@ -410,6 +421,17 @@ description = "A fast and thorough lazy object proxy."
 category = "main"
 optional = false
 python-versions = ">=3.6"
+
+[[package]]
+name = "lsfiles"
+version = "0.1.1"
+description = "Path object VC index"
+category = "dev"
+optional = false
+python-versions = ">=3.8,<4.0"
+
+[package.dependencies]
+gitspy = ">=0.1.0,<0.2.0"
 
 [[package]]
 name = "m2r"
@@ -634,7 +656,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
 name = "pyaud"
-version = "3.8.0"
+version = "3.9.0"
 description = "Framework for writing Python package audits"
 category = "dev"
 optional = false
@@ -642,28 +664,15 @@ python-versions = ">=3.8,<4.0"
 
 [package.dependencies]
 appdirs = ">=1.4.4,<2.0.0"
-black = ">=21.12b0,<22.0"
-codecov = ">=2.1.12,<3.0.0"
-coverage = ">=6.2,<7.0"
-docformatter = ">=1.4,<2.0"
 environs = ">=9.4.0,<10.0.0"
-flynt = ">=0.75,<0.76"
-isort = ">=5.10.1,<6.0.0"
+gitspy = ">=0.1.0,<0.2.0"
+lsfiles = ">=0.1.1,<0.2.0"
 m2r = ">=0.2.1,<0.3.0"
 mistune = "<=0.8.4"
-mypy = ">=0.930,<0.931"
 object-colors = ">=2.0.1,<3.0.0"
-pipfile-requirements = ">=0.3.0,<0.4.0"
-pylint = ">=2.12.2,<3.0.0"
-pytest = ">=6.2.5,<7.0.0"
-pytest-cov = ">=3.0.0,<4.0.0"
-python-dotenv = ">=0.19.2,<0.20.0"
-readmetester = ">=1.0.1,<2.0.0"
-Sphinx = ">=4.3.2,<5.0.0"
-sphinxcontrib-fulltoc = ">=1.2.0,<2.0.0"
-sphinxcontrib-programoutput = ">=0.17,<0.18"
+pyaud-plugins = ">=0.2.0,<0.3.0"
+spall = ">=0.1.0,<0.2.0"
 toml = ">=0.10.2,<0.11.0"
-vulture = ">=2.3,<3.0"
 
 [[package]]
 name = "pygments"
@@ -860,6 +869,14 @@ description = "This package provides 29 stemmers for 28 languages generated from
 category = "main"
 optional = false
 python-versions = "*"
+
+[[package]]
+name = "spall"
+version = "0.1.1"
+description = "Object-oriented commandline"
+category = "dev"
+optional = false
+python-versions = ">=3.8,<4.0"
 
 [[package]]
 name = "sphinx"
@@ -1125,7 +1142,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "d8c480bebed8cb677362a6ef2722b70f6b86ecc5fe5228519777430a525a4295"
+content-hash = "627509d95fdfd87e5693f9960c3a20e297676a97bfb1c0f7f11f0ffbb8899ead"
 
 [metadata.files]
 alabaster = [
@@ -1271,6 +1288,10 @@ flynt = [
     {file = "flynt-0.75-py3-none-any.whl", hash = "sha256:2211967c935d5317b8f6811a562b536a934a6c910db1b1738ad660e9fce8ca7a"},
     {file = "flynt-0.75.tar.gz", hash = "sha256:b955d89621531bec85291ecf966cda9d5db519c8f4e28fff7d967c17b06ccaef"},
 ]
+gitspy = [
+    {file = "gitspy-0.1.1-py3-none-any.whl", hash = "sha256:7f506b18667a1655b03978bf354301d918a0d91a6d021e2c0f367b3d31944199"},
+    {file = "gitspy-0.1.1.tar.gz", hash = "sha256:b91fdb56ee9e0ca16a0243f38cb99fc40473562680f91e7a2be1aac736f89fae"},
+]
 idna = [
     {file = "idna-3.3-py3-none-any.whl", hash = "sha256:84d9dd047ffa80596e0f246e2eab0b391788b0503584e8945f2368256d2735ff"},
     {file = "idna-3.3.tar.gz", hash = "sha256:9d643ff0a55b762d5cdb124b8eaa99c66322e2157b69160bc32796e824360e6d"},
@@ -1341,6 +1362,10 @@ lazy-object-proxy = [
     {file = "lazy_object_proxy-1.7.1-cp39-cp39-win32.whl", hash = "sha256:2130db8ed69a48a3440103d4a520b89d8a9405f1b06e2cc81640509e8bf6548f"},
     {file = "lazy_object_proxy-1.7.1-cp39-cp39-win_amd64.whl", hash = "sha256:677ea950bef409b47e51e733283544ac3d660b709cfce7b187f5ace137960d61"},
     {file = "lazy_object_proxy-1.7.1-pp37.pp38-none-any.whl", hash = "sha256:d66906d5785da8e0be7360912e99c9188b70f52c422f9fc18223347235691a84"},
+]
+lsfiles = [
+    {file = "lsfiles-0.1.1-py3-none-any.whl", hash = "sha256:03eabd2c1546205a9f580e3918f8f2eeb079a39a76789e7affe269e97c7eda6e"},
+    {file = "lsfiles-0.1.1.tar.gz", hash = "sha256:3be1895ddc5e0f2baee473cf1403392ee6eaca414b83ee6bfc5bc6a58b2fb4ec"},
 ]
 m2r = [
     {file = "m2r-0.2.1.tar.gz", hash = "sha256:bf90bad66cda1164b17e5ba4a037806d2443f2a4d5ddc9f6a5554a0322aaed99"},
@@ -1511,8 +1536,8 @@ py = [
     {file = "py-1.11.0.tar.gz", hash = "sha256:51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719"},
 ]
 pyaud = [
-    {file = "pyaud-3.8.0-py3-none-any.whl", hash = "sha256:252125bf03d5d0570f0269e892b925c97898ee3e5de9299a26084f62cbcbaf16"},
-    {file = "pyaud-3.8.0.tar.gz", hash = "sha256:199cc9fba6757008f5be8f538add8000c8fff0d57c1836fc210873b8265cd724"},
+    {file = "pyaud-3.9.0-py3-none-any.whl", hash = "sha256:4f8a14434a0cd09c965c33e3695f4e92f0663bdf2500f98486390e967a4db0e6"},
+    {file = "pyaud-3.9.0.tar.gz", hash = "sha256:8495f9089d4e3f88829516c399a70ba2c8892bc03ba2299dbd9a99bdab431294"},
 ]
 pygments = [
     {file = "Pygments-2.8.1-py3-none-any.whl", hash = "sha256:534ef71d539ae97d4c3a4cf7d6f110f214b0e687e92f9cb9d2a3b0d3101289c8"},
@@ -1573,6 +1598,10 @@ six = [
 snowballstemmer = [
     {file = "snowballstemmer-2.2.0-py2.py3-none-any.whl", hash = "sha256:c8e1716e83cc398ae16824e5572ae04e0d9fc2c6b985fb0f900f5f0c96ecba1a"},
     {file = "snowballstemmer-2.2.0.tar.gz", hash = "sha256:09b16deb8547d3412ad7b590689584cd0fe25ec8db3be37788be3810cbf19cb1"},
+]
+spall = [
+    {file = "spall-0.1.1-py3-none-any.whl", hash = "sha256:997c8fa6fd3135466c8de53182c68ef32dfbf1e2cfc882f3a816057b21d51176"},
+    {file = "spall-0.1.1.tar.gz", hash = "sha256:72a06d24a3dc333fd66212f2b5247a5d813baaa4bacfd4fed69a324788475cf1"},
 ]
 sphinx = [
     {file = "Sphinx-4.4.0-py3-none-any.whl", hash = "sha256:5da895959511473857b6d0200f56865ed62c31e8f82dd338063b84ec022701fe"},
