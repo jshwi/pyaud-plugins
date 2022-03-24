@@ -271,7 +271,7 @@ python-versions = "*"
 
 [[package]]
 name = "flynt"
-version = "0.75"
+version = "0.76"
 description = "CLI tool to convert a python project's %-formatted strings to f-strings."
 category = "main"
 optional = false
@@ -1141,7 +1141,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "bf23f11f77b5af7ba54f3c7982a5a959c2f4afdb53903c80df9aa07b70d302b6"
+content-hash = "05dffb038678181f41a3044ed0ca36021b199e1855d2bdd772289f0aded923db"
 
 [metadata.files]
 alabaster = [
@@ -1305,8 +1305,8 @@ executing = [
     {file = "executing-0.8.3.tar.gz", hash = "sha256:c6554e21c6b060590a6d3be4b82fb78f8f0194d809de5ea7df1c093763311501"},
 ]
 flynt = [
-    {file = "flynt-0.75-py3-none-any.whl", hash = "sha256:2211967c935d5317b8f6811a562b536a934a6c910db1b1738ad660e9fce8ca7a"},
-    {file = "flynt-0.75.tar.gz", hash = "sha256:b955d89621531bec85291ecf966cda9d5db519c8f4e28fff7d967c17b06ccaef"},
+    {file = "flynt-0.76-py3-none-any.whl", hash = "sha256:fc122c5f589b0c4d019d7d33597f4925fd886a8e6fb3cbadb918e4baa3661687"},
+    {file = "flynt-0.76.tar.gz", hash = "sha256:7a99c5a550ea9e8c21203f6999ed8ce69cbad7bc8465268469777cf06413193a"},
 ]
 gitspy = [
     {file = "gitspy-0.1.1-py3-none-any.whl", hash = "sha256:7f506b18667a1655b03978bf354301d918a0d91a6d021e2c0f367b3d31944199"},
