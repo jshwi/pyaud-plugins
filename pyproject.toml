@@ -27,7 +27,7 @@ description = "Plugin package for Pyaud"
 license = "MIT"
 name = "pyaud-plugins"
 readme = 'README.rst'
-version = "0.2.0"
+version = "0.3.0"
 
 [tool.poetry.dependencies]
 Sphinx = "^4.3.2"
