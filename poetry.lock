@@ -939,7 +939,7 @@ md = ["cmarkgfm (>=0.8.0)"]
 
 [[package]]
 name = "readmetester"
-version = "2.0.0"
+version = "2.1.0"
 description = "Parse, test, and assert RST code-blocks"
 category = "main"
 optional = false
@@ -949,6 +949,7 @@ python-versions = ">=3.8,<4.0"
 object-colors = ">=2.0.0,<3.0.0"
 Pygments = ">=2.8.1,<3.0.0"
 pyproject-parser = ">=0.4.3,<0.5.0"
+restructuredtext-lint = ">=1.4.0,<2.0.0"
 
 [[package]]
 name = "requests"
@@ -967,6 +968,17 @@ urllib3 = ">=1.21.1,<1.27"
 [package.extras]
 socks = ["PySocks (>=1.5.6,!=1.5.7)", "win-inet-pton"]
 use_chardet_on_py3 = ["chardet (>=3.0.2,<5)"]
+
+[[package]]
+name = "restructuredtext-lint"
+version = "1.4.0"
+description = "reStructuredText linter"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+docutils = ">=0.11,<1.0"
 
 [[package]]
 name = "restview"
@@ -1751,12 +1763,15 @@ readme-renderer = [
     {file = "readme_renderer-34.0.tar.gz", hash = "sha256:dfb4d17f21706d145f7473e0b61ca245ba58e810cf9b2209a48239677f82e5b0"},
 ]
 readmetester = [
-    {file = "readmetester-2.0.0-py3-none-any.whl", hash = "sha256:36075c0bac8743fb37abf0263374d5fba28220d3dd76e4c8b6c3a202a5dbcefa"},
-    {file = "readmetester-2.0.0.tar.gz", hash = "sha256:b677fa600fadeb703635bc2bfca7ab1bdbd4188bf2dfba21149b7ea4c0b9b55b"},
+    {file = "readmetester-2.1.0-py3-none-any.whl", hash = "sha256:6b55c44fa54b09184f555785e724d8f0fd5dbc8aeb59f747b573940bdea01fc0"},
+    {file = "readmetester-2.1.0.tar.gz", hash = "sha256:cd17f99ae8c4dc5248639e4ac6a5417175a00853ade216463405f4b4e5c9b51e"},
 ]
 requests = [
     {file = "requests-2.27.1-py2.py3-none-any.whl", hash = "sha256:f22fa1e554c9ddfd16e6e41ac79759e17be9e492b3587efa038054674760e72d"},
     {file = "requests-2.27.1.tar.gz", hash = "sha256:68d7c56fd5a8999887728ef304a6d12edc7be74f1cfa47714fc8b414525c9a61"},
+]
+restructuredtext-lint = [
+    {file = "restructuredtext_lint-1.4.0.tar.gz", hash = "sha256:1b235c0c922341ab6c530390892eb9e92f90b9b75046063e047cacfb0f050c45"},
 ]
 restview = [
     {file = "restview-3.0.0-py2.py3-none-any.whl", hash = "sha256:9cd358c3ddf7ef82174d90a64e82e8c1b82630269cb750c166ef94bd73cf3162"},
