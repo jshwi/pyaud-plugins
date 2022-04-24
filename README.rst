@@ -1,31 +1,32 @@
 pyaud-plugins
 =============
+.. image:: https://img.shields.io/badge/License-MIT-yellow.svg
+    :target: https://opensource.org/licenses/MIT
+    :alt: License
+.. image:: https://img.shields.io/pypi/v/pyaud-plugins
+    :target: https://img.shields.io/pypi/v/pyaud-plugins
+    :alt: pypi
 .. image:: https://github.com/jshwi/pyaud-plugins/actions/workflows/ci.yml/badge.svg
     :target: https://github.com/jshwi/pyaud-plugins/actions/workflows/ci.yml
-    :alt: ci
+    :alt: CI
 .. image:: https://github.com/jshwi/pyaud-plugins/actions/workflows/codeql-analysis.yml/badge.svg
     :target: https://github.com/jshwi/pyaud-plugins/actions/workflows/codeql-analysis.yml
     :alt: CodeQL
+.. image:: https://codecov.io/gh/jshwi/pyaud-plugins/branch/master/graph/badge.svg
+    :target: https://codecov.io/gh/jshwi/pyaud-plugins
+    :alt: codecov.io
 .. image:: https://readthedocs.org/projects/pyaud-plugins/badge/?version=latest
     :target: https://pyaud-plugins.readthedocs.io/en/latest/?badge=latest
     :alt: readthedocs.org
 .. image:: https://img.shields.io/badge/python-3.8-blue.svg
     :target: https://www.python.org/downloads/release/python-380
     :alt: python3.8
-.. image:: https://img.shields.io/pypi/v/pyaud-plugins
-    :target: https://img.shields.io/pypi/v/pyaud-plugins
-    :alt: pypi
-.. image:: https://codecov.io/gh/jshwi/pyaud-plugins/branch/master/graph/badge.svg
-    :target: https://codecov.io/gh/jshwi/pyaud-plugins
-    :alt: codecov.io
-.. image:: https://img.shields.io/badge/License-MIT-blue.svg
-    :target: https://lbesson.mit-license.org/
-    :alt: mit
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
     :alt: black
 
-Plugins for `pyaud`
+Plugin package for Pyaud
+------------------------
 
 Dependencies
 ------------
@@ -64,7 +65,7 @@ This package contains the following plugins on running `pyaud modules`
     deploy-docs     -- Deploy package documentation to `gh-pages`
     docs            -- Compile package documentation with `Sphinx`
     files           -- Audit project data files
-    format          -- Audit code against `Black`
+    format          -- Audit code with `Black`
     format-docs     -- Format docstrings with `docformatter`
     format-str      -- Format f-strings with `flynt`
     imports         -- Audit imports with `isort`
