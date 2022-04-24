@@ -21,7 +21,7 @@ colors = Color()
 colors.populate_colors()
 
 
-@pyaud.plugins.register(name="tests")
+@pyaud.plugins.register()
 class Tests(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
     """Run the package unit-tests with ``pytest``."""
 
@@ -57,7 +57,7 @@ class Tests(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
         return 0
 
 
-@pyaud.plugins.register(name="coverage")
+@pyaud.plugins.register()
 class Coverage(Tests):  # pylint: disable=too-few-public-methods
     """Run package unit-tests with ``pytest`` and ``coverage``."""
 
@@ -80,7 +80,7 @@ class Coverage(Tests):  # pylint: disable=too-few-public-methods
         return returncode
 
 
-@pyaud.plugins.register(name="deploy")
+@pyaud.plugins.register()
 class Deploy(  # pylint: disable=too-few-public-methods
     pyaud.plugins.Parametrize
 ):
@@ -90,7 +90,7 @@ class Deploy(  # pylint: disable=too-few-public-methods
         return ["deploy-cov", "deploy-docs"]
 
 
-@pyaud.plugins.register(name="deploy-cov")
+@pyaud.plugins.register()
 class DeployCov(  # pylint: disable=too-few-public-methods
     pyaud.plugins.Action
 ):
@@ -124,7 +124,7 @@ class DeployCov(  # pylint: disable=too-few-public-methods
             print("No coverage report found")
 
 
-@pyaud.plugins.register(name="deploy-docs")
+@pyaud.plugins.register()
 class DeployDocs(
     pyaud.plugins.Action
 ):  # pylint: disable=too-few-public-methods
@@ -220,7 +220,7 @@ class DeployDocs(
             print(self._pushing_skipped)
 
 
-@pyaud.plugins.register(name="docs")
+@pyaud.plugins.register()
 class Docs(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
     """Compile package documentation with ``Sphinx``.
 
@@ -267,7 +267,7 @@ class Docs(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
                 print("No docs found")
 
 
-@pyaud.plugins.register(name="files")
+@pyaud.plugins.register()
 class Files(
     pyaud.plugins.Parametrize
 ):  # pylint: disable=too-few-public-methods
@@ -282,7 +282,7 @@ class Files(
         return ["requirements", "toc", "whitelist"]
 
 
-@pyaud.plugins.register(name="format")
+@pyaud.plugins.register()
 class Format(pyaud.plugins.Fix):
     """Audit code with `Black`."""
 
@@ -304,7 +304,7 @@ class Format(pyaud.plugins.Fix):
         )
 
 
-@pyaud.plugins.register(name="lint")
+@pyaud.plugins.register()
 class Lint(pyaud.plugins.Audit):
     """Lint code with ``pylint``."""
 
@@ -325,7 +325,7 @@ class Lint(pyaud.plugins.Audit):
         )
 
 
-@pyaud.plugins.register(name="requirements")
+@pyaud.plugins.register()
 class Requirements(pyaud.plugins.Write):
     """Audit requirements.txt with Pipfile.lock."""
 
@@ -364,7 +364,7 @@ class Requirements(pyaud.plugins.Write):
                 fout.write(f"{content.split(';')[0]}\n")
 
 
-@pyaud.plugins.register(name="toc")
+@pyaud.plugins.register()
 class Toc(pyaud.plugins.Write):
     """Audit docs/<NAME>.rst toc-file."""
 
@@ -434,8 +434,8 @@ class Toc(pyaud.plugins.Write):
                 os.remove(module)
 
 
-@pyaud.plugins.register(name="typecheck")
-class TypeCheck(pyaud.plugins.Audit):
+@pyaud.plugins.register()
+class Typecheck(pyaud.plugins.Audit):
     """Typecheck code with ``mypy``.
 
     Check that there are no errors between the files and their stub-
@@ -503,7 +503,7 @@ class TypeCheck(pyaud.plugins.Audit):
         return returncode
 
 
-@pyaud.plugins.register(name="unused")
+@pyaud.plugins.register()
 class Unused(pyaud.plugins.Fix):
     """Audit unused code with ``vulture``.
 
@@ -529,7 +529,7 @@ class Unused(pyaud.plugins.Fix):
         return self.audit(*args, **kwargs)
 
 
-@pyaud.plugins.register(name="whitelist")
+@pyaud.plugins.register()
 class Whitelist(pyaud.plugins.Write):
     """Check whitelist.py file with ``vulture``.
 
@@ -564,7 +564,7 @@ class Whitelist(pyaud.plugins.Write):
             fout.write("\n".join(stdout) + "\n")
 
 
-@pyaud.plugins.register(name="imports")
+@pyaud.plugins.register()
 class Imports(pyaud.plugins.FixFile):
     """Audit imports with ``isort``.
 
@@ -639,7 +639,7 @@ class Imports(pyaud.plugins.FixFile):
             fout.write(self.result)
 
 
-@pyaud.plugins.register(name="readme")
+@pyaud.plugins.register()
 class Readme(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
     """Parse, test, and assert RST code-blocks."""
 
@@ -662,8 +662,8 @@ class Readme(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
             print("No README.rst found in project root")
 
 
-@pyaud.plugins.register(name="format-str")
-class FormatFString(pyaud.plugins.Fix):
+@pyaud.plugins.register()
+class FormatStr(pyaud.plugins.Fix):
     """Format f-strings with ``flynt``."""
 
     flynt = "flynt"
@@ -690,7 +690,7 @@ class FormatFString(pyaud.plugins.Fix):
         )
 
 
-@pyaud.plugins.register(name="format-docs")
+@pyaud.plugins.register()
 class FormatDocs(pyaud.plugins.Fix):
     """Format docstrings with ``docformatter``."""
 
