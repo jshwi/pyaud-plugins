@@ -34,23 +34,11 @@
     "url": "git+https://github.com/jshwi/pyaud-plugins.git"
   },
   "keywords": [
+    "pyaud",
+    "plugins",
     "audit",
-    "black",
-    "codecov",
-    "coverage",
-    "docformatter",
-    "flynt",
-    "isort",
-    "mypy",
-    "pipfile-requirements",
-    "pylint",
-    "pytest-cov",
-    "pytest",
-    "python3.8",
-    "readmetester",
-    "sphinx",
-    "toml",
-    "vulture"
+    "ci",
+    "python"
   ],
   "author": "Stephen Whitlock",
   "license": "MIT",
