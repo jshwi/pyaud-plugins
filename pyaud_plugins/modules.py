@@ -19,7 +19,7 @@ colors.populate_colors()
 
 
 @pyaud.plugins.register()
-class Tests(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
+class Tests(pyaud.plugins.Action):
     """Run the package unit-tests with ``pytest``."""
 
     pytest = "pytest"
@@ -54,7 +54,7 @@ class Tests(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
 
 
 @pyaud.plugins.register()
-class Coverage(Tests):  # pylint: disable=too-few-public-methods
+class Coverage(Tests):
     """Run package unit-tests with ``pytest`` and ``coverage``."""
 
     coverage = "coverage"
@@ -77,9 +77,7 @@ class Coverage(Tests):  # pylint: disable=too-few-public-methods
 
 
 @pyaud.plugins.register()
-class Deploy(  # pylint: disable=too-few-public-methods
-    pyaud.plugins.Parametrize
-):
+class Deploy(pyaud.plugins.Parametrize):
     """Deploy package documentation and test coverage."""
 
     def plugins(self) -> t.List[str]:
@@ -87,9 +85,7 @@ class Deploy(  # pylint: disable=too-few-public-methods
 
 
 @pyaud.plugins.register()
-class DeployCov(  # pylint: disable=too-few-public-methods
-    pyaud.plugins.Action
-):
+class DeployCov(pyaud.plugins.Action):
     """Upload coverage data to ``Codecov``.
 
     If no file exists otherwise announce that no file has been created
@@ -122,9 +118,7 @@ class DeployCov(  # pylint: disable=too-few-public-methods
 
 
 @pyaud.plugins.register()
-class DeployDocs(
-    pyaud.plugins.Action
-):  # pylint: disable=too-few-public-methods
+class DeployDocs(pyaud.plugins.Action):  # pyli
     """Deploy package documentation to ``gh-pages``.
 
     Check that the branch is being pushed as master (or other branch for
@@ -221,7 +215,7 @@ class DeployDocs(
 
 
 @pyaud.plugins.register()
-class Docs(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
+class Docs(pyaud.plugins.Action):
     """Compile package documentation with ``Sphinx``.
 
     This is so the hyperlink isn't exactly the same as the package
@@ -266,9 +260,7 @@ class Docs(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
 
 
 @pyaud.plugins.register()
-class Files(
-    pyaud.plugins.Parametrize
-):  # pylint: disable=too-few-public-methods
+class Files(pyaud.plugins.Parametrize):
     """Audit project data files.
 
     Make docs/<APPNAME>.rst, whitelist.py, and requirements.txt if none
@@ -606,13 +598,9 @@ class Imports(pyaud.plugins.FixFile):
             self.content = fin.read()
 
         # write original file's contents to temporary file
-        tmp = (
-            tempfile.NamedTemporaryFile(  # pylint: disable=consider-using-with
-                delete=False
-            )
-        )
-        with open(tmp.name, "w", encoding=environ.ENCODING) as fout:
-            fout.write(self.content)
+        with tempfile.NamedTemporaryFile(delete=False) as tmp:
+            with open(tmp.name, "w", encoding=environ.ENCODING) as fout:
+                fout.write(self.content)
 
         # run both ``isort`` and ``black`` on the temporary file,
         # leaving the original file untouched
@@ -646,7 +634,7 @@ class Imports(pyaud.plugins.FixFile):
 
 
 @pyaud.plugins.register()
-class Readme(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
+class Readme(pyaud.plugins.Action):
     """Parse, test, and assert RST code-blocks."""
 
     readmetester = "readmetester"

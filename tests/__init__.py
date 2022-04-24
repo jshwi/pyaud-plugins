@@ -99,9 +99,7 @@ class NoColorCapsys:
         :return: A tuple (just like the capsys) containing stdout in the
             first index and stderr in the second
         """
-        return tuple(  # pylint: disable=consider-using-generator
-            [self._regex(r) for r in self.capsys.readouterr()]
-        )
+        return tuple(self._regex(r) for r in self.capsys.readouterr())
 
     def stdout(self) -> str:
         """Return stdout without referencing the tuple indices.

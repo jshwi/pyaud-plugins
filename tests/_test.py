@@ -3,7 +3,7 @@ tests._test
 ===========
 """
 # pylint: disable=too-many-lines,too-many-arguments,cell-var-from-loop
-# pylint: disable=too-few-public-methods,unused-variable,protected-access
+# pylint: disable=too-few-public-methods,protected-access
 import datetime
 import os
 import typing as t
@@ -132,9 +132,7 @@ def test_call_coverage_xml(
             print(*args)
             return 0
 
-    class _Tests(  # pylint: disable=too-few-public-methods
-        pyaud_plugins.modules.Tests
-    ):
+    class _Tests(pyaud_plugins.modules.Tests):
         @property
         def is_tests(self) -> bool:
             return is_tests
@@ -1155,13 +1153,13 @@ def test_no_exe_provided(monkeypatch: pytest.MonkeyPatch) -> None:
     pyaud.files.append(Path.cwd() / FILES)
 
     # noinspection PyUnusedLocal
-    @pyaud.plugins.register(name=unique)
     class Plugin(pyaud.plugins.Audit):
         """Nothing to do."""
 
         def audit(self, *args: str, **kwargs: bool) -> int:
             """Nothing to do."""
 
+    pyaud.plugins.register(name=unique)(Plugin)
     assert pyaud.plugins.get(unique).exe == []
 
 

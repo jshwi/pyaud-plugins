@@ -2,7 +2,6 @@
 tests.conftest
 ==============
 """
-# pylint: disable=too-many-arguments,too-many-locals,too-few-public-methods
 # pylint: disable=protected-access,no-member,too-many-statements
 import copy
 import typing as t
@@ -195,13 +194,8 @@ def fixture_main(monkeypatch: pytest.MonkeyPatch) -> MockMainType:
 
     def _main(*args: str) -> None:
         """Run main with custom args."""
-        # noinspection PyProtectedMember
-        # pylint: disable=protected-access,import-outside-toplevel
-        # noinspection PyPackageRequirements
-        from pyaud._main import main
-
         monkeypatch.setattr("sys.argv", [pyaud.__name__, *args])
-        main()
+        pyaud.main()
 
     return _main
 
@@ -262,9 +256,7 @@ def fixture_patch_sp_output(patch_sp_call: MockSPCallType) -> MockSPOutputType:
         def _call(self, *_: str, **__: bool) -> int:
             """Mock call to do nothing except send the expected stdout
             to self."""
-            self._stdout.append(  # pylint: disable=protected-access
-                _stdout.pop()
-            )
+            self._stdout.append(_stdout.pop())
             return 0
 
         patch_sp_call(_call)
