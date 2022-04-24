@@ -49,7 +49,7 @@ class Tests(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
         ]
         return rglob != []
 
-    def action(self, *args: t.Any, **kwargs: bool) -> t.Any:
+    def action(self, *args: str, **kwargs: bool) -> int:
         if self.is_tests:
             return self.subprocess[self.pytest].call(*args, **kwargs)
 
@@ -67,7 +67,7 @@ class Coverage(Tests):  # pylint: disable=too-few-public-methods
     def exe(self) -> t.List[str]:
         return super().exe + [self.coverage]
 
-    def action(self, *args: t.Any, **kwargs: bool) -> t.Any:
+    def action(self, *args: str, **kwargs: bool) -> int:
         returncode = super().action(
             *[f"--cov={e}" for e in pyaud.files.reduce()], **kwargs
         )
@@ -110,7 +110,7 @@ class DeployCov(  # pylint: disable=too-few-public-methods
     def exe(self) -> t.List[str]:
         return [self.codecov]
 
-    def action(self, *args: t.Any, **kwargs: bool) -> t.Any:
+    def action(self, *args: str, **kwargs: bool) -> int:
         coverage_xml = Path.cwd() / environ.COVERAGE_XML
         self.logger().debug("looking for %s", coverage_xml)
         if coverage_xml.is_file():
@@ -122,6 +122,8 @@ class DeployCov(  # pylint: disable=too-few-public-methods
                 print("CODECOV_TOKEN not set")
         else:
             print("No coverage report found")
+
+        return 0
 
 
 @pyaud.plugins.register()
@@ -197,7 +199,7 @@ class DeployDocs(
 
         pyaud.git.branch("-D", "gh-pages", devnull=True)
 
-    def action(self, *args: t.Any, **kwargs: bool) -> t.Any:
+    def action(self, *args: str, **kwargs: bool) -> int:
         if pyaud.branch() == "master":
             git_credentials = ["GH_NAME", "GH_EMAIL", "GH_TOKEN"]
             null_vals = [
@@ -219,6 +221,8 @@ class DeployDocs(
             colors.green.print("Documentation not for master")
             print(self._pushing_skipped)
 
+        return 0
+
 
 @pyaud.plugins.register()
 class Docs(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
@@ -238,7 +242,7 @@ class Docs(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
     def exe(self) -> t.List[str]:
         return [self.sphinx_build]
 
-    def action(self, *args: t.Any, **kwargs: bool) -> t.Any:
+    def action(self, *args: str, **kwargs: bool) -> int:
         pyaud.plugins.get("toc")(*args, **kwargs)
         readme_rst = "README"
         underline = len(readme_rst) * "="
@@ -265,6 +269,8 @@ class Docs(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
                     colors.green.bold.print("Build successful")
             else:
                 print("No docs found")
+
+        return 0
 
 
 @pyaud.plugins.register()
@@ -293,12 +299,12 @@ class Format(pyaud.plugins.Fix):
     def exe(self) -> t.List[str]:
         return [self.black]
 
-    def audit(self, *args: t.Any, **kwargs: bool) -> t.Any:
+    def audit(self, *args: str, **kwargs: bool) -> int:
         return self.subprocess[self.black].call(
             "--check", *pyaud.files.args(), *args, **kwargs
         )
 
-    def fix(self, *args: t.Any, **kwargs: bool) -> t.Any:
+    def fix(self, *args: str, **kwargs: bool) -> int:
         return self.subprocess[self.black].call(
             *args, *pyaud.files.args(), **kwargs
         )
@@ -319,7 +325,7 @@ class Lint(pyaud.plugins.Audit):
     def env(self) -> t.Dict[str, str]:
         return {"PYCHARM_HOSTED": "True"}
 
-    def audit(self, *args: t.Any, **kwargs: bool) -> t.Any:
+    def audit(self, *args: str, **kwargs: bool) -> int:
         return self.subprocess[self.pylint].call(
             "--output-format=colorized", *args, *pyaud.files.args(), **kwargs
         )
@@ -342,7 +348,7 @@ class Requirements(pyaud.plugins.Write):
     def required(self) -> Path:
         return Path.cwd() / "Pipfile.lock"
 
-    def write(self, *args: t.Any, **kwargs: bool) -> t.Any:
+    def write(self, *args: str, **kwargs: bool) -> int:
         # get the stdout for both production and development packages
 
         # get the stdout for both production and development packages
@@ -362,6 +368,8 @@ class Requirements(pyaud.plugins.Write):
         with open(self.path, "w", encoding="utf-8") as fout:
             for content in stdout:
                 fout.write(f"{content.split(';')[0]}\n")
+
+        return 0
 
 
 @pyaud.plugins.register()
@@ -387,7 +395,7 @@ class Toc(pyaud.plugins.Write):
             with open(path, encoding="utf-8") as fin:
                 contents.extend(fin.read().splitlines())
 
-    def write(self, *args: t.Any, **kwargs: bool) -> t.Any:
+    def write(self, *args: str, **kwargs: bool) -> int:
         toc_attrs = "   :members:\n   :undoc-members:\n   :show-inheritance:"
         package = pyaud.package()
         docspath = Path.cwd() / DOCS
@@ -433,6 +441,8 @@ class Toc(pyaud.plugins.Write):
             if module.is_file():
                 os.remove(module)
 
+        return 0
+
 
 @pyaud.plugins.register()
 class Typecheck(pyaud.plugins.Audit):
@@ -449,7 +459,7 @@ class Typecheck(pyaud.plugins.Audit):
     def exe(self) -> t.List[str]:
         return [self.mypy]
 
-    def audit(self, *args: t.Any, **kwargs: bool) -> t.Any:
+    def audit(self, *args: str, **kwargs: bool) -> int:
         # save the value of ``suppress`` if it exists: default to False
         suppress = kwargs.get("suppress", False)
 
@@ -516,7 +526,7 @@ class Unused(pyaud.plugins.Fix):
     def exe(self) -> t.List[str]:
         return [self.vulture]
 
-    def audit(self, *args: t.Any, **kwargs: bool) -> t.Any:
+    def audit(self, *args: str, **kwargs: bool) -> int:
         whitelist = Path.cwd() / environ.WHITELIST
         args = tuple([*pyaud.files.args(reduce=True), *args])
         if whitelist.is_file():
@@ -524,7 +534,7 @@ class Unused(pyaud.plugins.Fix):
 
         return self.subprocess[self.vulture].call(*args, **kwargs)
 
-    def fix(self, *args: t.Any, **kwargs: bool) -> t.Any:
+    def fix(self, *args: str, **kwargs: bool) -> int:
         pyaud.plugins.get("whitelist")(*args, **kwargs)
         return self.audit(*args, **kwargs)
 
@@ -547,7 +557,7 @@ class Whitelist(pyaud.plugins.Write):
     def path(self) -> Path:
         return Path.cwd() / environ.WHITELIST
 
-    def write(self, *args: t.Any, **kwargs: bool) -> t.Any:
+    def write(self, *args: str, **kwargs: bool) -> int:
         # append whitelist exceptions for each individual module
         kwargs["suppress"] = True
         self.subprocess[self.vulture].call(
@@ -562,6 +572,8 @@ class Whitelist(pyaud.plugins.Write):
         stdout.sort()
         with open(self.path, "w", encoding="utf-8") as fout:
             fout.write("\n".join(stdout) + "\n")
+
+        return 0
 
 
 @pyaud.plugins.register()
@@ -595,7 +607,7 @@ class Imports(pyaud.plugins.FixFile):
     def exe(self) -> t.List[str]:
         return ["isort", "black"]
 
-    def audit(self, file: Path, **kwargs: bool) -> t.Any:
+    def audit(self, file: Path, **kwargs: bool) -> int:
         # collect original file's contents
         with open(file, encoding="utf-8") as fin:
             self.content = fin.read()
@@ -626,11 +638,12 @@ class Imports(pyaud.plugins.FixFile):
             self.result = fin.read()
 
         os.remove(tmp.name)
+        return 0
 
     def fail_condition(self) -> t.Optional[bool]:
         return self.result != self.content
 
-    def fix(self, file: t.Any, **kwargs: bool) -> None:
+    def fix(self, file: Path, **kwargs: bool) -> None:
         print(f"Fixed {file.relative_to(Path.cwd())}")
 
         # replace original file's contents with the temp file post
@@ -653,13 +666,15 @@ class Readme(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
     def exe(self) -> t.List[str]:
         return [self.readmetester]
 
-    def action(self, *args, **kwargs):
+    def action(self, *args: str, **kwargs: bool) -> int:
         if Path(Path.cwd() / README).is_file():
             self.subprocess[self.readmetester].call(
                 Path.cwd() / README, *args, **kwargs
             )
         else:
             print("No README.rst found in project root")
+
+        return 0
 
 
 @pyaud.plugins.register()
@@ -674,7 +689,7 @@ class FormatStr(pyaud.plugins.Fix):
     def exe(self) -> t.List[str]:
         return [self.flynt]
 
-    def audit(self, *args: t.Any, **kwargs: bool) -> t.Any:
+    def audit(self, *args: str, **kwargs: bool) -> int:
         return self.subprocess[self.flynt].call(
             "--dry-run",
             "--fail-on-change",
@@ -684,7 +699,7 @@ class FormatStr(pyaud.plugins.Fix):
             **kwargs,
         )
 
-    def fix(self, *args: t.Any, **kwargs: bool) -> t.Any:
+    def fix(self, *args: str, **kwargs: bool) -> int:
         return self.subprocess[self.flynt].call(
             *self.args, *pyaud.files.args(), *args, **kwargs
         )

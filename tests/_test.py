@@ -31,13 +31,20 @@ from . import (
     SP_CALL,
     SP_OPEN_PROC,
     SP_STDOUT,
+    MakeTreeType,
+    MockCallStatusType,
+    MockMainType,
+    MockSPOutputType,
+    MockSPPrintCalledType,
     NoColorCapsys,
     files,
 )
 from .files import EXPECTED_NESTED_TOC
 
 
-def test_no_files_found(main: t.Any, nocolorcapsys: NoColorCapsys) -> None:
+def test_no_files_found(
+    main: MockMainType, nocolorcapsys: NoColorCapsys
+) -> None:
     """Test the correct output is produced when no file exists.
 
     :param main: Patch package entry point.
@@ -61,7 +68,7 @@ def test_no_files_found(main: t.Any, nocolorcapsys: NoColorCapsys) -> None:
     ids=("created", "updated", "up_to_date"),
 )
 def test_write_command(
-    main: t.Any,
+    main: MockMainType,
     monkeypatch: pytest.MonkeyPatch,
     nocolorcapsys: NoColorCapsys,
     contents: t.List[str],
@@ -78,7 +85,7 @@ def test_write_command(
     """
     for content in contents:
 
-        def mock_write_whitelist(*_: t.Any, **__: t.Any) -> None:
+        def mock_write_whitelist(*_: str, **__: bool) -> None:
             with open(
                 Path.cwd() / pyaud_plugins.environ.WHITELIST,
                 "w",
@@ -98,7 +105,7 @@ def test_write_command(
     "is_tests,expected", [(False, "No coverage to report"), (True, "xml")]
 )
 def test_call_coverage_xml(
-    main: t.Any,
+    main: MockMainType,
     monkeypatch: pytest.MonkeyPatch,
     nocolorcapsys: NoColorCapsys,
     is_tests: bool,
@@ -116,13 +123,14 @@ def test_call_coverage_xml(
 
     class _HasCall:
         @classmethod
-        def call(cls, *args: t.Any, **_: t.Any) -> None:
+        def call(cls, *args: str, **_: bool) -> int:
             """Print the args passed to the subprocess object.
 
             :param args: Args to print.
             :param _: Unused misc kwargs.
             """
             print(*args)
+            return 0
 
     class _Tests(  # pylint: disable=too-few-public-methods
         pyaud_plugins.modules.Tests
@@ -131,7 +139,7 @@ def test_call_coverage_xml(
         def is_tests(self) -> bool:
             return is_tests
 
-        def action(self, *args: t.Any, **kwargs: bool) -> t.Any:
+        def action(self, *args: str, **kwargs: bool) -> int:
             return 0
 
     monkeypatch.setattr(
@@ -146,10 +154,10 @@ def test_call_coverage_xml(
 
 
 def test_make_deploy_all(
-    main: t.Any,
+    main: MockMainType,
     monkeypatch: pytest.MonkeyPatch,
     nocolorcapsys: NoColorCapsys,
-    call_status: t.Any,
+    call_status: MockCallStatusType,
 ) -> None:
     """Test the correct commands are run when running ``pyaud deploy``.
 
@@ -168,7 +176,7 @@ def test_make_deploy_all(
     modules = "deploy-cov", "deploy-docs"
     mocked_plugins = pyaud.plugins.mapping()
     for module in modules:
-        mocked_plugins[module] = call_status(module)
+        mocked_plugins[module] = call_status(module)  # type: ignore
 
     monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mocked_plugins)
     main("deploy")
@@ -178,8 +186,8 @@ def test_make_deploy_all(
 
 
 def test_make_deploy_all_fail(
-    main: t.Any,
-    call_status: t.Any,
+    main: MockMainType,
+    call_status: MockCallStatusType,
     monkeypatch: pytest.MonkeyPatch,
     nocolorcapsys: NoColorCapsys,
 ) -> None:
@@ -193,14 +201,16 @@ def test_make_deploy_all_fail(
     """
     deploy_module = "deploy-docs"
     mock_plugins = pyaud.plugins.mapping()
-    mock_plugins[deploy_module] = call_status(deploy_module, 1)
+    mock_plugins[deploy_module] = call_status(deploy_module, 1)  # type: ignore
     monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mock_plugins)
     main("deploy")
     out = nocolorcapsys.stdout().splitlines()
     assert f"{pyaud.__name__} {deploy_module}" in out
 
 
-def test_make_docs_no_docs(main: t.Any, nocolorcapsys: NoColorCapsys) -> None:
+def test_make_docs_no_docs(
+    main: MockMainType, nocolorcapsys: NoColorCapsys
+) -> None:
     """Test correct message is produced.
 
     Test when running ``pyaud docs`` when no docs are present.
@@ -215,7 +225,9 @@ def test_make_docs_no_docs(main: t.Any, nocolorcapsys: NoColorCapsys) -> None:
 
 
 def test_make_docs_toc_fail(
-    main: t.Any, monkeypatch: pytest.MonkeyPatch, make_tree: t.Any
+    main: MockMainType,
+    monkeypatch: pytest.MonkeyPatch,
+    make_tree: MakeTreeType,
 ) -> None:
     """Test that error message is produced when ``make_toc`` fails.
 
@@ -236,10 +248,10 @@ def test_make_docs_toc_fail(
 
 
 def test_make_docs_rm_cache(
-    main: t.Any,
+    main: MockMainType,
     monkeypatch: pytest.MonkeyPatch,
-    call_status: t.Any,
-    make_tree: t.Any,
+    call_status: MockCallStatusType,
+    make_tree: MakeTreeType,
 ) -> None:
     """Test ``make_docs`` removes all builds before starting a new one.
 
@@ -253,13 +265,13 @@ def test_make_docs_rm_cache(
 
     # disable call to ``Subprocess`` to only create ./docs/_build
     # directory so tests can continue
-    def _call(*_: t.Any, **__: t.Any) -> int:
+    def _call(*_: str, **__: bool) -> int:
         builddir.mkdir(parents=True)
         return 0
 
     # patch ``make_toc`` and ``Subprocess.call``
     mocked_plugins = pyaud.plugins.mapping()
-    mocked_plugins["toc"] = call_status("toc")
+    mocked_plugins["toc"] = call_status("toc")  # type: ignore
     monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mocked_plugins)
     monkeypatch.setattr(SP_CALL, _call)
     make_tree(Path.cwd(), {"docs": {CONFPY: None, "readme.rst": None}})
@@ -280,9 +292,9 @@ def test_make_docs_rm_cache(
 
 
 def test_make_files(
-    main: t.Any,
+    main: MockMainType,
     monkeypatch: pytest.MonkeyPatch,
-    call_status: t.Any,
+    call_status: MockCallStatusType,
     nocolorcapsys: NoColorCapsys,
 ) -> None:
     """Test correct commands are executed when running ``make_files``.
@@ -296,7 +308,7 @@ def test_make_files(
     file_funcs = "requirements", "toc", "whitelist"
     mocked_modules = pyaud.plugins.mapping()
     for file_func in file_funcs:
-        mocked_modules[file_func] = call_status(file_func)
+        mocked_modules[file_func] = call_status(file_func)  # type: ignore
 
     monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mocked_modules)
 
@@ -307,7 +319,7 @@ def test_make_files(
     )
 
 
-def test_make_format(main: t.Any) -> None:
+def test_make_format(main: MockMainType) -> None:
     """Test ``make_format`` when successful and when it fails.
 
     :param main: Patch package entry point.
@@ -322,7 +334,9 @@ def test_make_format(main: t.Any) -> None:
 
 
 def test_pipfile2req_commands(
-    main: t.Any, patch_sp_print_called: t.Any, nocolorcapsys: NoColorCapsys
+    main: MockMainType,
+    patch_sp_print_called: MockSPPrintCalledType,
+    nocolorcapsys: NoColorCapsys,
 ) -> None:
     """Test that the correct commands are executed.
 
@@ -377,7 +391,9 @@ def test_readme_replace() -> None:
 
 
 def test_append_whitelist(
-    main: t.Any, nocolorcapsys: NoColorCapsys, patch_sp_print_called: t.Any
+    main: MockMainType,
+    nocolorcapsys: NoColorCapsys,
+    patch_sp_print_called: MockSPPrintCalledType,
 ) -> None:
     """Test that whitelist file argument is appended ``vulture`` call.
 
@@ -401,7 +417,9 @@ def test_append_whitelist(
 
 
 def test_mypy_expected(
-    main: t.Any, patch_sp_print_called: t.Any, nocolorcapsys: NoColorCapsys
+    main: MockMainType,
+    patch_sp_print_called: MockSPPrintCalledType,
+    nocolorcapsys: NoColorCapsys,
 ) -> None:
     """Test that the ``mypy`` command is correctly called.
 
@@ -444,9 +462,9 @@ def test_mypy_expected(
 )
 def test_pytest_is_tests(
     monkeypatch: pytest.MonkeyPatch,
-    main: t.Any,
+    main: MockMainType,
     nocolorcapsys: NoColorCapsys,
-    patch_sp_print_called: t.Any,
+    patch_sp_print_called: MockSPPrintCalledType,
     relpath: Path,
     expected: str,
 ) -> None:
@@ -476,9 +494,9 @@ def test_pytest_is_tests(
 
 def test_make_toc(
     monkeypatch: pytest.MonkeyPatch,
-    main: t.Any,
-    patch_sp_print_called: t.Any,
-    make_tree: t.Any,
+    main: MockMainType,
+    patch_sp_print_called: MockSPPrintCalledType,
+    make_tree: MakeTreeType,
 ) -> None:
     """Test that the default toc file is edited correctly.
 
@@ -508,8 +526,8 @@ def test_make_toc(
 
 def test_make_requirements(
     monkeypatch: pytest.MonkeyPatch,
-    main: t.Any,
-    patch_sp_output: t.Any,
+    main: MockMainType,
+    patch_sp_output: MockSPOutputType,
     nocolorcapsys: NoColorCapsys,
 ) -> None:
     """Test that requirements.txt file is correctly edited.
@@ -540,7 +558,7 @@ def test_make_requirements(
 def test_make_whitelist(
     monkeypatch: pytest.MonkeyPatch,
     nocolorcapsys: NoColorCapsys,
-    make_tree: t.Any,
+    make_tree: MakeTreeType,
 ) -> None:
     """Test a whitelist.py file is created properly.
 
@@ -574,7 +592,9 @@ def test_make_whitelist(
         assert fin.read() == files.Whitelist.be8a443_all()
 
 
-def test_pylint_colorized(main: t.Any, capsys: t.Any) -> None:
+def test_pylint_colorized(
+    main: MockMainType, capsys: pytest.CaptureFixture
+) -> None:
     """Test that color codes are produced with ``process.PIPE``.
 
     Test ``pylint --output-format=colorized``. If ``colorama`` is
@@ -598,7 +618,9 @@ def test_pylint_colorized(main: t.Any, capsys: t.Any) -> None:
     )
 
 
-def test_isort_imports(main: t.Any, nocolorcapsys: NoColorCapsys) -> None:
+def test_isort_imports(
+    main: MockMainType, nocolorcapsys: NoColorCapsys
+) -> None:
     """Test isort properly sorts file imports.
 
     :param main: Patch package entry point.
@@ -622,7 +644,7 @@ def test_isort_imports(main: t.Any, nocolorcapsys: NoColorCapsys) -> None:
     main("imports")
 
 
-def test_readme(main: t.Any, nocolorcapsys: NoColorCapsys) -> None:
+def test_readme(main: MockMainType, nocolorcapsys: NoColorCapsys) -> None:
     """Test standard README and return values.
 
     :param main: Patch package entry point.
@@ -654,7 +676,7 @@ def test_readme(main: t.Any, nocolorcapsys: NoColorCapsys) -> None:
     ids=["format", "imports", "format-str", "format-docs"],
 )
 def test_py_audit_error(
-    main: t.Any, make_tree: t.Any, module: str, content: str
+    main: MockMainType, make_tree: MakeTreeType, module: str, content: str
 ) -> None:
     """Test ``AuditError`` message.
 
@@ -681,7 +703,9 @@ def test_py_audit_error(
 
 @pytest.mark.usefixtures("init_remote")
 def test_deploy_not_master(
-    main: t.Any, monkeypatch: pytest.MonkeyPatch, nocolorcapsys: NoColorCapsys
+    main: MockMainType,
+    monkeypatch: pytest.MonkeyPatch,
+    nocolorcapsys: NoColorCapsys,
 ) -> None:
     """Test that deployment is skipped when branch is not ``master``.
 
@@ -700,7 +724,9 @@ def test_deploy_not_master(
 
 @pytest.mark.usefixtures("init_remote")
 def test_deploy_master_not_set(
-    main: t.Any, monkeypatch: pytest.MonkeyPatch, nocolorcapsys: NoColorCapsys
+    main: MockMainType,
+    monkeypatch: pytest.MonkeyPatch,
+    nocolorcapsys: NoColorCapsys,
 ) -> None:
     """Test correct notification is displayed.
 
@@ -734,7 +760,9 @@ def test_deploy_master_not_set(
 
 @pytest.mark.usefixtures("init_remote")
 def test_deploy_master(
-    main: t.Any, monkeypatch: pytest.MonkeyPatch, nocolorcapsys: NoColorCapsys
+    main: MockMainType,
+    monkeypatch: pytest.MonkeyPatch,
+    nocolorcapsys: NoColorCapsys,
 ) -> None:
     """Test docs are properly deployed.
 
@@ -750,10 +778,11 @@ def test_deploy_master(
     readme = project_dir / README
     mock_plugins = pyaud.plugins.mapping()
 
-    def _docs(*_: t.Any, **__: t.Any):
+    def _docs(*_: str, **__: int) -> int:
         Path(Path.cwd() / pyaud_plugins.environ.BUILDDIR / "html").mkdir(
             parents=True
         )
+        return 0
 
     mock_plugins["docs"] = _docs  # type: ignore
     monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mock_plugins)
@@ -803,7 +832,7 @@ def test_deploy_master(
 )
 @pytest.mark.usefixtures("init_remote")
 def test_deploy_master_param(
-    main: t.Any,
+    main: MockMainType,
     monkeypatch: pytest.MonkeyPatch,
     nocolorcapsys: NoColorCapsys,
     rounds: int,
@@ -821,10 +850,11 @@ def test_deploy_master_param(
     path = Path.cwd()
     mock_plugins = pyaud.plugins.mapping()
 
-    def _docs(*_: t.Any, **__: t.Any) -> None:
+    def _docs(*_: str, **__: bool) -> int:
         Path(path / pyaud_plugins.environ.BUILDDIR / "html").mkdir(
             parents=True
         )
+        return 0
 
     mock_plugins["docs"] = _docs  # type: ignore
     monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mock_plugins)
@@ -842,10 +872,10 @@ def test_deploy_master_param(
 
 
 def test_deploy_cov_report_token(
-    main: t.Any,
+    main: MockMainType,
     monkeypatch: pytest.MonkeyPatch,
     nocolorcapsys: NoColorCapsys,
-    patch_sp_print_called: t.Any,
+    patch_sp_print_called: MockSPPrintCalledType,
 ) -> None:
     """Test ``make_deploy_cov`` when ``CODECOV_TOKEN`` is set.
 
@@ -868,7 +898,7 @@ def test_deploy_cov_report_token(
 
 
 def test_deploy_cov_no_token(
-    main: t.Any, nocolorcapsys: NoColorCapsys
+    main: MockMainType, nocolorcapsys: NoColorCapsys
 ) -> None:
     """Test ``make_deploy_cov``.
 
@@ -886,7 +916,7 @@ def test_deploy_cov_no_token(
 
 
 def test_deploy_cov_no_report_token(
-    main: t.Any, nocolorcapsys: NoColorCapsys
+    main: MockMainType, nocolorcapsys: NoColorCapsys
 ) -> None:
     """Test ``make_deploy_cov``.
 
@@ -903,7 +933,9 @@ def test_deploy_cov_no_report_token(
 
 
 def test_make_format_success(
-    main: t.Any, nocolorcapsys: NoColorCapsys, patch_sp_print_called: t.Any
+    main: MockMainType,
+    nocolorcapsys: NoColorCapsys,
+    patch_sp_print_called: MockSPPrintCalledType,
 ) -> None:
     """Test ``Format`` when successful.
 
@@ -919,7 +951,7 @@ def test_make_format_success(
     nocolorcapsys.readouterr()
 
 
-def test_make_format_docs_fail(main: t.Any) -> None:
+def test_make_format_docs_fail(main: MockMainType) -> None:
     """Test ``make_format`` when it fails.
 
     Ensure process fails when unformatted docstrings are found.
@@ -936,7 +968,7 @@ def test_make_format_docs_fail(main: t.Any) -> None:
 
 
 def test_make_format_docs_suppress(
-    main: t.Any, nocolorcapsys: NoColorCapsys
+    main: MockMainType, nocolorcapsys: NoColorCapsys
 ) -> None:
     """Test ``make_format`` when running with ``-s/--suppress``.
 
@@ -959,7 +991,7 @@ def test_make_format_docs_suppress(
     )
 
 
-def test_isort_and_black(main: t.Any) -> None:
+def test_isort_and_black(main: MockMainType) -> None:
     """Test ``AuditError`` is raised.
 
     For failed checks when looking for formatted inputs run through
@@ -977,7 +1009,7 @@ def test_isort_and_black(main: t.Any) -> None:
 
 
 def test_isort_and_black_fix(
-    main: t.Any, nocolorcapsys: NoColorCapsys
+    main: MockMainType, nocolorcapsys: NoColorCapsys
 ) -> None:
     """Test file is correctly fixed  for failed check.
 
@@ -997,7 +1029,7 @@ def test_isort_and_black_fix(
     assert f"Fixed {Path(Path.cwd() / FILES).relative_to(Path.cwd())}" in out
 
 
-def test_make_format_fix(main: t.Any) -> None:
+def test_make_format_fix(main: MockMainType) -> None:
     """Test ``make_format`` when it fails.
 
     :param main: Patch package entry point.
@@ -1012,7 +1044,7 @@ def test_make_format_fix(main: t.Any) -> None:
 
 
 def test_make_unused_fix(
-    main: t.Any, nocolorcapsys: NoColorCapsys, make_tree: t.Any
+    main: MockMainType, nocolorcapsys: NoColorCapsys, make_tree: MakeTreeType
 ) -> None:
     """Test ``make_unused`` when ``-f/--fix`` is provided.
 
@@ -1044,7 +1076,7 @@ def test_make_unused_fix(
         )
 
 
-def test_make_unused_fail(main: t.Any) -> None:
+def test_make_unused_fail(main: MockMainType) -> None:
     """Test ``make_unused`` with neither ``--fix`` or ``--suppress``.
 
     :param main: Patch package entry point.
@@ -1060,7 +1092,7 @@ def test_make_unused_fail(main: t.Any) -> None:
 
 
 def test_make_format_docs_fix(
-    main: t.Any, nocolorcapsys: NoColorCapsys
+    main: MockMainType, nocolorcapsys: NoColorCapsys
 ) -> None:
     """Test ``make_format`` when running with ``-f/--fix``.
 
@@ -1078,7 +1110,9 @@ def test_make_format_docs_fix(
     assert nocolorcapsys.stdout().strip() == NO_ISSUES
 
 
-def test_format_str_fix(main: t.Any, nocolorcapsys: NoColorCapsys) -> None:
+def test_format_str_fix(
+    main: MockMainType, nocolorcapsys: NoColorCapsys
+) -> None:
     """Test fix audit when f-strings can be created with ``flynt``.
 
     :param main: Patch package entry point.
@@ -1097,7 +1131,7 @@ def test_format_str_fix(main: t.Any, nocolorcapsys: NoColorCapsys) -> None:
 
 
 def test_audit_class_error(
-    main: t.Any, monkeypatch: pytest.MonkeyPatch
+    main: MockMainType, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     """Test errors are handled correctly when running ``pyaud audit``.
 
@@ -1125,14 +1159,14 @@ def test_no_exe_provided(monkeypatch: pytest.MonkeyPatch) -> None:
     class Plugin(pyaud.plugins.Audit):
         """Nothing to do."""
 
-        def audit(self, *args: t.Any, **kwargs: bool) -> int:
+        def audit(self, *args: str, **kwargs: bool) -> int:
             """Nothing to do."""
 
     assert pyaud.plugins.get(unique).exe == []
 
 
 def test_download_missing_stubs(
-    monkeypatch: pytest.MonkeyPatch, main: t.Any
+    monkeypatch: pytest.MonkeyPatch, main: MockMainType
 ) -> None:
     """Test for coverage on missing stubs file.
 
@@ -1150,7 +1184,7 @@ def test_download_missing_stubs(
 
 
 def test_typecheck_re_raise_err(
-    monkeypatch: pytest.MonkeyPatch, main: t.Any
+    monkeypatch: pytest.MonkeyPatch, main: MockMainType
 ) -> None:
     """Test for re-raise of error for non stub library errors.
 
@@ -1168,7 +1202,7 @@ def test_typecheck_re_raise_err(
     assert str(err.value) == "pyaud typecheck did not pass all checks"
 
 
-def test_nested_toc(main: t.Any, make_tree: t.Any) -> None:
+def test_nested_toc(main: MockMainType, make_tree: MakeTreeType) -> None:
     """Test that only one file is completed with a nested project.
 
     Prior to this commit only ``repo.src.rst`` would be removed.

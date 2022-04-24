@@ -15,7 +15,21 @@ import pytest
 
 import pyaud_plugins
 
-from . import DEBUG, GH_EMAIL, GH_NAME, GH_TOKEN, REPO, NoColorCapsys
+from . import (
+    DEBUG,
+    GH_EMAIL,
+    GH_NAME,
+    GH_TOKEN,
+    REPO,
+    MakeTreeType,
+    MockCallStatusType,
+    MockFuncType,
+    MockMainType,
+    MockSPCallType,
+    MockSPOutputType,
+    MockSPPrintCalledType,
+    NoColorCapsys,
+)
 
 
 # noinspection PyUnresolvedReferences,PyProtectedMember
@@ -172,7 +186,7 @@ def fixture_nocolorcapsys(capsys: pytest.CaptureFixture) -> NoColorCapsys:
 
 
 @pytest.fixture(name="main")
-def fixture_main(monkeypatch: pytest.MonkeyPatch) -> t.Any:
+def fixture_main(monkeypatch: pytest.MonkeyPatch) -> MockMainType:
     """Pass patched commandline arguments to package's main function.
 
     :param monkeypatch: Mock patch environment and attributes.
@@ -193,7 +207,7 @@ def fixture_main(monkeypatch: pytest.MonkeyPatch) -> t.Any:
 
 
 @pytest.fixture(name="call_status")
-def fixture_call_status() -> t.Any:
+def fixture_call_status() -> MockCallStatusType:
     """Disable all usage of function apart from selected returncode.
 
     Useful for processes programmed to return a value for the function
@@ -202,8 +216,8 @@ def fixture_call_status() -> t.Any:
     :return: Function for using this fixture.
     """
 
-    def _call_status(module: str, returncode: int = 0) -> t.Any:
-        def _func(*_, **__) -> int:
+    def _call_status(module: str, returncode: int = 0) -> MockFuncType:
+        def _func(*_: str, **__: bool) -> int:
             return returncode
 
         _func.__name__ = module
@@ -213,7 +227,7 @@ def fixture_call_status() -> t.Any:
 
 
 @pytest.fixture(name="patch_sp_call")
-def fixture_patch_sp_call(monkeypatch: pytest.MonkeyPatch) -> t.Any:
+def fixture_patch_sp_call(monkeypatch: pytest.MonkeyPatch) -> MockSPCallType:
     """Mock ``Subprocess.call``.
 
     Print the command that is being run.
@@ -222,7 +236,7 @@ def fixture_patch_sp_call(monkeypatch: pytest.MonkeyPatch) -> t.Any:
     :return: Function for using this fixture.
     """
 
-    def _patch_sp_call(func: t.Any, returncode: int = 0) -> t.Any:
+    def _patch_sp_call(func: MockFuncType, returncode: int = 0) -> None:
         def call(*args: str, **kwargs: bool) -> int:
             func(*args, **kwargs)
 
@@ -234,7 +248,7 @@ def fixture_patch_sp_call(monkeypatch: pytest.MonkeyPatch) -> t.Any:
 
 
 @pytest.fixture(name="patch_sp_output")
-def fixture_patch_sp_output(patch_sp_call: t.Any) -> t.Any:
+def fixture_patch_sp_output(patch_sp_call: MockSPCallType) -> MockSPOutputType:
     """Patch ``Subprocess``.
 
     Return test strings to ``self.stdout``.
@@ -245,12 +259,13 @@ def fixture_patch_sp_output(patch_sp_call: t.Any) -> t.Any:
     def _patch_sp_output(*stdout: str) -> None:
         _stdout = list(stdout)
 
-        def _call(self, *_: t.Any, **__: t.Any) -> None:
+        def _call(self, *_: str, **__: bool) -> int:
             """Mock call to do nothing except send the expected stdout
             to self."""
             self._stdout.append(  # pylint: disable=protected-access
                 _stdout.pop()
             )
+            return 0
 
         patch_sp_call(_call)
 
@@ -258,13 +273,13 @@ def fixture_patch_sp_output(patch_sp_call: t.Any) -> t.Any:
 
 
 @pytest.fixture(name="make_tree")
-def fixture_make_tree() -> t.Any:
+def fixture_make_tree() -> MakeTreeType:
     """Recursively create directory tree from dict mapping.
 
     :return: Function for using this fixture.
     """
 
-    def _make_tree(root: Path, obj: t.Dict[t.Any, t.Any]) -> None:
+    def _make_tree(root: Path, obj: t.Dict[str, t.Any]) -> None:
         for key, value in obj.items():
             fullpath = root / key
             if isinstance(value, dict):
@@ -287,7 +302,9 @@ def fixture_init_remote() -> None:
 
 
 @pytest.fixture(name="patch_sp_print_called")
-def fixture_patch_sp_print_called(patch_sp_call: t.Any) -> t.Any:
+def fixture_patch_sp_print_called(
+    patch_sp_call: MockSPCallType,
+) -> MockSPPrintCalledType:
     """Mock ``Subprocess.call``to print the command that is being run.
 
     :param patch_sp_call: Mock ``Subprocess.call`` by injecting a new
@@ -295,10 +312,11 @@ def fixture_patch_sp_print_called(patch_sp_call: t.Any) -> t.Any:
     :return: Function for using this fixture.
     """
 
-    def _patch_sp_print_called() -> t.Any:
-        def _call(self, *args: str, **_: t.Any) -> None:
+    def _patch_sp_print_called() -> None:
+        def _call(self, *args: str, **_: bool) -> int:
             print(f"{self} {' '.join(str(i) for i in args)}")
+            return 0
 
-        return patch_sp_call(_call)
+        patch_sp_call(_call)
 
     return _patch_sp_print_called

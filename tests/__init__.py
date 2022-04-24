@@ -11,8 +11,23 @@ from pathlib import Path
 # noinspection PyPackageRequirements
 import pyaud
 
+MockMainType = t.Callable[..., None]
+MockFuncType = t.Callable[..., int]
+MockCallStatusType = t.Callable[[str, int], MockFuncType]
+MockSPOutputType = t.Callable[..., None]
+MakeTreeType = t.Callable[[Path, t.Dict[str, t.Any]], None]
+MockSPPrintCalledType = t.Callable[[], None]
+
+
+class MockSPCallType(t.Protocol):  # pylint: disable=too-few-public-methods
+    """Type for ``fixture_patch_sp_call``"""
+
+    def __call__(self, func: MockFuncType, returncode: int = ..., /) -> None:
+        """Type for ``fixture_patch_sp_call``"""
+
+
 REAL_REPO = Path(__file__).parent.parent
-FILES: str = "file.py"
+FILES = "file.py"
 PUSHING_SKIPPED = "Pushing skipped"
 REPO = "repo"
 GH_NAME = "test_user"
