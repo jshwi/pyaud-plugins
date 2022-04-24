@@ -11,8 +11,6 @@ from pathlib import Path
 # noinspection PyPackageRequirements
 import pyaud
 
-from . import files
-
 REAL_REPO = Path(__file__).parent.parent
 FILES: str = "file.py"
 PUSHING_SKIPPED = "Pushing skipped"
