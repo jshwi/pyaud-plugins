@@ -11,14 +11,15 @@ from pathlib import Path
 import pyaud
 import pytest
 
-import pyaud_plugins
+from pyaud_plugins import environ as ppe
 
 from . import (
     DEBUG,
     GH_EMAIL,
     GH_NAME,
     GH_TOKEN,
-    REPO,
+    INIT_REMOTE,
+    LOGGING,
     MakeTreeType,
     MockCallStatusType,
     MockFuncType,
@@ -28,6 +29,8 @@ from . import (
     MockSPPrintCalledType,
     NoColorCapsys,
 )
+
+MOCK_PACKAGE = "package"
 
 
 @pytest.fixture(name="mock_environment", autouse=True)
@@ -44,7 +47,7 @@ def fixture_mock_environment(
     # load generic env variables so as to avoid a KeyError and override
     # relevant variables for test environment
     monkeypatch.setenv("HOME", str(tmp_path))
-    monkeypatch.setenv("CODECOV_SLUG", f"{GH_NAME}/{REPO}")
+    monkeypatch.setenv("CODECOV_SLUG", f"{GH_NAME}/{MOCK_PACKAGE}")
 
     # load plugins dir
     # ================
@@ -55,8 +58,10 @@ def fixture_mock_environment(
     # set the cwd to the temporary project dir
     # ensure no real .env file interferes with tests
     # patch ``setuptools.find_package`` to return package as existing
-    monkeypatch.setattr("os.getcwd", lambda: str(tmp_path / REPO))
-    monkeypatch.setattr("setuptools.find_packages", lambda *_, **__: [REPO])
+    monkeypatch.setattr("os.getcwd", lambda: str(tmp_path / MOCK_PACKAGE))
+    monkeypatch.setattr(
+        "setuptools.find_packages", lambda *_, **__: [MOCK_PACKAGE]
+    )
 
     # mock path resolutions for `environs` module
     # prevent lookup of .env file in this repo's real dir
@@ -114,13 +119,13 @@ def fixture_mock_environment(
     default_config: t.Dict[str, t.Any] = copy.deepcopy(
         pyaud.config.DEFAULT_CONFIG
     )
-    default_config["logging"]["root"]["level"] = DEBUG
+    default_config[LOGGING]["root"]["level"] = DEBUG
     monkeypatch.setattr("pyaud.config.DEFAULT_CONFIG", default_config)
     logfile = Path(
         tmp_path / ".cache" / pyaud.__name__ / "log" / f"{pyaud.__name__}.log"
     )
-    default_config["logging"]["handlers"]["default"]["filename"] = str(logfile)
-    default_config["logging"]["root"]["level"] = DEBUG
+    default_config[LOGGING]["handlers"]["default"]["filename"] = str(logfile)
+    default_config[LOGGING]["root"]["level"] = DEBUG
     monkeypatch.setattr("pyaud.config.DEFAULT_CONFIG", default_config)
     logfile.parent.mkdir(parents=True)
 
@@ -284,13 +289,13 @@ def fixture_make_tree() -> MakeTreeType:
     return _make_tree
 
 
-@pytest.fixture(name="init_remote")
+@pytest.fixture(name=INIT_REMOTE)
 def fixture_init_remote() -> None:
     """Initialize local "remote origin".
 
     :return: Function for using this fixture.
     """
-    pyaud.git.init("--bare", pyaud_plugins.environ.GH_REMOTE, devnull=True)
+    pyaud.git.init("--bare", ppe.GH_REMOTE, devnull=True)
     pyaud.git.remote("add", "origin", "origin", devnull=True)
 
 

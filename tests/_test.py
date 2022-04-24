@@ -5,40 +5,51 @@ tests._test
 # pylint: disable=too-many-lines,too-many-arguments,cell-var-from-loop
 # pylint: disable=too-few-public-methods,protected-access
 import datetime
-import os
 import typing as t
 from pathlib import Path
 
 import pyaud
 import pytest
 
-import pyaud_plugins
+import pyaud_plugins as pplugins
+from pyaud_plugins import environ as ppe
 
 from . import (
-    CONFPY,
-    DOCS,
-    FILES,
+    COVERAGE,
+    DEPLOY_COV,
+    DEPLOY_DOCS,
+    FILE,
+    FLAG_FIX,
+    FLAG_SUPPRESS,
+    FORMAT,
+    FORMAT_DOCS,
+    FORMAT_STR,
+    IMPORTS,
     INIT,
+    INIT_REMOTE,
     INITIAL_COMMIT,
     NO_ISSUES,
-    PIPFILE_LOCK,
+    NO_TESTS_FOUND,
     PUSHING_SKIPPED,
     PYAUD_FILES_POPULATE,
     PYAUD_PLUGINS_PLUGINS,
-    README,
-    REPO,
+    REQUIREMENTS,
     SP_CALL,
     SP_OPEN_PROC,
+    SP_REPR_PYTEST,
     SP_STDOUT,
+    TOC,
+    TYPECHECK,
+    UNUSED,
+    WHITELIST,
     MakeTreeType,
     MockCallStatusType,
     MockMainType,
     MockSPOutputType,
     MockSPPrintCalledType,
     NoColorCapsys,
-    files,
+    templates,
 )
-from .files import EXPECTED_NESTED_TOC
 
 
 def test_no_files_found(
@@ -50,18 +61,18 @@ def test_no_files_found(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
-    main("typecheck")
+    main(TYPECHECK)
     assert nocolorcapsys.stdout().strip() == "No files found"
 
 
 @pytest.mark.parametrize(
     "contents,expected",
     [
-        (["created"], "created ``whitelist.py``"),
-        (["", "updated"], "updated ``whitelist.py``"),
+        (["created"], f"created ``{ppe.WHITELIST.name}``"),
+        (["", "updated"], f"updated ``{ppe.WHITELIST.name}``"),
         (
             ["up-to-date", "up-to-date"],
-            "``whitelist.py`` is already up to date",
+            f"``{ppe.WHITELIST.name}`` is already up to date",
         ),
     ],
     ids=("created", "updated", "up_to_date"),
@@ -86,16 +97,14 @@ def test_write_command(
 
         def mock_write_whitelist(*_: str, **__: bool) -> None:
             with open(
-                Path.cwd() / pyaud_plugins.environ.WHITELIST,
-                "w",
-                encoding="utf-8",
+                Path.cwd() / ppe.WHITELIST, "w", encoding=ppe.ENCODING
             ) as fout:
                 fout.write(content)
 
         monkeypatch.setattr(
             "pyaud_plugins.modules.Whitelist.write", mock_write_whitelist
         )
-        main("whitelist")
+        main(WHITELIST)
 
     assert expected in nocolorcapsys.stdout()
 
@@ -131,7 +140,7 @@ def test_call_coverage_xml(
             print(*args)
             return 0
 
-    class _Tests(pyaud_plugins.modules.Tests):
+    class _Tests(pplugins.modules.Tests):
         @property
         def is_tests(self) -> bool:
             return is_tests
@@ -140,13 +149,12 @@ def test_call_coverage_xml(
             return 0
 
     monkeypatch.setattr(
-        "pyaud.plugins._SubprocessFactory", lambda *_: {"coverage": _HasCall}
+        "pyaud.plugins._SubprocessFactory", lambda *_: {COVERAGE: _HasCall}
     )
-    coverage = pyaud_plugins.modules.Coverage
-    coverage.__bases__ = (_Tests,)
-    del pyaud.plugins._plugins["coverage"]
-    pyaud.plugins._plugins["coverage"] = coverage
-    main("coverage")
+    pplugins.modules.Coverage.__bases__ = (_Tests,)
+    del pyaud.plugins._plugins[COVERAGE]
+    pyaud.plugins._plugins[COVERAGE] = pplugins.modules.Coverage
+    main(COVERAGE)
     assert nocolorcapsys.stdout().strip() == expected
 
 
@@ -170,7 +178,7 @@ def test_make_deploy_all(
     :param call_status: Patch function to not do anything. Optionally
         returns non-zero exit code (0 by default).
     """
-    modules = "deploy-cov", "deploy-docs"
+    modules = DEPLOY_COV, DEPLOY_DOCS
     mocked_plugins = pyaud.plugins.mapping()
     for module in modules:
         mocked_plugins[module] = call_status(module)  # type: ignore
@@ -196,13 +204,12 @@ def test_make_deploy_all_fail(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
-    deploy_module = "deploy-docs"
     mock_plugins = pyaud.plugins.mapping()
-    mock_plugins[deploy_module] = call_status(deploy_module, 1)  # type: ignore
+    mock_plugins[DEPLOY_DOCS] = call_status(DEPLOY_DOCS, 1)  # type: ignore
     monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mock_plugins)
     main("deploy")
     out = nocolorcapsys.stdout().splitlines()
-    assert f"{pyaud.__name__} {deploy_module}" in out
+    assert f"{pyaud.__name__} {DEPLOY_DOCS}" in out
 
 
 def test_make_docs_no_docs(
@@ -216,8 +223,8 @@ def test_make_docs_no_docs(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
-    Path(Path.cwd() / FILES).touch()
-    main("docs")
+    Path(Path.cwd() / FILE).touch()
+    main(ppe.DOCS.name)
     assert nocolorcapsys.stdout().strip() == "No docs found"
 
 
@@ -235,11 +242,11 @@ def test_make_docs_toc_fail(
     :param monkeypatch: Mock patch environment and attributes.
     :param make_tree: Create directory tree from dict mapping.
     """
-    make_tree(Path.cwd(), {"docs": {CONFPY: None}})
+    make_tree(Path.cwd(), {ppe.DOCS.name: {ppe.DOCS_CONF.name: None}})
     monkeypatch.setattr(SP_OPEN_PROC, lambda *_, **__: 1)
     monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda: None)
     with pytest.raises(pyaud.exceptions.AuditError) as err:
-        main("docs")
+        main(ppe.DOCS.name)
 
     assert str(err.value) == "pyaud docs did not pass all checks"
 
@@ -257,35 +264,35 @@ def test_make_docs_rm_cache(
     :param call_status: Patch function to return specific exit-code.
     :param make_tree: Create directory tree from dict mapping.
     """
-    builddir = Path.cwd() / pyaud_plugins.environ.BUILDDIR
-    readme = Path.cwd() / README
-
     # disable call to ``Subprocess`` to only create ./docs/_build
     # directory so tests can continue
     def _call(*_: str, **__: bool) -> int:
-        builddir.mkdir(parents=True)
+        ppe.BUILDDIR.mkdir(parents=True)
         return 0
 
     # patch ``make_toc`` and ``Subprocess.call``
     mocked_plugins = pyaud.plugins.mapping()
-    mocked_plugins["toc"] = call_status("toc")  # type: ignore
+    mocked_plugins[TOC] = call_status(TOC)  # type: ignore
     monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mocked_plugins)
     monkeypatch.setattr(SP_CALL, _call)
-    make_tree(Path.cwd(), {"docs": {CONFPY: None, "readme.rst": None}})
-    with open(readme, "w", encoding="utf-8") as fout:
-        fout.write(files.README_RST)
+    make_tree(
+        Path.cwd(),
+        {ppe.DOCS.name: {ppe.DOCS_CONF.name: None, "readme.rst": None}},
+    )
+    with open(ppe.README_RST, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.README_RST)
 
-    builddir.mkdir(parents=True)
-    Path(builddir / "marker").touch()
-    freeze_docs_build = builddir.iterdir()
+    ppe.BUILDDIR.mkdir(parents=True)
+    Path(ppe.BUILDDIR / "marker").touch()
+    freeze_docs_build = ppe.BUILDDIR.iterdir()
 
     # to test creation of README.rst content needs to be written to file
-    with open(readme, "w", encoding="utf-8") as fout:
-        fout.write(files.README_RST)
+    with open(ppe.README_RST, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.README_RST)
 
     monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda: None)
-    main("docs")
-    assert freeze_docs_build != builddir.iterdir()
+    main(ppe.DOCS.name)
+    assert freeze_docs_build != ppe.BUILDDIR.iterdir()
 
 
 def test_make_files(
@@ -302,7 +309,7 @@ def test_make_files(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
-    file_funcs = "requirements", "toc", "whitelist"
+    file_funcs = REQUIREMENTS, TOC, WHITELIST
     mocked_modules = pyaud.plugins.mapping()
     for file_func in file_funcs:
         mocked_modules[file_func] = call_status(file_func)  # type: ignore
@@ -321,13 +328,13 @@ def test_make_format(main: MockMainType) -> None:
 
     :param main: Patch package entry point.
     """
-    file = Path.cwd() / FILES
-    with open(file, "w", encoding="utf-8") as fout:
-        fout.write(files.UNFORMATTED)
+    file = Path.cwd() / FILE
+    with open(file, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.UNFORMATTED)
 
     pyaud.files.append(file)
     with pytest.raises(pyaud.exceptions.AuditError):
-        main("format")
+        main(FORMAT)
 
 
 def test_pipfile2req_commands(
@@ -343,48 +350,45 @@ def test_pipfile2req_commands(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
-    requirements = Path.cwd() / pyaud_plugins.environ.REQUIREMENTS
-    pipfile_lock = Path.cwd() / PIPFILE_LOCK
-    with open(pipfile_lock, "w", encoding="utf-8") as fout:
-        fout.write(files.PIPFILE_LOCK)
+    with open(ppe.PIPFILE_LOCK, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.PIPFILE_LOCK)
 
     patch_sp_print_called()
-    main("requirements")
+    main(REQUIREMENTS)
     out = nocolorcapsys.stdout()
     assert all(
         e in out
         for e in (
-            f"Updating ``{requirements}``",
-            f"<Subprocess (pipfile2req)> {pipfile_lock}",
-            f"<Subprocess (pipfile2req)> {pipfile_lock} --dev",
-            f"created ``{requirements.name}``",
+            f"Updating ``{ppe.REQUIREMENTS}``",
+            f"<Subprocess (pipfile2req)> {ppe.PIPFILE_LOCK}",
+            f"<Subprocess (pipfile2req)> {ppe.PIPFILE_LOCK} --dev",
+            f"created ``{ppe.REQUIREMENTS.name}``",
         )
     )
 
 
 def test_readme_replace() -> None:
     """Test that ``LineSwitch`` properly edits a file."""
-    path = Path.cwd() / README
 
     def _test_file_index(title: str, underline: str) -> None:
-        with open(path, encoding="utf-8") as fin:
+        with open(ppe.README_RST, encoding=ppe.ENCODING) as fin:
             lines = fin.read().splitlines()
 
         assert lines[0] == title
         assert lines[1] == len(underline) * "="
 
-    repo = "repo"
-    readme = "README"
-    repo_underline = len(repo) * "="
-    readme_underline = len(readme) * "="
-    with open(path, "w", encoding="utf-8") as fout:
-        fout.write(f"{repo}\n{repo_underline}\n")
+    repo_underline = len(ppe.PACKAGE_NAME) * "="
+    readme_underline = len(ppe.README_RST.stem) * "="
+    with open(ppe.README_RST, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(f"{ppe.PACKAGE_NAME}\n{repo_underline}\n")
 
-    _test_file_index(repo, repo_underline)
-    with pyaud.parsers.LineSwitch(path, {0: readme, 1: readme_underline}):
-        _test_file_index(readme, readme_underline)
+    _test_file_index(ppe.PACKAGE_NAME, repo_underline)
+    with pyaud.parsers.LineSwitch(
+        ppe.README_RST, {0: ppe.README_RST.stem, 1: readme_underline}
+    ):
+        _test_file_index(ppe.README_RST.stem, readme_underline)
 
-    _test_file_index(repo, repo_underline)
+    _test_file_index(ppe.PACKAGE_NAME, repo_underline)
 
 
 def test_append_whitelist(
@@ -402,15 +406,13 @@ def test_append_whitelist(
     :param patch_sp_print_called: Patch ``Subprocess.call`` to only
         announce what is called.
     """
-    project_dir = Path.cwd()
-    whitelist = project_dir / pyaud_plugins.environ.WHITELIST
-    Path(project_dir / FILES).touch()
-    whitelist.touch()
+    Path(Path.cwd() / FILE).touch()
+    ppe.WHITELIST.touch()
     pyaud.git.add(".")
     pyaud.files.populate()
     patch_sp_print_called()
-    main("unused")
-    assert str(whitelist) in nocolorcapsys.stdout()
+    main(UNUSED)
+    assert str(ppe.WHITELIST) in nocolorcapsys.stdout()
 
 
 def test_mypy_expected(
@@ -426,10 +428,10 @@ def test_mypy_expected(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
-    path = Path(os.getcwd(), FILES)
+    path = Path.cwd() / FILE
     pyaud.files.append(path)
     patch_sp_print_called()
-    main("typecheck")
+    main(TYPECHECK)
     assert (
         f"<Subprocess (mypy)> --ignore-missing-imports {path}"
         in nocolorcapsys.stdout()
@@ -439,16 +441,16 @@ def test_mypy_expected(
 @pytest.mark.parametrize(
     "relpath,expected",
     [
-        (Path("tests"), "No tests found"),
-        (Path("tests", "test.py"), "No tests found"),
-        (Path("tests", "filename.py"), "No tests found"),
-        (Path("tests", "_test.py"), "<Subprocess (pytest)>"),
-        (Path("tests", "test_.py"), "<Subprocess (pytest)>"),
-        (Path("tests", "three_test.py"), "<Subprocess (pytest)>"),
-        (Path("tests", "test_four.py"), "<Subprocess (pytest)>"),
+        (Path(ppe.TESTS.name), NO_TESTS_FOUND),
+        (Path(ppe.TESTS.name, "test.py"), NO_TESTS_FOUND),
+        (Path(ppe.TESTS.name, "filename.py"), NO_TESTS_FOUND),
+        (Path(ppe.TESTS.name, "_test.py"), SP_REPR_PYTEST),
+        (Path(ppe.TESTS.name, "test_.py"), SP_REPR_PYTEST),
+        (Path(ppe.TESTS.name, "three_test.py"), SP_REPR_PYTEST),
+        (Path(ppe.TESTS.name, "test_four.py"), SP_REPR_PYTEST),
     ],
     ids=(
-        "tests",
+        ppe.TESTS.name,
         "tests/test.py",
         "tests/filename.py",
         "tests/test_.py",
@@ -485,7 +487,7 @@ def test_pytest_is_tests(
     pyaud.files.append(Path.cwd() / relpath)
     monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda: None)
     patch_sp_print_called()
-    main("tests")
+    main(ppe.TESTS.name)
     assert nocolorcapsys.stdout().strip() == expected
 
 
@@ -505,20 +507,20 @@ def test_make_toc(
         announce what is called.
     :param make_tree: Create directory tree from dict mapping.
     """
-    project_dir = Path.cwd()
     modules = "modules.rst"
-    path = project_dir / DOCS / f"{REPO}.rst"
-    make_tree(project_dir, {"docs": {modules: None, CONFPY: None}})
-    with open(path, "w", encoding="utf-8") as fout:
-        assert fout.write(files.DEFAULT_TOC)
+    make_tree(
+        Path.cwd(), {ppe.DOCS.name: {modules: None, ppe.DOCS_CONF: None}}
+    )
+    with open(ppe.PACKAGE_TOC, "w", encoding=ppe.ENCODING) as fout:
+        assert fout.write(templates.DEFAULT_TOC)
 
     monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda: None)
     patch_sp_print_called()
-    main("toc")
-    with open(path, encoding="utf-8") as fin:
-        assert fin.read() == files.ALTERED_TOC
+    main(TOC)
+    with open(ppe.PACKAGE_TOC, encoding=ppe.ENCODING) as fin:
+        assert fin.read() == templates.ALTERED_TOC
 
-    assert not Path(project_dir / DOCS / modules).is_file()
+    assert not Path(ppe.DOCS / modules).is_file()
 
 
 def test_make_requirements(
@@ -538,18 +540,19 @@ def test_make_requirements(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
-    path = Path.cwd() / pyaud_plugins.environ.REQUIREMENTS
-    with open(Path.cwd() / PIPFILE_LOCK, "w", encoding="utf-8") as fout:
-        fout.write(files.PIPFILE_LOCK)
+    with open(ppe.PIPFILE_LOCK, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.PIPFILE_LOCK)
 
-    patch_sp_output(files.PIPFILE2REQ_PROD, files.PIPFILE2REQ_DEV)
+    patch_sp_output(templates.PIPFILE2REQ_PROD, templates.PIPFILE2REQ_DEV)
     monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda: None)
-    main("requirements")
+    main(REQUIREMENTS)
     assert nocolorcapsys.stdout() == (
-        f"Updating ``{path}``\ncreated ``{path.name}``\n"
+        "Updating ``{}``\ncreated ``{}``\n".format(
+            ppe.REQUIREMENTS, ppe.REQUIREMENTS.name
+        )
     )
-    with open(path, encoding="utf-8") as fin:
-        assert fin.read() == files.REQUIREMENTS
+    with open(ppe.REQUIREMENTS, encoding=ppe.ENCODING) as fin:
+        assert fin.read() == templates.REQUIREMENTS
 
 
 def test_make_whitelist(
@@ -566,12 +569,10 @@ def test_make_whitelist(
         color codes.
     :param make_tree: Create directory tree from dict mapping.
     """
-    project_dir = Path.cwd()
-    whitelist = project_dir / pyaud_plugins.environ.WHITELIST
     make_tree(
-        project_dir,
+        Path.cwd(),
         {
-            "tests": {"conftest.py": None, FILES: None},
+            ppe.TESTS.name: {"conftest.py": None, FILE: None},
             "pyaud": {"src": {INIT: None, "modules.py": None}},
         },
     )
@@ -579,14 +580,14 @@ def test_make_whitelist(
     pyaud.git.add(".")
     pyaud.files.populate()
     monkeypatch.setattr(
-        "spall.Subprocess.stdout", lambda *_, **__: files.Whitelist.be8a443
+        "spall.Subprocess.stdout", lambda *_, **__: templates.Whitelist.be8a443
     )
-    pyaud.plugins.get("whitelist")()
+    pyaud.plugins.get(WHITELIST)()
     assert nocolorcapsys.stdout() == (
-        f"Updating ``{whitelist}``\ncreated ``{whitelist.name}``\n"
+        f"Updating ``{ppe.WHITELIST}``\ncreated ``{ppe.WHITELIST.name}``\n"
     )
-    with open(whitelist, encoding="utf-8") as fin:
-        assert fin.read() == files.Whitelist.be8a443_all()
+    with open(ppe.WHITELIST, encoding=ppe.ENCODING) as fin:
+        assert fin.read() == templates.Whitelist.be8a443_all()
 
 
 def test_pylint_colorized(
@@ -602,12 +603,12 @@ def test_pylint_colorized(
     :param main: Patch package entry point.
     :param capsys: Capture sys output.
     """
-    path = Path.cwd() / FILES
-    with open(path, "w", encoding="utf-8") as fout:
+    path = Path.cwd() / FILE
+    with open(path, "w", encoding=ppe.ENCODING) as fout:
         fout.write("import this_package_does_not_exist")
 
     pyaud.files.append(path)
-    main("lint", "--suppress")
+    main("lint", FLAG_SUPPRESS)
     output = capsys.readouterr()[0]
     assert all(
         i in output
@@ -624,21 +625,21 @@ def test_isort_imports(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
-    path = Path.cwd() / FILES
-    with open(path, "w", encoding="utf-8") as fout:
-        fout.write(files.IMPORTS_UNSORTED)
+    path = Path.cwd() / FILE
+    with open(path, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.IMPORTS_UNSORTED)
 
     pyaud.files.append(path)
-    main("imports", "--fix")
-    with open(path, encoding="utf-8") as fin:
+    main(IMPORTS, FLAG_FIX)
+    with open(path, encoding=ppe.ENCODING) as fin:
         assert (
-            files.IMPORTS_SORTED.splitlines()[1:]
+            templates.IMPORTS_SORTED.splitlines()[1:]
             == fin.read().splitlines()[:20]
         )
 
     out = nocolorcapsys.stdout()
     assert all(i in out for i in (f"Fixed {path.name}", NO_ISSUES))
-    main("imports")
+    main(IMPORTS)
 
 
 def test_readme(main: MockMainType, nocolorcapsys: NoColorCapsys) -> None:
@@ -652,25 +653,25 @@ def test_readme(main: MockMainType, nocolorcapsys: NoColorCapsys) -> None:
     assert (
         nocolorcapsys.stdout().strip() == "No README.rst found in project root"
     )
-    with open(Path.cwd() / README, "w", encoding="utf-8") as fout:
-        fout.write(files.CODE_BLOCK_TEMPLATE)
+    with open(ppe.README_RST, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.CODE_BLOCK_TEMPLATE)
 
     main("readme")
     assert (
         "\n".join([i.strip() for i in nocolorcapsys.stdout().splitlines()])
-        == files.CODE_BLOCK_EXPECTED
+        == templates.CODE_BLOCK_EXPECTED
     )
 
 
 @pytest.mark.parametrize(
     "module,content",
     [
-        ("format", files.UNFORMATTED),
-        ("imports", files.IMPORTS_UNSORTED),
-        ("format-str", files.FORMAT_STR_FUNCS_PRE),
-        ("format-docs", files.DOCFORMATTER_EXAMPLE),
+        (FORMAT, templates.UNFORMATTED),
+        (IMPORTS, templates.IMPORTS_UNSORTED),
+        (FORMAT_STR, templates.FORMAT_STR_FUNCS_PRE),
+        (FORMAT_DOCS, templates.DOCFORMATTER_EXAMPLE),
     ],
-    ids=["format", "imports", "format-str", "format-docs"],
+    ids=[FORMAT, IMPORTS, FORMAT_STR, FORMAT_DOCS],
 )
 def test_py_audit_error(
     main: MockMainType, make_tree: MakeTreeType, module: str, content: str
@@ -682,10 +683,12 @@ def test_py_audit_error(
     :param module: [<module>].__name__.
     :param content: Content to write to file.
     """
-    project_dir = Path.cwd()
-    file = project_dir / FILES
-    make_tree(project_dir, {"tests": {"_test.py": None}, REPO: {INIT: None}})
-    with open(file, "w", encoding="utf-8") as fout:
+    file = Path.cwd() / FILE
+    make_tree(
+        Path.cwd(),
+        {ppe.TESTS.name: {"_test.py": None}, ppe.PACKAGE_NAME: {INIT: None}},
+    )
+    with open(file, "w", encoding=ppe.ENCODING) as fout:
         fout.write(content)
 
     pyaud.git.add(".")
@@ -698,7 +701,7 @@ def test_py_audit_error(
     assert "Path" not in stderr
 
 
-@pytest.mark.usefixtures("init_remote")
+@pytest.mark.usefixtures(INIT_REMOTE)
 def test_deploy_not_master(
     main: MockMainType,
     monkeypatch: pytest.MonkeyPatch,
@@ -712,14 +715,14 @@ def test_deploy_not_master(
         color codes.
     """
     monkeypatch.setattr("pyaud.branch", lambda: "not_master")
-    main("deploy-docs")
+    main(DEPLOY_DOCS)
     out = [i.strip() for i in nocolorcapsys.stdout().splitlines()]
     assert all(
         i in out for i in ["Documentation not for master", PUSHING_SKIPPED]
     )
 
 
-@pytest.mark.usefixtures("init_remote")
+@pytest.mark.usefixtures(INIT_REMOTE)
 def test_deploy_master_not_set(
     main: MockMainType,
     monkeypatch: pytest.MonkeyPatch,
@@ -741,7 +744,7 @@ def test_deploy_master_not_set(
     monkeypatch.delenv("PYAUD_GH_NAME")
     monkeypatch.delenv("PYAUD_GH_EMAIL")
     monkeypatch.delenv("PYAUD_GH_TOKEN")
-    main("deploy-docs")
+    main(DEPLOY_DOCS)
     out = nocolorcapsys.stdout().splitlines()
     assert all(
         i in out
@@ -755,7 +758,7 @@ def test_deploy_master_not_set(
     )
 
 
-@pytest.mark.usefixtures("init_remote")
+@pytest.mark.usefixtures(INIT_REMOTE)
 def test_deploy_master(
     main: MockMainType,
     monkeypatch: pytest.MonkeyPatch,
@@ -771,26 +774,22 @@ def test_deploy_master(
     :param nocolorcapsys: Capture system output while stripping ANSI
                             color codes.
     """
-    project_dir = Path.cwd()
-    readme = project_dir / README
     mock_plugins = pyaud.plugins.mapping()
 
     def _docs(*_: str, **__: int) -> int:
-        Path(Path.cwd() / pyaud_plugins.environ.BUILDDIR / "html").mkdir(
-            parents=True
-        )
+        Path(Path.cwd() / ppe.BUILDDIR / "html").mkdir(parents=True)
         return 0
 
-    mock_plugins["docs"] = _docs  # type: ignore
+    mock_plugins[ppe.DOCS.name] = _docs  # type: ignore
     monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mock_plugins)
-    readme.touch()  # force stash
+    ppe.README_RST.touch()  # force stash
     pyaud.git.add(".")
     pyaud.git.commit("-m", INITIAL_COMMIT, devnull=True)
 
-    with open(readme, "w", encoding="utf-8") as fout:
-        fout.write(files.README_RST)
+    with open(ppe.README_RST, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.README_RST)
 
-    main("deploy-docs", "--fix")
+    main(DEPLOY_DOCS, FLAG_FIX)
     out = nocolorcapsys.stdout().splitlines()
     assert all(
         i in out
@@ -799,7 +798,7 @@ def test_deploy_master(
             "Documentation Successfully deployed",
         ]
     )
-    main("deploy-docs", "--fix")
+    main(DEPLOY_DOCS, FLAG_FIX)
     out = nocolorcapsys.stdout().splitlines()
     assert all(
         i in out
@@ -827,7 +826,7 @@ def test_deploy_master(
     ],
     ids=["stashed", "multi"],
 )
-@pytest.mark.usefixtures("init_remote")
+@pytest.mark.usefixtures(INIT_REMOTE)
 def test_deploy_master_param(
     main: MockMainType,
     monkeypatch: pytest.MonkeyPatch,
@@ -844,25 +843,22 @@ def test_deploy_master_param(
     :param rounds: How many times ``make_deploy_docs`` needs to be run.
     :param expected: Expected stdout result.
     """
-    path = Path.cwd()
     mock_plugins = pyaud.plugins.mapping()
 
     def _docs(*_: str, **__: bool) -> int:
-        Path(path / pyaud_plugins.environ.BUILDDIR / "html").mkdir(
-            parents=True
-        )
+        Path(ppe.BUILDDIR / "html").mkdir(parents=True)
         return 0
 
-    mock_plugins["docs"] = _docs  # type: ignore
+    mock_plugins[ppe.DOCS.name] = _docs  # type: ignore
     monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mock_plugins)
-    with open(path / README, "w", encoding="utf-8") as fout:
-        fout.write(files.README_RST)
+    with open(ppe.README_RST, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.README_RST)
 
-    Path(path, FILES).touch()
+    Path(Path.cwd(), FILE).touch()
     pyaud.git.add(".", devnull=True)
     pyaud.git.commit("-m", INITIAL_COMMIT, devnull=True)
     for _ in range(rounds):
-        main("deploy-docs", "--fix")
+        main(DEPLOY_DOCS, FLAG_FIX)
 
     out = [i.strip() for i in nocolorcapsys.stdout().splitlines()]
     assert all(i in out for i in expected)
@@ -886,7 +882,7 @@ def test_deploy_cov_report_token(
     :param patch_sp_print_called: Patch ``Subprocess.call`` to only
         announce what is called.
     """
-    Path(Path.cwd() / pyaud_plugins.environ.COVERAGE_XML).touch()
+    ppe.COVERAGE_XML.touch()
     patch_sp_print_called()
     monkeypatch.setenv("CODECOV_TOKEN", "token")
     main("deploy-cov")
@@ -906,8 +902,8 @@ def test_deploy_cov_no_token(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
-    Path(Path.cwd() / pyaud_plugins.environ.COVERAGE_XML).touch()
-    main("deploy-cov")
+    ppe.COVERAGE_XML.touch()
+    main(DEPLOY_COV)
     out = nocolorcapsys.stdout()
     assert "CODECOV_TOKEN not set" in out
 
@@ -924,7 +920,7 @@ def test_deploy_cov_no_report_token(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
-    main("deploy-cov")
+    main(DEPLOY_COV)
     out = nocolorcapsys.stdout()
     assert all(e in out for e in ["No coverage report found"])
 
@@ -942,9 +938,9 @@ def test_make_format_success(
     :param patch_sp_print_called: Patch ``Subprocess.call`` to only
         announce what is called.
     """
-    pyaud.files.append(Path.cwd() / FILES)
+    pyaud.files.append(Path.cwd() / FILE)
     patch_sp_print_called()
-    main("format")
+    main(FORMAT)
     nocolorcapsys.readouterr()
 
 
@@ -955,13 +951,13 @@ def test_make_format_docs_fail(main: MockMainType) -> None:
 
     :param main: Patch package entry point.
     """
-    path = Path.cwd() / FILES
-    with open(path, "w", encoding="utf-8") as fout:
-        fout.write(files.DOCFORMATTER_EXAMPLE)
+    path = Path.cwd() / FILE
+    with open(path, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.DOCFORMATTER_EXAMPLE)
 
     pyaud.files.append(path)
     with pytest.raises(pyaud.exceptions.AuditError):
-        main("format-docs")
+        main(FORMAT_DOCS)
 
 
 def test_make_format_docs_suppress(
@@ -976,12 +972,12 @@ def test_make_format_docs_suppress(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
-    path = Path.cwd() / FILES
-    with open(path, "w", encoding="utf-8") as fout:
-        fout.write(files.DOCFORMATTER_EXAMPLE)
+    path = Path.cwd() / FILE
+    with open(path, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.DOCFORMATTER_EXAMPLE)
 
     pyaud.files.append(path)
-    main("format-docs", "--suppress")
+    main(FORMAT_DOCS, FLAG_SUPPRESS)
     assert (
         nocolorcapsys.stderr().strip()
         == "Failed: returned non-zero exit status 3"
@@ -996,13 +992,13 @@ def test_isort_and_black(main: MockMainType) -> None:
 
     :param main: Patch package entry point.
     """
-    path = Path.cwd() / FILES
-    with open(path, "w", encoding="utf-8") as fout:
-        fout.write(files.BEFORE_ISORT)
+    path = Path.cwd() / FILE
+    with open(path, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.BEFORE_ISORT)
 
     pyaud.files.append(path)
     with pytest.raises(pyaud.exceptions.AuditError):
-        main("imports")
+        main(IMPORTS)
 
 
 def test_isort_and_black_fix(
@@ -1017,13 +1013,14 @@ def test_isort_and_black_fix(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
-    with open(Path.cwd() / FILES, "w", encoding="utf-8") as fout:
-        fout.write(files.BEFORE_ISORT)
+    path = Path.cwd() / FILE
+    with open(path, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.BEFORE_ISORT)
 
-    pyaud.files.append(Path.cwd() / FILES)
-    main("imports", "--suppress", "--fix")
+    pyaud.files.append(path)
+    main(IMPORTS, FLAG_SUPPRESS, FLAG_FIX)
     out = nocolorcapsys.stdout()
-    assert f"Fixed {Path(Path.cwd() / FILES).relative_to(Path.cwd())}" in out
+    assert f"Fixed {path.relative_to(Path.cwd())}" in out
 
 
 def test_make_format_fix(main: MockMainType) -> None:
@@ -1031,13 +1028,14 @@ def test_make_format_fix(main: MockMainType) -> None:
 
     :param main: Patch package entry point.
     """
-    with open(Path.cwd() / FILES, "w", encoding="utf-8") as fout:
-        fout.write(files.UNFORMATTED)
+    path = Path.cwd() / FILE
+    with open(path, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.UNFORMATTED)
 
-    pyaud.files.append(Path.cwd() / FILES)
-    main("format", "--fix")
-    with open(Path.cwd() / FILES, encoding="utf-8") as fin:
-        assert fin.read().strip() == files.UNFORMATTED.replace("'", '"')
+    pyaud.files.append(path)
+    main(FORMAT, FLAG_FIX)
+    with open(path, encoding=ppe.ENCODING) as fin:
+        assert fin.read().strip() == templates.UNFORMATTED.replace("'", '"')
 
 
 def test_make_unused_fix(
@@ -1049,27 +1047,24 @@ def test_make_unused_fix(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
-    package = Path.cwd() / "repo"
-    make_tree(Path.cwd(), {"repo": {INIT: None}})
-    file = package / FILES
-    with open(file, "w", encoding="utf-8") as fout:
-        fout.write(files.UNFORMATTED)  # also, an unused function
+    make_tree(Path.cwd(), {ppe.PACKAGE_NAME: {INIT: None}})
+    file = Path.cwd() / ppe.PACKAGE_NAME / FILE
+    with open(file, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.UNFORMATTED)  # also, an unused function
 
     pyaud.files.append(file)
-    main("unused", "--fix")
+    main(UNUSED, FLAG_FIX)
     assert nocolorcapsys.stdout() == (
         "{}:1: unused function 'reformat_this' (60% confidence)\n"
         "Updating ``{}``\n"
         "created ``whitelist.py``\n"
         "Success: no issues found in 1 source files\n".format(
-            file, Path.cwd() / pyaud_plugins.environ.WHITELIST
+            file, ppe.WHITELIST
         )
     )
-    with open(
-        Path.cwd() / pyaud_plugins.environ.WHITELIST, encoding="utf-8"
-    ) as fin:
+    with open(ppe.WHITELIST, encoding=ppe.ENCODING) as fin:
         assert fin.read().strip() == (
-            "reformat_this  # unused function (repo/file.py:1)"
+            "reformat_this  # unused function (package/file.py:1)"
         )
 
 
@@ -1078,12 +1073,13 @@ def test_make_unused_fail(main: MockMainType) -> None:
 
     :param main: Patch package entry point.
     """
-    with open(Path.cwd() / FILES, "w", encoding="utf-8") as fout:
-        fout.write(files.UNFORMATTED)  # also, an unused function
+    path = Path.cwd() / FILE
+    with open(path, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.UNFORMATTED)  # also, an unused function
 
-    pyaud.files.append(Path.cwd() / FILES)
+    pyaud.files.append(path)
     with pytest.raises(pyaud.exceptions.AuditError) as err:
-        main("unused")
+        main(UNUSED)
 
     assert str(err.value) == "pyaud unused did not pass all checks"
 
@@ -1099,11 +1095,12 @@ def test_make_format_docs_fix(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
-    pyaud.files.append(Path.cwd() / FILES)
-    with open(Path.cwd() / FILES, "w", encoding="utf-8") as fout:
-        fout.write(files.DOCFORMATTER_EXAMPLE)
+    path = Path.cwd() / FILE
+    pyaud.files.append(path)
+    with open(path, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.DOCFORMATTER_EXAMPLE)
 
-    main("format-docs", "--fix")
+    main(FORMAT_DOCS, FLAG_FIX)
     assert nocolorcapsys.stdout().strip() == NO_ISSUES
 
 
@@ -1116,15 +1113,16 @@ def test_format_str_fix(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
-    with open(Path.cwd() / FILES, "w", encoding="utf-8") as fout:
-        fout.write(files.FORMAT_STR_FUNCS_PRE)
+    path = Path.cwd() / FILE
+    with open(path, "w", encoding=ppe.ENCODING) as fout:
+        fout.write(templates.FORMAT_STR_FUNCS_PRE)
 
     pyaud.git.add(".", devnull=True)
     pyaud.files.populate()
-    main("format-str", "--fix")
+    main(FORMAT_STR, FLAG_FIX)
     nocolorcapsys.stdout()
-    with open(Path.cwd() / FILES, encoding="utf-8") as fin:
-        assert fin.read() == files.FORMAT_STR_FUNCS_POST
+    with open(path, encoding=ppe.ENCODING) as fin:
+        assert fin.read() == templates.FORMAT_STR_FUNCS_POST
 
 
 def test_audit_class_error(
@@ -1136,7 +1134,7 @@ def test_audit_class_error(
     :param monkeypatch: Mock patch environment and attributes.
     """
     monkeypatch.setattr(SP_OPEN_PROC, lambda *_, **__: 1)
-    pyaud.files.append(Path.cwd() / FILES)
+    pyaud.files.append(Path.cwd() / FILE)
     monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda: None)
     with pytest.raises(pyaud.exceptions.AuditError):
         main("lint")
@@ -1149,7 +1147,7 @@ def test_no_exe_provided(monkeypatch: pytest.MonkeyPatch) -> None:
     """
     unique = datetime.datetime.now().strftime("%d%m%YT%H%M%S")
     monkeypatch.setattr(SP_OPEN_PROC, lambda *_, **__: 1)
-    pyaud.files.append(Path.cwd() / FILES)
+    pyaud.files.append(Path.cwd() / FILE)
 
     class Plugin(pyaud.plugins.Audit):
         """Nothing to do."""
@@ -1170,13 +1168,12 @@ def test_download_missing_stubs(
     :param main: Patch package entry point.
     :return:
     """
-    path = Path(os.getcwd(), FILES)
-    pyaud.files.append(path)
+    pyaud.files.append(Path.cwd() / FILE)
     monkeypatch.setattr(SP_CALL, lambda *_, **__: 1)
     monkeypatch.setattr(
         SP_STDOUT, lambda _: ["error: Library stubs not installed for"]
     )
-    main("typecheck")
+    main(TYPECHECK)
 
 
 def test_typecheck_re_raise_err(
@@ -1188,12 +1185,11 @@ def test_typecheck_re_raise_err(
     :param main: Patch package entry point.
     :return:
     """
-    path = Path(os.getcwd(), FILES)
-    pyaud.files.append(path)
+    pyaud.files.append(Path.cwd() / FILE)
     monkeypatch.setattr(SP_CALL, lambda *_, **__: 1)
     monkeypatch.setattr(SP_STDOUT, lambda _: [])
     with pytest.raises(pyaud.exceptions.AuditError) as err:
-        main("typecheck")
+        main(TYPECHECK)
 
     assert str(err.value) == "pyaud typecheck did not pass all checks"
 
@@ -1213,8 +1209,8 @@ def test_nested_toc(main: MockMainType, make_tree: MakeTreeType) -> None:
     make_tree(
         Path.cwd(),
         {
-            "docs": {CONFPY: None},
-            "repo": {
+            ppe.DOCS.name: {ppe.DOCS_CONF.name: None},
+            ppe.PACKAGE_NAME: {
                 "routes": {
                     "auth.py": None,
                     "__init__.py": None,
@@ -1242,7 +1238,7 @@ def test_nested_toc(main: MockMainType, make_tree: MakeTreeType) -> None:
             },
         },
     )
-    main("toc")
-    assert not Path(Path.cwd() / DOCS / "repo.routes.rst").is_file()
-    with open(Path.cwd() / DOCS / f"{REPO}.rst", encoding="utf-8") as fin:
-        assert fin.read() == EXPECTED_NESTED_TOC
+    main(TOC)
+    assert not Path(ppe.DOCS / "repo.routes.rst").is_file()
+    with open(ppe.PACKAGE_TOC, encoding=ppe.ENCODING) as fin:
+        assert fin.read() == templates.EXPECTED_NESTED_TOC

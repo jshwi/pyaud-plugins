@@ -8,8 +8,6 @@ import re
 import typing as t
 from pathlib import Path
 
-import pyaud
-
 MockMainType = t.Callable[..., None]
 MockFuncType = t.Callable[..., int]
 MockCallStatusType = t.Callable[[str, int], MockFuncType]
@@ -25,40 +23,38 @@ class MockSPCallType(t.Protocol):  # pylint: disable=too-few-public-methods
         """Type for ``fixture_patch_sp_call``"""
 
 
-REAL_REPO = Path(__file__).parent.parent
-FILES = "file.py"
+FILE = "file.py"
 PUSHING_SKIPPED = "Pushing skipped"
-REPO = "repo"
 GH_NAME = "test_user"
 GH_EMAIL = "test_email.com"
 GH_TOKEN = "token"
 INITIAL_COMMIT = "Initial commit"
 NO_ISSUES = "Success: no issues found in 1 source files"
 INIT = "__init__.py"
-CONFPY = "conf.py"
-LEVELS = ("DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL")
-DEBUG = LEVELS[0]
-INFO = LEVELS[1]
-WARNING = LEVELS[2]
-ERROR = LEVELS[3]
-CRITICAL = LEVELS[4]
-PYAUD_MODULES = "pyaud.main.plugins"
+DEBUG = "DEBUG"
 SP_OPEN_PROC = "spall.Subprocess._open_process"
-README = Path("README.rst")
 PYAUD_PLUGINS_PLUGINS = "pyaud.plugins._plugins"
-TYPE_ERROR = "can only register one of the following:"
-DOCS = Path("docs")
-PIPFILE_LOCK = Path("Pipfile.lock")
-RCFILE = f".{pyaud.__name__}rc"
-TOMLFILE = f"{pyaud.__name__}.toml"
-PYPROJECT = "pyproject.toml"
-GITIGNORE = ".gitignore"
 PYAUD_FILES_POPULATE = "pyaud.files.populate"
 SP_CALL = "spall.Subprocess.call"
 SP_STDOUT = "spall.Subprocess.stdout"
-OS_GETCWD = "os.getcwd"
-WHITELIST_PY = "whitelist.py"
-COMMIT = "7c57dc943941566f47b9e7ee3208245d0bcd7656"
+FLAG_SUPPRESS = "--suppress"
+FLAG_FIX = "--fix"
+NO_TESTS_FOUND = "No tests found"
+FORMAT_STR = "format-str"
+REQUIREMENTS = "requirements"
+UNUSED = "unused"
+WHITELIST = "whitelist"
+SP_REPR_PYTEST = "<Subprocess (pytest)>"
+COVERAGE = "coverage"
+FORMAT = "format"
+INIT_REMOTE = "init_remote"
+TYPECHECK = "typecheck"
+DEPLOY_COV = "deploy-cov"
+FORMAT_DOCS = "format-docs"
+TOC = "toc"
+IMPORTS = "imports"
+DEPLOY_DOCS = "deploy-docs"
+LOGGING = "logging"
 
 
 class NoColorCapsys:
@@ -113,13 +109,3 @@ class NoColorCapsys:
         :return: Stderr.
         """
         return self.readouterr()[1]
-
-
-class MockPluginType(pyaud.plugins.Plugin):
-    """PluginType object."""
-
-
-class MockCachedPluginType(MockPluginType):
-    """PluginType object with ``cache`` set to True."""
-
-    cache = True

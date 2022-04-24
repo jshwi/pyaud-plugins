@@ -6,7 +6,7 @@ Content to write to mock files.
 """
 # pylint: disable=too-many-lines,line-too-long,too-few-public-methods
 
-README_RST = """repo\n====\n"""
+README_RST = """package\n====\n"""
 PIPFILE_LOCK = """{
 {
     "_meta": {
@@ -1425,13 +1425,13 @@ PIPFILE_LOCK = """{
 }
 """
 DEFAULT_TOC = """
-repo package
-============
+package package
+===============
 
 Module contents
 ---------------
 
-.. automodule:: repo
+.. automodule:: package
    :members:
    :undoc-members:
    :show-inheritance:
@@ -1813,9 +1813,9 @@ def make_deploy_docs(**kwargs: bool) -> None:
             print(f"- {null_val}")
 """
 ALTERED_TOC = (
-    "repo\n"
-    "====\n\n"
-    ".. automodule:: repo\n"
+    "package\n"
+    "=======\n\n"
+    ".. automodule:: package\n"
     "   :members:\n"
     "   :undoc-members:\n"
     "   :show-inheritance:\n"
@@ -1863,7 +1863,7 @@ BEFORE_ISORT = (
     "from . import (\n"
     "    GH_EMAIL,\n"
     "    GH_TOKEN,\n"
-    "    REAL_REPO,\n"
+    "    REAL_REPe,\n"
     "    GH_NAME,\n"
     "    FILES,\n"
     "    REPO,\n"
@@ -1873,94 +1873,94 @@ BEFORE_ISORT = (
 UNFORMATTED = """def reformat_this():
     print('black will make sure this is double quoted')"""
 EXPECTED_NESTED_TOC = """\
-repo
-====
+package
+=======
 
-.. automodule:: repo
+.. automodule:: package
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.admin
+.. automodule:: package.admin
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.cli
+.. automodule:: package.cli
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.config
+.. automodule:: package.config
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.deps
+.. automodule:: package.deps
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.exceptions
+.. automodule:: package.exceptions
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.extensions
+.. automodule:: package.extensions
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.forms
+.. automodule:: package.forms
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.log
+.. automodule:: package.log
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.mail
+.. automodule:: package.mail
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.models
+.. automodule:: package.models
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.navbar
+.. automodule:: package.navbar
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.redirect
+.. automodule:: package.redirect
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.renderers
+.. automodule:: package.renderers
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.routes
+.. automodule:: package.routes
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.routes.auth
+.. automodule:: package.routes.auth
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.routes.post
+.. automodule:: package.routes.post
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.routes.views
+.. automodule:: package.routes.views
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.security
+.. automodule:: package.security
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.shell
+.. automodule:: package.shell
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.tasks
+.. automodule:: package.tasks
    :members:
    :undoc-members:
    :show-inheritance:
-.. automodule:: repo.user
+.. automodule:: package.user
    :members:
    :undoc-members:
    :show-inheritance:
