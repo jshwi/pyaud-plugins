@@ -1,7 +1,4 @@
-"""
-pyaud_plugins
-=============
-"""
+"""Plugin package for Pyaud."""
 from . import modules
 from ._environ import environ
 from ._version import __version__

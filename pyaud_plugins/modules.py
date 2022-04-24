@@ -97,8 +97,10 @@ class DeployCov(  # pylint: disable=too-few-public-methods
     """Upload coverage data to ``Codecov``.
 
     If no file exists otherwise announce that no file has been created
-    yet. If no ``CODECOV_TOKEN`` environment variable has been exported
-    or defined in ``.env`` announce that no authorization token has been
+    yet.
+
+    If no ``CODECOV_TOKEN`` environment variable has been exported or
+    defined in ``.env`` announce that no authorization token has been
     created yet.
     """
 
@@ -128,10 +130,11 @@ class DeployDocs(
 ):  # pylint: disable=too-few-public-methods
     """Deploy package documentation to ``gh-pages``.
 
-    Check that the branch is being pushed as master (or other branch
-    for tests). If the correct branch is the one in use deploy.
-    ``gh-pages`` to the orphaned branch - otherwise do nothing and
-    announce.
+    Check that the branch is being pushed as master (or other branch for
+    tests).
+
+    If the correct branch is the one in use deploy. ``gh-pages`` to the
+    orphaned branch - otherwise do nothing and announce.
     """
 
     _pushing_skipped = "Pushing skipped"
@@ -222,8 +225,10 @@ class Docs(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
     """Compile package documentation with ``Sphinx``.
 
     This is so the hyperlink isn't exactly the same as the package
-    documentation. Build the ``Sphinx`` html documentation. Return the
-    README's title to what it originally was.
+    documentation.
+
+    Build the ``Sphinx`` html documentation. Return the README's title
+    to what it originally was.
     """
 
     sphinx_build = "sphinx-build"
@@ -268,9 +273,9 @@ class Files(
 ):  # pylint: disable=too-few-public-methods
     """Audit project data files.
 
-    Make ``docs/<APPNAME>.rst``, ``whitelist.py``, and
-    ``requirements.txt`` if none already exist, update them if they do
-    and changes are needed or pass if nothing needs to be done.
+    Make docs/<APPNAME>.rst, whitelist.py, and requirements.txt if none
+    already exist, update them if they do and changes are needed or pass
+    if nothing needs to be done.
     """
 
     def plugins(self) -> t.List[str]:
@@ -419,9 +424,8 @@ class Toc(pyaud.plugins.Write):
             for content in contents:
                 fout.write(f"{content}\n{toc_attrs}\n")
 
-        # files that we do not want included in docs
-        # modules creates an extra layer that is not desired for this
-        # module
+        # files that we do not want included in docs modules creates an
+        # extra layer that is not desired for this module
         blacklist = [docspath / "modules.rst", *nested]
 
         # remove unwanted files
@@ -629,8 +633,8 @@ class Imports(pyaud.plugins.FixFile):
     def fix(self, file: t.Any, **kwargs: bool) -> None:
         print(f"Fixed {file.relative_to(Path.cwd())}")
 
-        # replace original file's contents with the temp
-        # file post ``isort`` and ``Black``
+        # replace original file's contents with the temp file post
+        # ``isort`` and ``Black``
         with open(file, "w", encoding="utf-8") as fout:
             fout.write(self.result)
 
