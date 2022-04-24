@@ -29,30 +29,39 @@ class _Environ(_Env):
     def WHITELIST(self) -> _Path:
         """File for allowed "unused" code (usually false-positives)."""
         with self.prefixed(self.PREFIX):
-            return self.path("WHITELIST", default=_Path("whitelist.py"))
+            return _Path.cwd() / self.path(
+                "WHITELIST", default=_Path("whitelist.py")
+            )
 
     @property
     def COVERAGE_XML(self) -> _Path:
         """Location to store coverage.xml file."""
         with self.prefixed(self.PREFIX):
-            return self.path("COVERAGE_XML", default=_Path("coverage.xml"))
+            return _Path.cwd() / self.path(
+                "COVERAGE_XML", default=_Path("coverage.xml")
+            )
 
     @property
     def REQUIREMENTS(self) -> _Path:
         """Where to find requirements.txt (or other named) file."""
         with self.prefixed(self.PREFIX):
-            return self.path("REQUIREMENTS", default=_Path("requirements.txt"))
+            return _Path.cwd() / self.path(
+                "REQUIREMENTS", default=_Path("requirements.txt")
+            )
 
     @property
     def DOCS(self) -> _Path:
         """Location of the user's documentation."""
         with self.prefixed(self.PREFIX):
-            return self.path("DOCS", default=_Path("docs"))
+            return _Path.cwd() / self.path("DOCS", default=_Path("docs"))
 
     @property
     def BUILDDIR(self) -> _Path:
         """Where to put built documentation."""
-        return self.path("BUILDDIR", default=self.DOCS / "_build")
+        with self.prefixed(self.PREFIX):
+            return _Path.cwd() / self.path(
+                "BUILDDIR", default=self.DOCS / "_build"
+            )
 
     @property
     def GH_NAME(self) -> _t.Optional[str]:

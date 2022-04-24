@@ -65,7 +65,7 @@ class Coverage(Tests):  # pylint: disable=too-few-public-methods
 
     @property
     def exe(self) -> t.List[str]:
-        return super().exe + [self.coverage]
+        return [self.pytest, self.coverage]
 
     def action(self, *args: str, **kwargs: bool) -> int:
         returncode = super().action(
@@ -111,12 +111,11 @@ class DeployCov(  # pylint: disable=too-few-public-methods
         return [self.codecov]
 
     def action(self, *args: str, **kwargs: bool) -> int:
-        coverage_xml = Path.cwd() / environ.COVERAGE_XML
-        self.logger().debug("looking for %s", coverage_xml)
-        if coverage_xml.is_file():
+        self.logger().debug("looking for %s", environ.COVERAGE_XML)
+        if environ.COVERAGE_XML.is_file():
             if environ.CODECOV_TOKEN is not None:
                 self.subprocess[self.codecov].call(
-                    "--file", Path.cwd() / coverage_xml, **kwargs
+                    "--file", environ.COVERAGE_XML, **kwargs
                 )
             else:
                 print("CODECOV_TOKEN not set")
@@ -143,7 +142,6 @@ class DeployDocs(
 
     def deploy_docs(self) -> None:
         """Series of functions for deploying docs."""
-        gh_remote = environ.GH_REMOTE
         root_html = Path.cwd() / "html"
         pyaud.git.add(".")
         pyaud.git.diff_index("--cached", "HEAD", capture=True)
@@ -162,7 +160,7 @@ class DeployDocs(
         pyaud.git.checkout("--orphan", "gh-pages")
         pyaud.git.config("--global", "user.name", environ.GH_NAME)
         pyaud.git.config("--global", "user.email", environ.GH_EMAIL)
-        shutil.rmtree(Path.cwd() / DOCS)
+        shutil.rmtree(environ.DOCS)
         pyaud.git.rm("-rf", Path.cwd(), devnull=True)
         pyaud.git.clean("-fdx", "--exclude=html", devnull=True)
         for file in root_html.rglob("*"):
@@ -174,10 +172,12 @@ class DeployDocs(
             "-m", '"[ci skip] Publishes updated documentation"', devnull=True
         )
         pyaud.git.remote("rm", "origin")
-        pyaud.git.remote("add", "origin", gh_remote)
+        pyaud.git.remote("add", "origin", environ.GH_REMOTE)
         pyaud.git.fetch()
         pyaud.git.stdout()
-        pyaud.git.ls_remote("--heads", gh_remote, "gh-pages", capture=True)
+        pyaud.git.ls_remote(
+            "--heads", environ.GH_REMOTE, "gh-pages", capture=True
+        )
         result = pyaud.git.stdout()
         remote_exists = None if not result else result[-1]
         pyaud.git.diff(
@@ -206,7 +206,7 @@ class DeployDocs(
                 k for k in git_credentials if getattr(environ, k) is None
             ]
             if not null_vals:
-                if not Path(Path.cwd() / environ.BUILDDIR / "html").is_dir():
+                if not Path(environ.BUILDDIR / "html").is_dir():
                     pyaud.plugins.get("docs")(**kwargs)
 
                 self.deploy_docs()
@@ -246,9 +246,8 @@ class Docs(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
         pyaud.plugins.get("toc")(*args, **kwargs)
         readme_rst = "README"
         underline = len(readme_rst) * "="
-        build_dir = Path.cwd() / environ.BUILDDIR
-        if build_dir.is_dir():
-            shutil.rmtree(build_dir)
+        if environ.BUILDDIR.is_dir():
+            shutil.rmtree(environ.BUILDDIR)
 
         with pyaud.parsers.Md2Rst(Path.cwd() / "README.md", temp=True):
             if (
@@ -261,8 +260,8 @@ class Docs(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
                     command = [
                         "-M",
                         "html",
-                        Path.cwd() / DOCS,
-                        build_dir,
+                        environ.DOCS,
+                        environ.BUILDDIR,
                         "-W",
                     ]
                     self.subprocess[self.sphinx_build].call(*command, **kwargs)
@@ -343,7 +342,7 @@ class Requirements(pyaud.plugins.Write):
 
     @property
     def path(self) -> Path:
-        return Path.cwd() / environ.REQUIREMENTS
+        return environ.REQUIREMENTS
 
     def required(self) -> Path:
         return Path.cwd() / "Pipfile.lock"
@@ -398,10 +397,9 @@ class Toc(pyaud.plugins.Write):
     def write(self, *args: str, **kwargs: bool) -> int:
         toc_attrs = "   :members:\n   :undoc-members:\n   :show-inheritance:"
         package = pyaud.package()
-        docspath = Path.cwd() / DOCS
         self.subprocess[self.sphinx_apidoc].call(
             "-o",
-            docspath,
+            environ.DOCS,
             Path.cwd() / package,
             "-f",
             *args,
@@ -412,8 +410,8 @@ class Toc(pyaud.plugins.Write):
         # dynamically populate a list of unwanted, overly nested files
         # nesting the file in the docs/<NAME>.rst file is preferred
         nested = [
-            docspath / f
-            for f in docspath.iterdir()
+            environ.DOCS / f
+            for f in environ.DOCS.iterdir()
             if len(f.name.split(".")) > 2
         ]
 
@@ -434,7 +432,7 @@ class Toc(pyaud.plugins.Write):
 
         # files that we do not want included in docs modules creates an
         # extra layer that is not desired for this module
-        blacklist = [docspath / "modules.rst", *nested]
+        blacklist = [environ.DOCS / "modules.rst", *nested]
 
         # remove unwanted files
         for module in blacklist:
@@ -527,10 +525,9 @@ class Unused(pyaud.plugins.Fix):
         return [self.vulture]
 
     def audit(self, *args: str, **kwargs: bool) -> int:
-        whitelist = Path.cwd() / environ.WHITELIST
         args = tuple([*pyaud.files.args(reduce=True), *args])
-        if whitelist.is_file():
-            args = str(whitelist), *args
+        if environ.WHITELIST.is_file():
+            args = str(environ.WHITELIST), *args
 
         return self.subprocess[self.vulture].call(*args, **kwargs)
 
@@ -555,7 +552,7 @@ class Whitelist(pyaud.plugins.Write):
 
     @property
     def path(self) -> Path:
-        return Path.cwd() / environ.WHITELIST
+        return environ.WHITELIST
 
     def write(self, *args: str, **kwargs: bool) -> int:
         # append whitelist exceptions for each individual module
