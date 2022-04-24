@@ -78,6 +78,7 @@ pytest-randomly = "^3.11.0"
 pytest-sugar = "^0.9.4"
 pytest-xdist = "^2.5.0"
 restview = "^3.0.0"
+sphinx-toolbox = "^2.18.1"
 toml-sort = "^0.20.0"
 
 [tool.pyaud.audit]
