@@ -1,6 +1,8 @@
 [build-system]
 build-backend = "poetry.core.masonry.api"
-requires = ["poetry-core>=1.0.0"]
+requires = [
+    "poetry-core>=1.0.0",
+]
 
 [tool.black]
 exclude = '''
@@ -19,14 +21,26 @@ skip-magic-trailing-comma = true
 fail_under = 100
 
 [tool.coverage.run]
-omit = ["whitelist.py", "pyaud/__main__.py"]
+omit = [
+    "whitelist.py",
+    "pyaud_plugins/__main__.py",
+]
 
 [tool.poetry]
-authors = ["jshwi <stephen@jshwisolutions.com>"]
+authors = [
+    "jshwi <stephen@jshwisolutions.com>",
+]
 description = "Plugin package for Pyaud"
+keywords = [
+    "pyaud",
+    "plugins",
+    "audit",
+    "ci",
+    "python",
+]
 license = "MIT"
 name = "pyaud-plugins"
-readme = 'README.rst'
+readme = "README.rst"
 version = "0.3.0"
 
 [tool.poetry.dependencies]
@@ -60,6 +74,8 @@ bump2version = "^1.0.1"
 ipython = "^8.2.0"
 pyaud = "^3.12.0"
 pytest = ">=6.2.5,<8.0.0"
+pytest-randomly = "^3.11.0"
+pytest-sugar = "^0.9.4"
 pytest-xdist = "^2.5.0"
 restview = "^3.0.0"
 toml-sort = "^0.20.0"
@@ -75,15 +91,21 @@ modules = [
     "unused",
     "lint",
     "coverage",
-    "readme",
     "docs",
 ]
 
 [tool.pyaud.clean]
-exclude = ["*.egg*", ".mypy_cache", ".env", "instance"]
+exclude = [
+    "*.egg*",
+    ".mypy_cache",
+    ".env",
+]
 
 [tool.pyaud.indexing]
-exclude = ["whitelist.py", "conf.py", "setup.py"]
+exclude = [
+    "whitelist.py",
+    "conf.py",
+]
 
 [tool.pyaud.logging]
 disable_existing_loggers = true
@@ -100,13 +122,11 @@ formatter = "standard"
 when = "d"
 
 [tool.pyaud.logging.root]
-handlers = ["default"]
+handlers = [
+    "default",
+]
 level = "DEBUG"
 propagate = false
-
-[tool.pyaud.packages]
-exclude = []
-name = "pyaud_plugins"
 
 [tool.pytest.ini_options]
 addopts = [
@@ -119,4 +139,10 @@ addopts = [
     "auto"
 ]
 filterwarnings = "ignore::DeprecationWarning"
-norecursedirs = ["docs", "*.egg-info", ".git", ".mypy_cache", ".idea", "prof"]
+norecursedirs = [
+    "docs",
+    "*.egg-info",
+    ".git",
+    ".mypy_cache",
+    ".idea",
+]
