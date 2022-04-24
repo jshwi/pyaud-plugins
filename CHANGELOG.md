@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased](https://github.com/jshwi/pyaud-plugins/compare/v0.3.0...HEAD)
 ------------------------------------------------------------------------
+### Added
+- Adds more properties to `pyaud_plugins.environ`
+
 ### Changed
 - `pyaud_plugins.environ` returns the absolute path
 

@@ -99,6 +99,80 @@ class _Environ(_Env):
         with self.prefixed(self.PREFIX):
             return self.str("GH_REMOTE", default=default)
 
+    @property
+    def ENCODING(self) -> str:
+        """Default encoding."""
+        with self.prefixed(self.PREFIX):
+            return self.str("ENCODING", default="utf-8")
+
+    @property
+    def PIPFILE_LOCK(self) -> _Path:
+        """Location of the user's Pipfile.lock."""
+        with self.prefixed(self.PREFIX):
+            return _Path.cwd() / self.path(
+                "PIPFILE_LOCK", default=_Path("Pipfile.lock")
+            )
+
+    @property
+    def PACKAGE_TOC(self):
+        """Location of the user's <PACKAGENAME>.toc."""
+        with self.prefixed(self.PREFIX):
+            return _Path.cwd() / self.path(
+                "PACKAGE_TOC", default=self.DOCS / f"{self.PACKAGE_NAME}.rst"
+            )
+
+    @property
+    def DOCS_HTML(self) -> _Path:
+        """Location of the user's html docs."""
+        with self.prefixed(self.PREFIX):
+            return _Path.cwd() / self.path(
+                "DOCS_HTML", default=self.BUILDDIR / "html"
+            )
+
+    @property
+    def DOCS_CONF(self) -> _Path:
+        """Location of the user's documentation config."""
+        with self.prefixed(self.PREFIX):
+            return _Path.cwd() / self.path(
+                "DOCS_CONF", default=self.DOCS / "conf.py"
+            )
+
+    @property
+    def README_RST(self) -> _Path:
+        """Location of the README.rst."""
+        with self.prefixed(self.PREFIX):
+            return _Path.cwd() / self.path(
+                "README", default=_Path("README.rst")
+            )
+
+    @property
+    def README_MD(self) -> _Path:
+        """Location of the README.md."""
+        with self.prefixed(self.PREFIX):
+            return _Path.cwd() / self.path(
+                "README", default=_Path("README.md")
+            )
+
+    @property
+    def TESTS(self) -> _Path:
+        """Location of tests."""
+        with self.prefixed(self.PREFIX):
+            return _Path.cwd() / self.path("TESTS", default=_Path("tests"))
+
+    @property
+    def PACKAGE(self) -> _Path:
+        """Location of Python package."""
+        with self.prefixed(self.PREFIX):
+            return _Path.cwd() / self.path(
+                "PACKAGE", default=_Path.cwd() / self.PACKAGE_NAME
+            )
+
+    @property
+    def PACKAGE_NAME(self) -> str:
+        """Name of the package this is being run on."""
+        with self.prefixed(self.PREFIX):
+            return self.str("PACKAGE_NAME", default=_pyaud.package())
+
 
 #: package environment, both parsed from .env file (with set defaults
 #: for missing keys), and static values

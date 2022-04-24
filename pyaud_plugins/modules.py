@@ -14,9 +14,6 @@ from object_colors import Color
 
 from ._environ import environ
 
-DOCS = Path("docs")
-README = Path("README.rst")
-
 colors = Color()
 colors.populate_colors()
 
@@ -39,13 +36,12 @@ class Tests(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
 
         :return: Does a test suite exist? True or False.
         """
-        tests = Path.cwd() / "tests"
         patterns = ("test_*.py", "*_test.py")
         rglob = [
             f
             for f in pyaud.files
             for p in patterns
-            if f.match(p) and str(tests) in str(f)
+            if f.match(p) and str(environ.TESTS) in str(f)
         ]
         return rglob != []
 
@@ -150,8 +146,8 @@ class DeployDocs(
             pyaud.git.stash(devnull=True)
             stashed = True
 
-        shutil.move(str(Path.cwd() / environ.BUILDDIR / "html"), root_html)
-        shutil.copy(Path.cwd() / README, root_html / README)
+        shutil.move(str(environ.DOCS_HTML), root_html)
+        shutil.copy(environ.README_RST, root_html / environ.README_RST.name)
         pyaud.git.rev_list("--max-parents=0", "HEAD", capture=True)
         stdout = pyaud.git.stdout()
         if stdout:
@@ -206,7 +202,7 @@ class DeployDocs(
                 k for k in git_credentials if getattr(environ, k) is None
             ]
             if not null_vals:
-                if not Path(environ.BUILDDIR / "html").is_dir():
+                if not environ.DOCS_HTML.is_dir():
                     pyaud.plugins.get("docs")(**kwargs)
 
                 self.deploy_docs()
@@ -244,18 +240,15 @@ class Docs(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
 
     def action(self, *args: str, **kwargs: bool) -> int:
         pyaud.plugins.get("toc")(*args, **kwargs)
-        readme_rst = "README"
-        underline = len(readme_rst) * "="
+        underline = len(environ.README_RST.name) * "="
         if environ.BUILDDIR.is_dir():
             shutil.rmtree(environ.BUILDDIR)
 
-        with pyaud.parsers.Md2Rst(Path.cwd() / "README.md", temp=True):
-            if (
-                Path(Path.cwd() / DOCS / "conf.py").is_file()
-                and Path(Path.cwd(), README).is_file()
-            ):
+        with pyaud.parsers.Md2Rst(environ.README_MD, temp=True):
+            if environ.DOCS_CONF.is_file() and environ.README_RST.is_file():
                 with pyaud.parsers.LineSwitch(
-                    Path.cwd() / README, {0: readme_rst, 1: underline}
+                    environ.README_RST,
+                    {0: environ.README_RST.name, 1: underline},
                 ):
                     command = [
                         "-M",
@@ -345,7 +338,7 @@ class Requirements(pyaud.plugins.Write):
         return environ.REQUIREMENTS
 
     def required(self) -> Path:
-        return Path.cwd() / "Pipfile.lock"
+        return environ.PIPFILE_LOCK
 
     def write(self, *args: str, **kwargs: bool) -> int:
         # get the stdout for both production and development packages
@@ -364,7 +357,7 @@ class Requirements(pyaud.plugins.Write):
             set("\n".join(self.subprocess[self.p2req].stdout()).splitlines())
         )
         stdout.sort()
-        with open(self.path, "w", encoding="utf-8") as fout:
+        with open(self.path, "w", encoding=environ.ENCODING) as fout:
             for content in stdout:
                 fout.write(f"{content.split(';')[0]}\n")
 
@@ -383,24 +376,23 @@ class Toc(pyaud.plugins.Write):
 
     @property
     def path(self) -> Path:
-        return Path.cwd() / DOCS / f"{pyaud.package()}.rst"
+        return environ.PACKAGE_TOC
 
     def required(self) -> t.Optional[Path]:
-        return Path.cwd() / DOCS / "conf.py"
+        return environ.DOCS_CONF
 
     @staticmethod
     def _populate(path: Path, contents: t.List[str]) -> None:
         if path.is_file():
-            with open(path, encoding="utf-8") as fin:
+            with open(path, encoding=environ.ENCODING) as fin:
                 contents.extend(fin.read().splitlines())
 
     def write(self, *args: str, **kwargs: bool) -> int:
         toc_attrs = "   :members:\n   :undoc-members:\n   :show-inheritance:"
-        package = pyaud.package()
         self.subprocess[self.sphinx_apidoc].call(
             "-o",
             environ.DOCS,
-            Path.cwd() / package,
+            environ.PACKAGE,
             "-f",
             *args,
             devnull=True,
@@ -426,7 +418,11 @@ class Toc(pyaud.plugins.Write):
             [i for i in contents if i.startswith(".. automodule::")]
         )
         with open(self.path, "w", encoding="utf-8") as fout:
-            fout.write(f"{package}\n{len(package) * '='}\n\n")
+            fout.write(
+                "{}\n{}\n\n".format(
+                    environ.PACKAGE_NAME, len(environ.PACKAGE_NAME) * "="
+                )
+            )
             for content in contents:
                 fout.write(f"{content}\n{toc_attrs}\n")
 
@@ -567,7 +563,7 @@ class Whitelist(pyaud.plugins.Write):
         stdout = self.subprocess[self.vulture].stdout()
         stdout = [i.replace(str(Path.cwd()) + os.sep, "") for i in stdout]
         stdout.sort()
-        with open(self.path, "w", encoding="utf-8") as fout:
+        with open(self.path, "w", encoding=environ.ENCODING) as fout:
             fout.write("\n".join(stdout) + "\n")
 
         return 0
@@ -606,7 +602,7 @@ class Imports(pyaud.plugins.FixFile):
 
     def audit(self, file: Path, **kwargs: bool) -> int:
         # collect original file's contents
-        with open(file, encoding="utf-8") as fin:
+        with open(file, encoding=environ.ENCODING) as fin:
             self.content = fin.read()
 
         # write original file's contents to temporary file
@@ -615,7 +611,7 @@ class Imports(pyaud.plugins.FixFile):
                 delete=False
             )
         )
-        with open(tmp.name, "w", encoding="utf-8") as fout:
+        with open(tmp.name, "w", encoding=environ.ENCODING) as fout:
             fout.write(self.content)
 
         # run both ``isort`` and ``black`` on the temporary file,
@@ -631,7 +627,7 @@ class Imports(pyaud.plugins.FixFile):
         )
 
         # collect the results from the temporary file
-        with open(tmp.name, encoding="utf-8") as fin:
+        with open(tmp.name, encoding=environ.ENCODING) as fin:
             self.result = fin.read()
 
         os.remove(tmp.name)
@@ -645,7 +641,7 @@ class Imports(pyaud.plugins.FixFile):
 
         # replace original file's contents with the temp file post
         # ``isort`` and ``Black``
-        with open(file, "w", encoding="utf-8") as fout:
+        with open(file, "w", encoding=environ.ENCODING) as fout:
             fout.write(self.result)
 
 
@@ -664,9 +660,9 @@ class Readme(pyaud.plugins.Action):  # pylint: disable=too-few-public-methods
         return [self.readmetester]
 
     def action(self, *args: str, **kwargs: bool) -> int:
-        if Path(Path.cwd() / README).is_file():
+        if environ.README_RST.is_file():
             self.subprocess[self.readmetester].call(
-                Path.cwd() / README, *args, **kwargs
+                environ.README_RST, *args, **kwargs
             )
         else:
             print("No README.rst found in project root")
