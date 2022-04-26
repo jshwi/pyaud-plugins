@@ -1242,3 +1242,34 @@ def test_nested_toc(main: MockMainType, make_tree: MakeTreeType) -> None:
     assert not Path(ppe.DOCS / "repo.routes.rst").is_file()
     with open(ppe.PACKAGE_TOC, encoding=ppe.ENCODING) as fin:
         assert fin.read() == templates.EXPECTED_NESTED_TOC
+
+
+def test_sphinx_build_abc(
+    main: MockMainType,
+    nocolorcapsys: NoColorCapsys,
+    patch_sp_print_called: MockSPPrintCalledType,
+) -> None:
+    """Test args properly passed to ``SphinxBuild``'s ``action``.
+
+    :param main: Patch package entry point.
+    :param nocolorcapsys: Capture system output while stripping ANSI
+        color codes.
+    :param patch_sp_print_called: Patch ``Subprocess.call`` to only
+        announce what is called.
+    """
+    # noinspection PyUnresolvedReferences
+    class SphinxBuild(pplugins._abc.SphinxBuild):
+        """SphinxBuild ABC."""
+
+        @property
+        def args(self) -> t.Tuple[t.Union[str, Path], ...]:
+            return "testing", "args", "passed", "to", "sphinx-build"
+
+    patch_sp_print_called()
+    pyaud.plugins.register()(SphinxBuild)
+    main("sphinx-build")
+    out = nocolorcapsys.stdout().splitlines()
+    assert (
+        "<Subprocess (sphinx-build)> testing args passed to sphinx-build"
+        in out
+    )

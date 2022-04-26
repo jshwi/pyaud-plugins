@@ -12,7 +12,7 @@ from pathlib import Path
 import pyaud
 from object_colors import Color
 
-from ._abc import CheckFix
+from ._abc import CheckFix, SphinxBuild
 from ._environ import environ as e
 
 colors = Color()
@@ -213,7 +213,7 @@ class DeployDocs(pyaud.plugins.Action):  # pyli
 
 
 @pyaud.plugins.register()
-class Docs(pyaud.plugins.Action):
+class Docs(SphinxBuild):
     """Compile package documentation with ``Sphinx``.
 
     This is so the hyperlink isn't exactly the same as the package
@@ -223,11 +223,9 @@ class Docs(pyaud.plugins.Action):
     to what it originally was.
     """
 
-    sphinx_build = "sphinx-build"
-
     @property
-    def exe(self) -> t.List[str]:
-        return [self.sphinx_build]
+    def args(self) -> t.Tuple[t.Union[str, Path], ...]:
+        return "-M", "html", e.DOCS, e.BUILDDIR, "-W"
 
     def action(self, *args: str, **kwargs: bool) -> int:
         pyaud.plugins.get("toc")(*args, **kwargs)
@@ -241,9 +239,7 @@ class Docs(pyaud.plugins.Action):
                 e.README_RST,
                 {0: e.README_RST.stem, 1: len(e.README_RST.stem) * "="},
             ):
-                returncode = self.subprocess[self.sphinx_build].call(
-                    "-M", "html", e.DOCS, e.BUILDDIR, "-W", **kwargs
-                )
+                returncode = self.sphinx_build(*args, **kwargs)
                 if not returncode:
                     colors.green.bold.print("Build successful")
 
