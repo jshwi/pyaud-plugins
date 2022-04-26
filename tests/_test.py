@@ -43,6 +43,7 @@ from . import (
     SP_OPEN_PROC,
     SP_REPR_PYTEST,
     SP_STDOUT,
+    TEST,
     TOC,
     TYPECHECK,
     UNUSED,
@@ -1405,3 +1406,30 @@ def test_call_sort_pyproject(
     main("sort-pyproject", FLAG_FIX)
     out = nocolorcapsys.stdout().splitlines()
     assert NO_ISSUES in out
+
+
+def test_test(
+    main: MockMainType,
+    monkeypatch: pytest.MonkeyPatch,
+    nocolorcapsys: NoColorCapsys,
+    call_status: MockCallStatusType,
+) -> None:
+    """Test the correct commands are run when running ``pyaud test``.
+
+    :param main: Patch package entry point.
+    :param monkeypatch: Mock patch environment and attributes.
+    :param nocolorcapsys: Capture system output while stripping ANSI
+        color codes.
+    :param call_status: Patch function to not do anything. Optionally
+        returns non-zero exit code (0 by default).
+    """
+    modules = DOCTEST, COVERAGE
+    mocked_plugins = pyaud.plugins.mapping()
+    for module in modules:
+        mocked_plugins[module] = call_status(module)  # type: ignore
+
+    monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mocked_plugins)
+    main(TEST)
+    out = nocolorcapsys.stdout().splitlines()
+    for module in modules:
+        assert f"{pyaud.__name__} {module}" in out

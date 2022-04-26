@@ -754,3 +754,11 @@ class SortPyproject(pyaud.plugins.Fix):
         return self.subprocess[self.toml_sort].call(
             e.PYPROJECT, "--in-place", "--all", *args, **kwargs
         )
+
+
+@pyaud.plugins.register()
+class Test(pyaud.plugins.Parametrize):
+    """Run all tests."""
+
+    def plugins(self) -> t.List[str]:
+        return ["doctest", "coverage"]

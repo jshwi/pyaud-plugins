@@ -77,6 +77,7 @@ This package contains the following plugins on running `pyaud modules`
     readme          -- Parse, test, and assert RST code-blocks
     requirements    -- Audit requirements.txt with Pipfile.lock
     sort-pyproject  -- Sort pyproject.toml file with `toml-sort`
+    test            -- Run all tests
     tests           -- Run the package unit-tests with `pytest`
     toc             -- Audit docs/<NAME>.rst toc-file
     typecheck       -- Typecheck code with `mypy`

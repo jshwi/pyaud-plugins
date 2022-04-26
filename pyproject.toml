@@ -24,6 +24,7 @@ filter = true
 "pyaud_plugins/modules.py" = [
     'PYCHARM_HOSTED',
     "True",
+    "doctest",
     "suppress",
 ]
 
@@ -105,8 +106,7 @@ modules = [
     "unused",
     "lint",
     "const",
-    "doctest",
-    "coverage",
+    "test",
     "docs",
 ]
 
