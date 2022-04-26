@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>README.rst &#8212; pyaud-plugins 0.3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphite.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="pyaud_plugins" href="pyaud_plugins.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyaud_plugins.html" title="pyaud_plugins"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyaud-plugins 0.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">README.rst</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="readme-rst">
+<h1>README.rst<a class="headerlink" href="#readme-rst" title="Permalink to this headline">¶</a></h1>
+<a class="reference external image-reference" href="https://opensource.org/licenses/MIT"><img alt="License" src="https://img.shields.io/badge/License-MIT-yellow.svg" /></a>
+<a class="reference external image-reference" href="https://img.shields.io/pypi/v/pyaud-plugins"><img alt="pypi" src="https://img.shields.io/pypi/v/pyaud-plugins" /></a>
+<a class="reference external image-reference" href="https://github.com/jshwi/pyaud-plugins/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/jshwi/pyaud-plugins/actions/workflows/ci.yml/badge.svg" /></a>
+<a class="reference external image-reference" href="https://github.com/jshwi/pyaud-plugins/actions/workflows/codeql-analysis.yml"><img alt="CodeQL" src="https://github.com/jshwi/pyaud-plugins/actions/workflows/codeql-analysis.yml/badge.svg" /></a>
+<a class="reference external image-reference" href="https://codecov.io/gh/jshwi/pyaud-plugins"><img alt="codecov.io" src="https://codecov.io/gh/jshwi/pyaud-plugins/branch/master/graph/badge.svg" /></a>
+<a class="reference external image-reference" href="https://pyaud-plugins.readthedocs.io/en/latest/?badge=latest"><img alt="readthedocs.org" src="https://readthedocs.org/projects/pyaud-plugins/badge/?version=latest" /></a>
+<a class="reference external image-reference" href="https://www.python.org/downloads/release/python-380"><img alt="python3.8" src="https://img.shields.io/badge/python-3.8-blue.svg" /></a>
+<a class="reference external image-reference" href="https://github.com/psf/black"><img alt="black" src="https://img.shields.io/badge/code%20style-black-000000.svg" /></a>
+<div class="section" id="plugin-package-for-pyaud">
+<h2>Plugin package for Pyaud<a class="headerlink" href="#plugin-package-for-pyaud" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pyaud</span></code></p>
+</div>
+<div class="section" id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">pyaud-plugins</span></code></p>
+</div>
+<div class="section" id="development">
+<h2>Development<a class="headerlink" href="#development" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">poetry</span> <span class="pre">install</span></code></p>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>See <a class="reference external" href="https://github.com/jshwi/pyaud#pyaud">pyaud</a></p>
+</div>
+<div class="section" id="plugins">
+<h2>Plugins<a class="headerlink" href="#plugins" title="Permalink to this headline">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">pyaud</span></code> will automatically load this package on search for all packages prefixed with <cite>“pyaud_”</cite></p>
+<p>For writing plugins see <a class="reference external" href="https://jshwi.github.io/pyaud/pyaud.html#pyaud-plugins">docs</a></p>
+<p>This package contains the following plugins on running <cite>pyaud modules</cite></p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">const           -- Check code for repeat use of strings</span>
+<span class="go">coverage        -- Run package unit-tests with `pytest` and `coverage`</span>
+<span class="go">deploy          -- Deploy package documentation and test coverage</span>
+<span class="go">deploy-cov      -- Upload coverage data to `Codecov`</span>
+<span class="go">deploy-docs     -- Deploy package documentation to `gh-pages`</span>
+<span class="go">docs            -- Compile package documentation with `Sphinx`</span>
+<span class="go">doctest         -- Run `doctest` on all code examples</span>
+<span class="go">doctest-package -- Run `doctest` on package</span>
+<span class="go">doctest-readme  -- Run `doctest` on Python code-blocks in README</span>
+<span class="go">files           -- Audit project data files</span>
+<span class="go">format          -- Audit code with `Black`</span>
+<span class="go">format-docs     -- Format docstrings with `docformatter`</span>
+<span class="go">format-str      -- Format f-strings with `flynt`</span>
+<span class="go">imports         -- Audit imports with `isort`</span>
+<span class="go">lint            -- Lint code with `pylint`</span>
+<span class="go">readme          -- Parse, test, and assert RST code-blocks</span>
+<span class="go">requirements    -- Audit requirements.txt with Pipfile.lock</span>
+<span class="go">sort-pyproject  -- Sort pyproject.toml file with `toml-sort`</span>
+<span class="go">test            -- Run all tests</span>
+<span class="go">tests           -- Run the package unit-tests with `pytest`</span>
+<span class="go">toc             -- Audit docs/&lt;NAME&gt;.rst toc-file</span>
+<span class="go">typecheck       -- Typecheck code with `mypy`</span>
+<span class="go">unused          -- Audit unused code with `vulture`</span>
+<span class="go">whitelist       -- Check whitelist.py file with `vulture`</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="pyaud_plugins.html">pyaud_plugins</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">README.rst</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#plugin-package-for-pyaud">Plugin package for Pyaud</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#development">Development</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plugins">Plugins</a></li>
+</ul>
+</li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="pyaud_plugins.html" title="pyaud_plugins"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyaud-plugins 0.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">README.rst</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Stephen Whitlock.
+    </div>
+  </body>
+</html>

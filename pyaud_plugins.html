@@ -1,0 +1,1217 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyaud_plugins &#8212; pyaud-plugins 0.3.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/graphite.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="README.rst" href="readme.html" />
+    <link rel="prev" title="pyaud-plugins docs" href="index.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="readme.html" title="README.rst"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="pyaud-plugins docs"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyaud-plugins 0.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyaud_plugins</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pyaud_plugins">
+<span id="pyaud-plugins"></span><h1>pyaud_plugins<a class="headerlink" href="#module-pyaud_plugins" title="Permalink to this headline">¶</a></h1>
+<p>Plugin package for Pyaud.</p>
+<span class="target" id="module-pyaud_plugins.modules"></span><div class="section" id="pyaud-plugins-modules">
+<h2>pyaud_plugins.modules<a class="headerlink" href="#pyaud-plugins-modules" title="Permalink to this headline">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Const">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">Const</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Const"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Const" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Audit</span></code></p>
+<p>Check code for repeat use of strings.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Const.audit">
+<span class="sig-name descname"><span class="pre">audit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Const.audit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Const.audit" title="Permalink to this definition">¶</a></dt>
+<dd><p>All audit logic to be written within this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>If any error has not been raised for any reason int
+object must be returned, from subprocess or written, to
+notify call whether process has succeeded or failed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Const.cache">
+<span class="sig-name descname"><span class="pre">cache</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#pyaud_plugins.modules.Const.cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>If set to True then indexed files will be monitored for change.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Const.cache_all">
+<span class="sig-name descname"><span class="pre">cache_all</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#pyaud_plugins.modules.Const.cache_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Only matters if <code class="docutils literal notranslate"><span class="pre">cache</span></code> is set to True.
+If False (default) then audit will cache on a file-by-file basis.
+If True, then no changes can be made to any file for a cache-hit
+to be valid.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Const.constcheck">
+<span class="sig-name descname"><span class="pre">constcheck</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'constcheck'</span></em><a class="headerlink" href="#pyaud_plugins.modules.Const.constcheck" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Const.exe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.Const.exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of executables to add to <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of str object to assign to subprocesses</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Coverage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">Coverage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Coverage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Coverage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pyaud_plugins.modules.Tests" title="pyaud_plugins.modules.Tests"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud_plugins.modules.Tests</span></code></a></p>
+<p>Run package unit-tests with <code class="docutils literal notranslate"><span class="pre">pytest</span></code> and <code class="docutils literal notranslate"><span class="pre">coverage</span></code>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Coverage.action">
+<span class="sig-name descname"><span class="pre">action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Coverage.action"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Coverage.action" title="Permalink to this definition">¶</a></dt>
+<dd><p>All logic to be written within this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Any value and type can be returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Coverage.coverage">
+<span class="sig-name descname"><span class="pre">coverage</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'coverage'</span></em><a class="headerlink" href="#pyaud_plugins.modules.Coverage.coverage" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Coverage.exe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.Coverage.exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of executables to add to <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of str object to assign to subprocesses</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Deploy">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">Deploy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Deploy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Deploy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Parametrize</span></code></p>
+<p>Deploy package documentation and test coverage.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Deploy.plugins">
+<span class="sig-name descname"><span class="pre">plugins</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Deploy.plugins"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Deploy.plugins" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of plugin names to run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of plugin names, as defined in <code class="docutils literal notranslate"><span class="pre">&#64;register</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.DeployCov">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">DeployCov</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#DeployCov"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.DeployCov" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Action</span></code></p>
+<p>Upload coverage data to <code class="docutils literal notranslate"><span class="pre">Codecov</span></code>.</p>
+<p>If no file exists otherwise announce that no file has been created
+yet.</p>
+<p>If no <code class="docutils literal notranslate"><span class="pre">CODECOV_TOKEN</span></code> environment variable has been exported or
+defined in <code class="docutils literal notranslate"><span class="pre">.env</span></code> announce that no authorization token has been
+created yet.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.DeployCov.action">
+<span class="sig-name descname"><span class="pre">action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#DeployCov.action"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.DeployCov.action" title="Permalink to this definition">¶</a></dt>
+<dd><p>All logic to be written within this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Any value and type can be returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.DeployCov.codecov">
+<span class="sig-name descname"><span class="pre">codecov</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'codecov'</span></em><a class="headerlink" href="#pyaud_plugins.modules.DeployCov.codecov" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.DeployCov.exe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.DeployCov.exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of executables to add to <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of str object to assign to subprocesses</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.DeployDocs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">DeployDocs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#DeployDocs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.DeployDocs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Action</span></code></p>
+<p>Deploy package documentation to <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code>.</p>
+<p>Check that the branch is being pushed as master (or other branch for
+tests).</p>
+<p>If the correct branch is the one in use deploy. <code class="docutils literal notranslate"><span class="pre">gh-pages</span></code> to the
+orphaned branch - otherwise do nothing and announce.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.DeployDocs.action">
+<span class="sig-name descname"><span class="pre">action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#DeployDocs.action"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.DeployDocs.action" title="Permalink to this definition">¶</a></dt>
+<dd><p>All logic to be written within this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Any value and type can be returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.DeployDocs.deploy_docs">
+<span class="sig-name descname"><span class="pre">deploy_docs</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#DeployDocs.deploy_docs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.DeployDocs.deploy_docs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Series of functions for deploying docs.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Docs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">Docs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Docs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Docs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud_plugins._abc.SphinxBuild</span></code></p>
+<p>Compile package documentation with <code class="docutils literal notranslate"><span class="pre">Sphinx</span></code>.</p>
+<p>This is so the hyperlink isn’t exactly the same as the package
+documentation.</p>
+<p>Build the <code class="docutils literal notranslate"><span class="pre">Sphinx</span></code> html documentation. Return the README’s title
+to what it originally was.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Docs.action">
+<span class="sig-name descname"><span class="pre">action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Docs.action"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Docs.action" title="Permalink to this definition">¶</a></dt>
+<dd><p>All logic to be written within this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Any value and type can be returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Docs.args">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">args</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.Docs.args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Args for <code class="docutils literal notranslate"><span class="pre">sphinx-build</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Doctest">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">Doctest</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Doctest"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Doctest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Parametrize</span></code></p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">doctest</span></code> on all code examples.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Doctest.plugins">
+<span class="sig-name descname"><span class="pre">plugins</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Doctest.plugins"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Doctest.plugins" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of plugin names to run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of plugin names, as defined in <code class="docutils literal notranslate"><span class="pre">&#64;register</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.DoctestPackage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">DoctestPackage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#DoctestPackage"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.DoctestPackage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud_plugins._abc.SphinxBuild</span></code></p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">doctest</span></code> on package.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.DoctestPackage.args">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">args</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="p"><span class="pre">...</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.DoctestPackage.args" title="Permalink to this definition">¶</a></dt>
+<dd><p>Args for <code class="docutils literal notranslate"><span class="pre">sphinx-build</span></code>.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.DoctestReadme">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">DoctestReadme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#DoctestReadme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.DoctestReadme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Action</span></code></p>
+<p>Run <code class="docutils literal notranslate"><span class="pre">doctest</span></code> on Python code-blocks in README.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.DoctestReadme.action">
+<span class="sig-name descname"><span class="pre">action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#DoctestReadme.action"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.DoctestReadme.action" title="Permalink to this definition">¶</a></dt>
+<dd><p>All logic to be written within this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Any value and type can be returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.DoctestReadme.exe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.DoctestReadme.exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of executables to add to <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of str object to assign to subprocesses</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.DoctestReadme.python">
+<span class="sig-name descname"><span class="pre">python</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'python'</span></em><a class="headerlink" href="#pyaud_plugins.modules.DoctestReadme.python" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Files">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">Files</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Files"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Files" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Parametrize</span></code></p>
+<p>Audit project data files.</p>
+<p>Make docs/&lt;APPNAME&gt;.rst, whitelist.py, and requirements.txt if none
+already exist, update them if they do and changes are needed or pass
+if nothing needs to be done.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Files.plugins">
+<span class="sig-name descname"><span class="pre">plugins</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Files.plugins"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Files.plugins" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of plugin names to run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of plugin names, as defined in <code class="docutils literal notranslate"><span class="pre">&#64;register</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Format">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">Format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Format" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud_plugins._abc.CheckFix</span></code></p>
+<p>Audit code with <cite>Black</cite>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Format.black">
+<span class="sig-name descname"><span class="pre">black</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'black'</span></em><a class="headerlink" href="#pyaud_plugins.modules.Format.black" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Format.cache">
+<span class="sig-name descname"><span class="pre">cache</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#pyaud_plugins.modules.Format.cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>If set to True then indexed files will be monitored for change.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Format.exe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.Format.exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of executables to add to <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of str object to assign to subprocesses</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Format.fix">
+<span class="sig-name descname"><span class="pre">fix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Format.fix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Format.fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run if audit fails but only if running a fix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>If any error has not been raised for any reason int
+object must be returned, from subprocess or written, to
+notify __call__ whether process has succeeded or failed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.FormatDocs">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">FormatDocs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#FormatDocs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.FormatDocs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud_plugins._abc.CheckFix</span></code></p>
+<p>Format docstrings with <code class="docutils literal notranslate"><span class="pre">docformatter</span></code>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.FormatDocs.args">
+<span class="sig-name descname"><span class="pre">args</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('--recursive',</span> <span class="pre">'--wrap-summaries',</span> <span class="pre">'72')</span></em><a class="headerlink" href="#pyaud_plugins.modules.FormatDocs.args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.FormatDocs.cache">
+<span class="sig-name descname"><span class="pre">cache</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#pyaud_plugins.modules.FormatDocs.cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>If set to True then indexed files will be monitored for change.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.FormatDocs.docformatter">
+<span class="sig-name descname"><span class="pre">docformatter</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'docformatter'</span></em><a class="headerlink" href="#pyaud_plugins.modules.FormatDocs.docformatter" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.FormatDocs.exe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.FormatDocs.exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of executables to add to <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of str object to assign to subprocesses</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.FormatStr">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">FormatStr</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#FormatStr"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.FormatStr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Fix</span></code></p>
+<p>Format f-strings with <code class="docutils literal notranslate"><span class="pre">flynt</span></code>.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.FormatStr.args">
+<span class="sig-name descname"><span class="pre">args</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">('--line-length',</span> <span class="pre">'79',</span> <span class="pre">'--transform-concats')</span></em><a class="headerlink" href="#pyaud_plugins.modules.FormatStr.args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.FormatStr.audit">
+<span class="sig-name descname"><span class="pre">audit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#FormatStr.audit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.FormatStr.audit" title="Permalink to this definition">¶</a></dt>
+<dd><p>All audit logic to be written within this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>If any error has not been raised for any reason int
+object must be returned, from subprocess or written, to
+notify __call__ whether process has succeeded or failed. If
+non-zero exist is returned and <code class="docutils literal notranslate"><span class="pre">-f/--fix</span></code> has been passed
+to the commandline run the <code class="docutils literal notranslate"><span class="pre">fix</span></code> method, otherwise raise
+<code class="docutils literal notranslate"><span class="pre">AuditError</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.FormatStr.cache">
+<span class="sig-name descname"><span class="pre">cache</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#pyaud_plugins.modules.FormatStr.cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>If set to True then indexed files will be monitored for change.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.FormatStr.exe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.FormatStr.exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of executables to add to <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of str object to assign to subprocesses</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.FormatStr.fix">
+<span class="sig-name descname"><span class="pre">fix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#FormatStr.fix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.FormatStr.fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run if audit fails but only if running a fix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>If any error has not been raised for any reason int
+object must be returned, from subprocess or written, to
+notify __call__ whether process has succeeded or failed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.FormatStr.flynt">
+<span class="sig-name descname"><span class="pre">flynt</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'flynt'</span></em><a class="headerlink" href="#pyaud_plugins.modules.FormatStr.flynt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Imports">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">Imports</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Imports"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Imports" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.FixFile</span></code></p>
+<p>Audit imports with <code class="docutils literal notranslate"><span class="pre">isort</span></code>.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Black</span></code> and <code class="docutils literal notranslate"><span class="pre">isort</span></code> clash in some areas when it comes to
+<code class="docutils literal notranslate"><span class="pre">Black</span></code> sorting imports. To avoid  running into false
+positives when running both in conjunction (as <code class="docutils literal notranslate"><span class="pre">Black</span></code> is
+uncompromising) run <code class="docutils literal notranslate"><span class="pre">Black</span></code> straight after.</p>
+<p>To effectively test this, for lack of stdin functionality, use
+<code class="docutils literal notranslate"><span class="pre">tempfile.NamedTemporaryFunction</span></code> to first evaluate contents
+from original file, then after <code class="docutils literal notranslate"><span class="pre">isort</span></code>, then after <code class="docutils literal notranslate"><span class="pre">Black</span></code>.</p>
+<p>If nothing has changed, even if <code class="docutils literal notranslate"><span class="pre">isort</span></code> has changed a file,
+then the imports are sorted enough for <code class="docutils literal notranslate"><span class="pre">Black</span></code>’s standard.</p>
+<p>If there is a change raise <code class="docutils literal notranslate"><span class="pre">PyAuditError</span></code> if <code class="docutils literal notranslate"><span class="pre">-f/--fix</span></code> or
+<code class="docutils literal notranslate"><span class="pre">-s/--suppress</span></code> was not passed to the commandline.</p>
+<p>If <code class="docutils literal notranslate"><span class="pre">-f/--fix</span></code> was passed then replace the original file with
+the temp file’s contents.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Imports.audit">
+<span class="sig-name descname"><span class="pre">audit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Imports.audit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Imports.audit" title="Permalink to this definition">¶</a></dt>
+<dd><p>All logic written within this method for each file’s audit.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> – Individual file.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Imports.black">
+<span class="sig-name descname"><span class="pre">black</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'black'</span></em><a class="headerlink" href="#pyaud_plugins.modules.Imports.black" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Imports.cache">
+<span class="sig-name descname"><span class="pre">cache</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#pyaud_plugins.modules.Imports.cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>If set to True then indexed files will be monitored for change.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Imports.content">
+<span class="sig-name descname"><span class="pre">content</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#pyaud_plugins.modules.Imports.content" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Imports.exe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.Imports.exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of executables to add to <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of str object to assign to subprocesses</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Imports.fail_condition">
+<span class="sig-name descname"><span class="pre">fail_condition</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">bool</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Imports.fail_condition"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Imports.fail_condition" title="Permalink to this definition">¶</a></dt>
+<dd><p>Condition to trigger non-subprocess failure.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Imports.fix">
+<span class="sig-name descname"><span class="pre">fix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">pathlib.Path</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Imports.fix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Imports.fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>All logic written within this method for each file’s fix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>file</strong> – Individual file.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Imports.isort">
+<span class="sig-name descname"><span class="pre">isort</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'isort'</span></em><a class="headerlink" href="#pyaud_plugins.modules.Imports.isort" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Imports.result">
+<span class="sig-name descname"><span class="pre">result</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#pyaud_plugins.modules.Imports.result" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Lint">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">Lint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Lint"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Lint" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Audit</span></code></p>
+<p>Lint code with <code class="docutils literal notranslate"><span class="pre">pylint</span></code>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Lint.audit">
+<span class="sig-name descname"><span class="pre">audit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Lint.audit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Lint.audit" title="Permalink to this definition">¶</a></dt>
+<dd><p>All audit logic to be written within this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>If any error has not been raised for any reason int
+object must be returned, from subprocess or written, to
+notify call whether process has succeeded or failed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Lint.cache">
+<span class="sig-name descname"><span class="pre">cache</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#pyaud_plugins.modules.Lint.cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>If set to True then indexed files will be monitored for change.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Lint.env">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">env</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.Lint.env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return environment which will remain active for run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dict containing any number of str keys and
+corresponding str values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Lint.exe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.Lint.exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of executables to add to <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of str object to assign to subprocesses</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Lint.pylint">
+<span class="sig-name descname"><span class="pre">pylint</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pylint'</span></em><a class="headerlink" href="#pyaud_plugins.modules.Lint.pylint" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Readme">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">Readme</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Readme"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Readme" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Action</span></code></p>
+<p>Parse, test, and assert RST code-blocks.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Readme.action">
+<span class="sig-name descname"><span class="pre">action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Readme.action"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Readme.action" title="Permalink to this definition">¶</a></dt>
+<dd><p>All logic to be written within this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Any value and type can be returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Readme.env">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">env</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.Readme.env" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return environment which will remain active for run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Dict containing any number of str keys and
+corresponding str values.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Readme.exe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.Readme.exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of executables to add to <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of str object to assign to subprocesses</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Readme.readmetester">
+<span class="sig-name descname"><span class="pre">readmetester</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'readmetester'</span></em><a class="headerlink" href="#pyaud_plugins.modules.Readme.readmetester" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Requirements">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">Requirements</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Requirements"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Requirements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Write</span></code></p>
+<p>Audit requirements.txt with Pipfile.lock.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Requirements.exe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.Requirements.exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of executables to add to <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of str object to assign to subprocesses</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Requirements.p2req">
+<span class="sig-name descname"><span class="pre">p2req</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pipfile2req'</span></em><a class="headerlink" href="#pyaud_plugins.modules.Requirements.p2req" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Requirements.path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></em><a class="headerlink" href="#pyaud_plugins.modules.Requirements.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to file, absolute or relative, that will be worked on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Returned value needs to be a Path object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Requirements.required">
+<span class="sig-name descname"><span class="pre">required</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">pathlib.Path</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Requirements.required"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Requirements.required" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-requisite for working on file (if there is one).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Path object, otherwise None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Requirements.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Requirements.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Requirements.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>All write logic to be written within this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.SortPyproject">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">SortPyproject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#SortPyproject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.SortPyproject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Fix</span></code></p>
+<p>Sort pyproject.toml file with <code class="docutils literal notranslate"><span class="pre">toml-sort</span></code>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.SortPyproject.audit">
+<span class="sig-name descname"><span class="pre">audit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#SortPyproject.audit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.SortPyproject.audit" title="Permalink to this definition">¶</a></dt>
+<dd><p>All audit logic to be written within this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>If any error has not been raised for any reason int
+object must be returned, from subprocess or written, to
+notify __call__ whether process has succeeded or failed. If
+non-zero exist is returned and <code class="docutils literal notranslate"><span class="pre">-f/--fix</span></code> has been passed
+to the commandline run the <code class="docutils literal notranslate"><span class="pre">fix</span></code> method, otherwise raise
+<code class="docutils literal notranslate"><span class="pre">AuditError</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.SortPyproject.exe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.SortPyproject.exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of executables to add to <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of str object to assign to subprocesses</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.SortPyproject.fix">
+<span class="sig-name descname"><span class="pre">fix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#SortPyproject.fix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.SortPyproject.fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run if audit fails but only if running a fix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>If any error has not been raised for any reason int
+object must be returned, from subprocess or written, to
+notify __call__ whether process has succeeded or failed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.SortPyproject.toml_sort">
+<span class="sig-name descname"><span class="pre">toml_sort</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'toml-sort'</span></em><a class="headerlink" href="#pyaud_plugins.modules.SortPyproject.toml_sort" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Test">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">Test</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Test"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Parametrize</span></code></p>
+<p>Run all tests.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Test.plugins">
+<span class="sig-name descname"><span class="pre">plugins</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Test.plugins"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Test.plugins" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of plugin names to run.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of plugin names, as defined in <code class="docutils literal notranslate"><span class="pre">&#64;register</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Tests">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">Tests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Tests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Tests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Action</span></code></p>
+<p>Run the package unit-tests with <code class="docutils literal notranslate"><span class="pre">pytest</span></code>.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Tests.action">
+<span class="sig-name descname"><span class="pre">action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Tests.action"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Tests.action" title="Permalink to this definition">¶</a></dt>
+<dd><p>All logic to be written within this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Any value and type can be returned.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Tests.cache">
+<span class="sig-name descname"><span class="pre">cache</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#pyaud_plugins.modules.Tests.cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>If set to True then indexed files will be monitored for change.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Tests.cache_all">
+<span class="sig-name descname"><span class="pre">cache_all</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#pyaud_plugins.modules.Tests.cache_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>Only matters if <code class="docutils literal notranslate"><span class="pre">cache</span></code> is set to True.
+If False (default) then audit will cache on a file-by-file basis.
+If True, then no changes can be made to any file for a cache-hit
+to be valid.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Tests.exe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.Tests.exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of executables to add to <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of str object to assign to subprocesses</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Tests.is_tests">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_tests</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#pyaud_plugins.modules.Tests.is_tests" title="Permalink to this definition">¶</a></dt>
+<dd><p>Confirm that a test suite exists.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Does a test suite exist? True or False.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Tests.pytest">
+<span class="sig-name descname"><span class="pre">pytest</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'pytest'</span></em><a class="headerlink" href="#pyaud_plugins.modules.Tests.pytest" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Toc">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">Toc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Toc"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Toc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Write</span></code></p>
+<p>Audit docs/&lt;NAME&gt;.rst toc-file.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Toc.exe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.Toc.exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of executables to add to <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of str object to assign to subprocesses</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Toc.path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></em><a class="headerlink" href="#pyaud_plugins.modules.Toc.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to file, absolute or relative, that will be worked on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Returned value needs to be a Path object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Toc.required">
+<span class="sig-name descname"><span class="pre">required</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">pathlib.Path</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Toc.required"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Toc.required" title="Permalink to this definition">¶</a></dt>
+<dd><p>Pre-requisite for working on file (if there is one).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Path object, otherwise None.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Toc.sphinx_apidoc">
+<span class="sig-name descname"><span class="pre">sphinx_apidoc</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'sphinx-apidoc'</span></em><a class="headerlink" href="#pyaud_plugins.modules.Toc.sphinx_apidoc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Toc.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Toc.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Toc.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>All write logic to be written within this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Typecheck">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">Typecheck</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Typecheck"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Typecheck" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Audit</span></code></p>
+<p>Typecheck code with <code class="docutils literal notranslate"><span class="pre">mypy</span></code>.</p>
+<p>Check that there are no errors between the files and their stub-
+files.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Typecheck.audit">
+<span class="sig-name descname"><span class="pre">audit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Typecheck.audit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Typecheck.audit" title="Permalink to this definition">¶</a></dt>
+<dd><p>All audit logic to be written within this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>If any error has not been raised for any reason int
+object must be returned, from subprocess or written, to
+notify call whether process has succeeded or failed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Typecheck.cache">
+<span class="sig-name descname"><span class="pre">cache</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#pyaud_plugins.modules.Typecheck.cache" title="Permalink to this definition">¶</a></dt>
+<dd><p>If set to True then indexed files will be monitored for change.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Typecheck.exe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.Typecheck.exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of executables to add to <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of str object to assign to subprocesses</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Typecheck.mypy">
+<span class="sig-name descname"><span class="pre">mypy</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mypy'</span></em><a class="headerlink" href="#pyaud_plugins.modules.Typecheck.mypy" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Unused">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">Unused</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Unused"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Unused" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Fix</span></code></p>
+<p>Audit unused code with <code class="docutils literal notranslate"><span class="pre">vulture</span></code>.</p>
+<p>Create whitelist first with –fix.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Unused.audit">
+<span class="sig-name descname"><span class="pre">audit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Unused.audit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Unused.audit" title="Permalink to this definition">¶</a></dt>
+<dd><p>All audit logic to be written within this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>If any error has not been raised for any reason int
+object must be returned, from subprocess or written, to
+notify __call__ whether process has succeeded or failed. If
+non-zero exist is returned and <code class="docutils literal notranslate"><span class="pre">-f/--fix</span></code> has been passed
+to the commandline run the <code class="docutils literal notranslate"><span class="pre">fix</span></code> method, otherwise raise
+<code class="docutils literal notranslate"><span class="pre">AuditError</span></code>.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Unused.exe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.Unused.exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of executables to add to <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of str object to assign to subprocesses</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Unused.fix">
+<span class="sig-name descname"><span class="pre">fix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Unused.fix"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Unused.fix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run if audit fails but only if running a fix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>If any error has not been raised for any reason int
+object must be returned, from subprocess or written, to
+notify __call__ whether process has succeeded or failed.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Unused.vulture">
+<span class="sig-name descname"><span class="pre">vulture</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'vulture'</span></em><a class="headerlink" href="#pyaud_plugins.modules.Unused.vulture" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Whitelist">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyaud_plugins.modules.</span></span><span class="sig-name descname"><span class="pre">Whitelist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Whitelist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Whitelist" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">pyaud.plugins.Write</span></code></p>
+<p>Check whitelist.py file with <code class="docutils literal notranslate"><span class="pre">vulture</span></code>.</p>
+<p>This will consider all unused code an exception so resolve code that
+is not to be excluded from the <code class="docutils literal notranslate"><span class="pre">vulture</span></code> search first.</p>
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Whitelist.exe">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">exe</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pyaud_plugins.modules.Whitelist.exe" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of executables to add to <code class="docutils literal notranslate"><span class="pre">subprocess</span></code> dict.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>List of str object to assign to subprocesses</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Whitelist.path">
+<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pathlib.Path</span></em><a class="headerlink" href="#pyaud_plugins.modules.Whitelist.path" title="Permalink to this definition">¶</a></dt>
+<dd><p>Path to file, absolute or relative, that will be worked on.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>Returned value needs to be a Path object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Whitelist.vulture">
+<span class="sig-name descname"><span class="pre">vulture</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'vulture'</span></em><a class="headerlink" href="#pyaud_plugins.modules.Whitelist.vulture" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyaud_plugins.modules.Whitelist.write">
+<span class="sig-name descname"><span class="pre">write</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="_modules/pyaud_plugins/modules.html#Whitelist.write"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyaud_plugins.modules.Whitelist.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>All write logic to be written within this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Args that can be passed from other plugins.</p></li>
+<li><p><strong>kwargs</strong> – Boolean flags for subprocesses.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h3><a href="index.html">Table of Contents</a></h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">pyaud_plugins</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pyaud-plugins-modules">pyaud_plugins.modules</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="readme.html">README.rst</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="readme.html" title="README.rst"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="pyaud-plugins docs"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyaud-plugins 0.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">pyaud_plugins</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2022, Stephen Whitlock.
+    </div>
+  </body>
+</html>
