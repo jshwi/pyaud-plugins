@@ -103,6 +103,7 @@ modules = [
     "unused",
     "lint",
     "const",
+    "doctest-package",
     "doctest-readme",
     "coverage",
     "docs",

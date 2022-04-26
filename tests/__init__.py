@@ -57,6 +57,7 @@ DEPLOY_DOCS = "deploy-docs"
 LOGGING = "logging"
 CONST = "const"
 DOCTEST_README = "doctest-readme"
+DOCTEST_PACKAGE = "doctest-package"
 
 
 class NoColorCapsys:

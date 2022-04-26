@@ -19,6 +19,7 @@ from . import (
     COVERAGE,
     DEPLOY_COV,
     DEPLOY_DOCS,
+    DOCTEST_PACKAGE,
     DOCTEST_README,
     FILE,
     FLAG_FIX,
@@ -1322,3 +1323,25 @@ def test_call_doctest_readme(
         main(DOCTEST_README)
 
     assert str(err.value) == "pyaud doctest-readme did not pass all checks"
+
+
+def test_doctest_package(
+    main: MockMainType,
+    nocolorcapsys: NoColorCapsys,
+    patch_sp_print_called: MockSPPrintCalledType,
+) -> None:
+    """Test args properly passed to ``doctest-package``.
+
+    :param main: Patch package entry point.
+    :param nocolorcapsys: Capture system output while stripping ANSI
+        color codes.
+    :param patch_sp_print_called: Patch ``Subprocess.call`` to only
+        announce what is called.
+    """
+    patch_sp_print_called()
+    main(DOCTEST_PACKAGE)
+    out = nocolorcapsys.stdout().splitlines()
+    assert (
+        f"<Subprocess (sphinx-build)> -M doctest {ppe.DOCS} {ppe.BUILDDIR}"
+        in out
+    )
