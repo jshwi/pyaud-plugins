@@ -8,7 +8,6 @@ import typing as t
 from configparser import ConfigParser
 from pathlib import Path
 
-# noinspection PyPackageRequirements
 import pyaud
 import pytest
 
@@ -31,7 +30,6 @@ from . import (
 )
 
 
-# noinspection PyUnresolvedReferences,PyProtectedMember
 @pytest.fixture(name="mock_environment", autouse=True)
 def fixture_mock_environment(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
@@ -83,7 +81,6 @@ def fixture_mock_environment(
     # load default key-value pairs
     # ============================
     # monkeypatch implemented on prefixes and override other
-    # noinspection PyProtectedMember
     monkeypatch.setenv("PYAUD_GH_NAME", GH_NAME)
     monkeypatch.setenv("PYAUD_GH_EMAIL", GH_EMAIL)
     monkeypatch.setenv("PYAUD_GH_TOKEN", GH_TOKEN)
@@ -140,13 +137,16 @@ def fixture_mock_environment(
     with open(Path.home() / ".gitconfig", "w", encoding="utf-8") as fout:
         config.write(fout)
 
+    # noinspection PyProtectedMember
     pyaud._environ.initialize_dirs()
 
     monkeypatch.setattr("pyaud.git.status", lambda *_, **__: True)
     monkeypatch.setattr("pyaud.git.rev_parse", lambda *_, **__: None)
+    # noinspection PyProtectedMember
     pyaud._indexing.HashMapping.unpatched_match_file = (  # type: ignore
         pyaud._indexing.HashMapping.match_file
     )
+    # noinspection PyProtectedMember
     pyaud._indexing.HashMapping.unpatched_hash_files = (  # type: ignore
         pyaud._indexing.HashMapping.hash_files
     )
@@ -156,6 +156,7 @@ def fixture_mock_environment(
     monkeypatch.setattr(
         "pyaud._indexing.HashMapping.hash_files", lambda _: None
     )
+    # noinspection PyProtectedMember
     monkeypatch.setattr(
         "pyaud.plugins._plugins", copy.deepcopy(pyaud.plugins._plugins)
     )

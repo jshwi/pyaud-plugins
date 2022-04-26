@@ -9,7 +9,6 @@ import os
 import typing as t
 from pathlib import Path
 
-# noinspection PyPackageRequirements
 import pyaud
 import pytest
 
@@ -1152,7 +1151,6 @@ def test_no_exe_provided(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(SP_OPEN_PROC, lambda *_, **__: 1)
     pyaud.files.append(Path.cwd() / FILES)
 
-    # noinspection PyUnusedLocal
     class Plugin(pyaud.plugins.Audit):
         """Nothing to do."""
 

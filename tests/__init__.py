@@ -8,7 +8,6 @@ import re
 import typing as t
 from pathlib import Path
 
-# noinspection PyPackageRequirements
 import pyaud
 
 MockMainType = t.Callable[..., None]
