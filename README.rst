@@ -59,6 +59,7 @@ This package contains the following plugins on running `pyaud modules`
 
 .. code-block:: console
 
+    const           -- Check code for repeat use of strings
     coverage        -- Run package unit-tests with `pytest` and `coverage`
     deploy          -- Deploy package documentation and test coverage
     deploy-cov      -- Upload coverage data to `Codecov`

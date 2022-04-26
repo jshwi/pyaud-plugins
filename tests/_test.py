@@ -15,6 +15,7 @@ import pyaud_plugins as pplugins
 from pyaud_plugins import environ as ppe
 
 from . import (
+    CONST,
     COVERAGE,
     DEPLOY_COV,
     DEPLOY_DOCS,
@@ -1273,3 +1274,25 @@ def test_sphinx_build_abc(
         "<Subprocess (sphinx-build)> testing args passed to sphinx-build"
         in out
     )
+
+
+def test_call_const(
+    main: MockMainType,
+    nocolorcapsys: NoColorCapsys,
+    patch_sp_print_called: MockSPPrintCalledType,
+) -> None:
+    """Test register and call of ``const`` plugin.
+
+    :param main: Patch package entry point.
+    :param nocolorcapsys: Capture system output while stripping ANSI
+        color codes.
+    :param patch_sp_print_called: Patch ``Subprocess.call`` to only
+        announce what is called.
+    """
+    path = Path.cwd() / FILE
+    pyaud.files.append(path)
+    patch_sp_print_called()
+    main(CONST)
+    out = nocolorcapsys.stdout().splitlines()
+    assert f"<Subprocess (constcheck)> {path}" in out
+    assert "Success: no issues found in 1 source files" in out

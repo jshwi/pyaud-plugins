@@ -672,3 +672,23 @@ class FormatDocs(CheckFix):
     @property
     def exe(self) -> t.List[str]:
         return [self.docformatter]
+
+
+@pyaud.plugins.register()
+class Const(pyaud.plugins.Audit):
+    """Check code for repeat use of strings."""
+
+    constcheck = "constcheck"
+    cache = True
+    cache_all = True
+
+    @property
+    def env(self) -> t.Dict[str, str]:
+        return {"PYCHARM_HOSTED": "True"}
+
+    @property
+    def exe(self) -> t.List[str]:
+        return [self.constcheck]
+
+    def audit(self, *args: str, **kwargs: bool) -> int:
+        return self.subprocess[self.constcheck].call(*pyaud.files.args())

@@ -27,7 +27,8 @@
     "test:doctest:package": "poetry run sphinx-build -M doctest docs/ docs/_build",
     "test:doctest:readme": "poetry run python -m doctest README.rst",
     "test:unit": "poetry run pyaud tests",
-    "types": "poetry run pyaud typecheck"
+    "types": "poetry run pyaud typecheck",
+    "const": "poetry run pyaud const"
   },
   "repository": {
     "type": "git",

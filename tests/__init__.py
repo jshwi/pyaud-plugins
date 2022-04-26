@@ -55,6 +55,7 @@ TOC = "toc"
 IMPORTS = "imports"
 DEPLOY_DOCS = "deploy-docs"
 LOGGING = "logging"
+CONST = "const"
 
 
 class NoColorCapsys:

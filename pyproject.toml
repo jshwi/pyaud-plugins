@@ -17,6 +17,16 @@ exclude = '''
 line-length = 79
 skip-magic-trailing-comma = true
 
+[tool.constcheck]
+filter = true
+
+[tool.constcheck.ignore_from]
+"pyaud_plugins/modules.py" = [
+    'PYCHARM_HOSTED',
+    "True",
+    "suppress",
+]
+
 [tool.coverage.report]
 fail_under = 100
 
@@ -48,6 +58,7 @@ Sphinx = "^4.3.2"
 appdirs = "^1.4.4"
 black = ">=21.12,<23.0"
 codecov = "^2.1.12"
+constcheck = "^0.4.1"
 coverage = "^6.2"
 docformatter = "^1.4"
 environs = "^9.4.0"
@@ -91,6 +102,7 @@ modules = [
     "typecheck",
     "unused",
     "lint",
+    "const",
     "coverage",
     "docs",
 ]
