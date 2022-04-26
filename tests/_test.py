@@ -10,6 +10,7 @@ from pathlib import Path
 
 import pyaud
 import pytest
+import tomli_w
 
 import pyaud_plugins as pplugins
 from pyaud_plugins import environ as ppe
@@ -1298,7 +1299,7 @@ def test_call_const(
     main(CONST)
     out = nocolorcapsys.stdout().splitlines()
     assert f"<Subprocess (constcheck)> {path}" in out
-    assert "Success: no issues found in 1 source files" in out
+    assert NO_ISSUES in out
 
 
 def test_call_doctest_readme(
@@ -1373,3 +1374,34 @@ def test_doctest(
     out = nocolorcapsys.stdout().splitlines()
     for module in modules:
         assert f"{pyaud.__name__} {module}" in out
+
+
+def test_call_sort_pyproject(
+    main: MockMainType, nocolorcapsys: NoColorCapsys
+) -> None:
+    """Test register and call of ``sort-pyproject`` plugin.
+
+    :param main: Patch package entry point.
+    :param nocolorcapsys: Capture system output while stripping ANSI
+        color codes.
+    """
+    path = Path.cwd() / FILE
+    pyaud.files.append(path)
+    test_obj = {"tool": {"b_package": {"key1": "value1"}}}
+    with open(ppe.PYPROJECT, "wb") as fout:
+        tomli_w.dump(test_obj, fout)
+    main("sort-pyproject")
+    out = nocolorcapsys.stdout().splitlines()
+    assert NO_ISSUES in out
+    test_obj = {
+        "tool": {
+            "b_package": {"key2": "value2"},
+            "a_package": {"key3": "value3"},
+        }
+    }
+    with open(ppe.PYPROJECT, "wb") as fout:
+        tomli_w.dump(test_obj, fout)
+
+    main("sort-pyproject", FLAG_FIX)
+    out = nocolorcapsys.stdout().splitlines()
+    assert NO_ISSUES in out

@@ -172,6 +172,14 @@ class _Environ(_Env):
         with self.prefixed(self.PREFIX):
             return self.str("PACKAGE_NAME", default=_pyaud.package())
 
+    @property
+    def PYPROJECT(self) -> _Path:
+        """Location of pyproject.toml file."""
+        with self.prefixed(self.PREFIX):
+            return _Path.cwd() / self.path(
+                "PYPROJECT", default=_Path("pyproject.toml")
+            )
+
 
 #: package environment, both parsed from .env file (with set defaults
 #: for missing keys), and static values

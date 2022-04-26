@@ -8,8 +8,8 @@
     "test": "tests"
   },
   "scripts": {
-    "toml:sort": "poetry run toml-sort pyproject.toml --in-place --all",
-    "audit": "npm-run-all audit:* && npm run toml:sort",
+    "toml:sort": "poetry run pyaud sort-pyproject",
+    "audit": "npm-run-all audit:*",
     "audit:misc": "npx prettier -c .",
     "audit:py": "poetry run pyaud audit --deploy --rcfile .github/pyaud.toml",
     "bump:major": "poetry run bump2version major",
