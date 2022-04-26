@@ -19,6 +19,7 @@ from . import (
     COVERAGE,
     DEPLOY_COV,
     DEPLOY_DOCS,
+    DOCTEST_README,
     FILE,
     FLAG_FIX,
     FLAG_SUPPRESS,
@@ -1296,3 +1297,28 @@ def test_call_const(
     out = nocolorcapsys.stdout().splitlines()
     assert f"<Subprocess (constcheck)> {path}" in out
     assert "Success: no issues found in 1 source files" in out
+
+
+def test_call_doctest_readme(
+    monkeypatch: pytest.MonkeyPatch,
+    main: MockMainType,
+    nocolorcapsys: NoColorCapsys,
+) -> None:
+    """Test success and failure with ``doctest-readme`` plugin.
+
+    :param monkeypatch: Mock patch environment and attributes.
+    :param main: Patch package entry point.
+    :param nocolorcapsys: Capture system output while stripping ANSI
+        color codes.
+    """
+    monkeypatch.setattr(SP_OPEN_PROC, lambda *_, **__: 0)
+    monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda: None)
+    main(DOCTEST_README)
+    out = nocolorcapsys.stdout().splitlines()
+    assert "Success: No issues found in README.rst" in out
+    monkeypatch.setattr(SP_OPEN_PROC, lambda *_, **__: 1)
+    monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda: None)
+    with pytest.raises(pyaud.exceptions.AuditError) as err:
+        main(DOCTEST_README)
+
+    assert str(err.value) == "pyaud doctest-readme did not pass all checks"

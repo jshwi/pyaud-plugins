@@ -692,3 +692,27 @@ class Const(pyaud.plugins.Audit):
 
     def audit(self, *args: str, **kwargs: bool) -> int:
         return self.subprocess[self.constcheck].call(*pyaud.files.args())
+
+
+@pyaud.plugins.register()
+class DoctestReadme(pyaud.plugins.Action):
+    """Run ``doctest`` on Python code-blocks in README."""
+
+    python = "python"
+
+    @property
+    def exe(self) -> t.List[str]:
+        return [self.python]
+
+    def action(self, *args: str, **kwargs: bool) -> int:
+        returncode = self.subprocess[self.python].call(
+            "-m", "doctest", e.README_RST
+        )
+        if not returncode:
+            colors.green.bold.print(
+                "Success: No issues found in {}".format(
+                    e.README_RST.relative_to(Path.cwd())
+                )
+            )
+
+        return returncode

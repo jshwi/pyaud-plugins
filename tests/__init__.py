@@ -56,6 +56,7 @@ IMPORTS = "imports"
 DEPLOY_DOCS = "deploy-docs"
 LOGGING = "logging"
 CONST = "const"
+DOCTEST_README = "doctest-readme"
 
 
 class NoColorCapsys:

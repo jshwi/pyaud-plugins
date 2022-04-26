@@ -9,7 +9,7 @@
   },
   "scripts": {
     "toml:sort": "poetry run toml-sort pyproject.toml --in-place --all",
-    "audit": "npm-run-all audit:* && npm run toml:sort && npm run test:doctest:readme",
+    "audit": "npm-run-all audit:* && npm run toml:sort",
     "audit:misc": "npx prettier -c .",
     "audit:py": "poetry run pyaud audit --deploy --rcfile .github/pyaud.toml",
     "bump:major": "poetry run bump2version major",
@@ -25,7 +25,7 @@
     "lint": "poetry run pyaud lint",
     "test": "npm-run-all test:**",
     "test:doctest:package": "poetry run sphinx-build -M doctest docs/ docs/_build",
-    "test:doctest:readme": "poetry run python -m doctest README.rst",
+    "test:doctest:readme": "poetry run pyaud doctest-readme",
     "test:unit": "poetry run pyaud tests",
     "types": "poetry run pyaud typecheck",
     "const": "poetry run pyaud const"
