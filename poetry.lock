@@ -393,7 +393,7 @@ toml = ">=0.10.2"
 
 [[package]]
 name = "domdf-python-tools"
-version = "3.2.2.post1"
+version = "3.3.0"
 description = "Helpful functions for Python 🐍 🛠️"
 category = "main"
 optional = false
@@ -893,7 +893,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [[package]]
 name = "pyaud"
-version = "3.12.0"
+version = "3.12.1"
 description = "Framework for writing Python package audits"
 category = "dev"
 optional = false
@@ -907,7 +907,7 @@ lsfiles = ">=0.1.1,<0.2.0"
 m2r = ">=0.2.1,<0.3.0"
 mistune = "<=0.8.4"
 object-colors = ">=2.0.1,<3.0.0"
-pyaud-plugins = ">=0.3.0,<0.4.0"
+pyaud-plugins = "*"
 spall = ">=0.1.0,<0.2.0"
 toml = ">=0.10.2,<0.11.0"
 
@@ -1607,7 +1607,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "e0367431f022eb04a3290415352cdf32660fd3eb87bcd76a7bb829d2aaa9c872"
+content-hash = "f23a6e8f541d1ca8e0805878d3d28e6d451555174ab1230f85e50df9bc30fa74"
 
 [metadata.files]
 alabaster = [
@@ -1807,8 +1807,8 @@ dom-toml = [
     {file = "dom_toml-0.5.1.post1.tar.gz", hash = "sha256:5fe4c5d8925528d509be41b878aeb8c24f2d3cc2e85c37d3d451542965138f3b"},
 ]
 domdf-python-tools = [
-    {file = "domdf-python-tools-3.2.2.post1.tar.gz", hash = "sha256:fef90a0109b284424b14f9513e3b543f68feb1d48beddde435928e0f05f4664e"},
-    {file = "domdf_python_tools-3.2.2.post1-py3-none-any.whl", hash = "sha256:70a9771dea6f5aa37779d2a86d4abaf63f8fa305e3313a53f71f45b8c8c5fd08"},
+    {file = "domdf_python_tools-3.3.0-py3-none-any.whl", hash = "sha256:692a33cfc4bc4270a30f18b95beb8f65bf56935d122a4bdb0af7f7760452d41c"},
+    {file = "domdf_python_tools-3.3.0.tar.gz", hash = "sha256:7c588cdfa3e8bfd9617efbb4fa42652b7010c0f158c81844c862fbda5d86d9cc"},
 ]
 environs = [
     {file = "environs-9.5.0-py2.py3-none-any.whl", hash = "sha256:1e549569a3de49c05f856f40bce86979e7d5ffbbc4398e7f338574c220189124"},
@@ -2100,8 +2100,8 @@ py = [
     {file = "py-1.11.0.tar.gz", hash = "sha256:51c75c4126074b472f746a24399ad32f6053d1b34b68d2fa41e558e6f4a98719"},
 ]
 pyaud = [
-    {file = "pyaud-3.12.0-py3-none-any.whl", hash = "sha256:6e24478c540c107999bcb19a685114b1fd9f223934786e67c9e500ade9e33718"},
-    {file = "pyaud-3.12.0.tar.gz", hash = "sha256:c39625a98412e386a7400131628174eb0534df818190878f7e03542a221e78f3"},
+    {file = "pyaud-3.12.1-py3-none-any.whl", hash = "sha256:5ee949cdabf694e18e5340f454ccc5a970379afbc12ba33c7ce5e0a218b72d0e"},
+    {file = "pyaud-3.12.1.tar.gz", hash = "sha256:b1171cf7e686e2ea08ed02651da2d5bcf477d9acbfe97951860686f6aae68ced"},
 ]
 pygments = [
     {file = "Pygments-2.12.0-py3-none-any.whl", hash = "sha256:dc9c10fb40944260f6ed4c688ece0cd2048414940f1cea51b8b226318411c519"},
