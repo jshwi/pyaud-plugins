@@ -12,6 +12,7 @@ from pathlib import Path
 import pyaud
 from object_colors import Color
 
+from ._abc import CheckFix
 from ._environ import environ as e
 
 colors = Color()
@@ -263,7 +264,7 @@ class Files(pyaud.plugins.Parametrize):
 
 
 @pyaud.plugins.register()
-class Format(pyaud.plugins.Fix):
+class Format(CheckFix):
     """Audit code with `Black`."""
 
     black = "black"
@@ -272,11 +273,6 @@ class Format(pyaud.plugins.Fix):
     @property
     def exe(self) -> t.List[str]:
         return [self.black]
-
-    def audit(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.black].call(
-            "--check", *pyaud.files.args(), *args, **kwargs
-        )
 
     def fix(self, *args: str, **kwargs: bool) -> int:
         return self.subprocess[self.black].call(
@@ -670,7 +666,7 @@ class FormatStr(pyaud.plugins.Fix):
 
 
 @pyaud.plugins.register()
-class FormatDocs(pyaud.plugins.Fix):
+class FormatDocs(CheckFix):
     """Format docstrings with ``docformatter``."""
 
     docformatter = "docformatter"
@@ -680,13 +676,3 @@ class FormatDocs(pyaud.plugins.Fix):
     @property
     def exe(self) -> t.List[str]:
         return [self.docformatter]
-
-    def audit(self, *args: t.Any, **kwargs: bool) -> t.Any:
-        return self.subprocess[self.docformatter].call(
-            "--check", *self.args, *pyaud.files.args(), *args, **kwargs
-        )
-
-    def fix(self, *args: t.Any, **kwargs: bool) -> t.Any:
-        return self.subprocess[self.docformatter].call(
-            "--in-place", *self.args, *pyaud.files.args(), *args, **kwargs
-        )
