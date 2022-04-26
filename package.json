@@ -24,6 +24,7 @@
     "format:py:str": "poetry run pyaud format-str",
     "lint": "poetry run pyaud lint",
     "test": "npm-run-all test:**",
+    "test:doctest": "poetry run pyaud doctest",
     "test:doctest:package": "poetry run pyaud doctest-package",
     "test:doctest:readme": "poetry run pyaud doctest-readme",
     "test:unit": "poetry run pyaud tests",

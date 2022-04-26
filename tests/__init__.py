@@ -58,6 +58,7 @@ LOGGING = "logging"
 CONST = "const"
 DOCTEST_README = "doctest-readme"
 DOCTEST_PACKAGE = "doctest-package"
+DOCTEST = "doctest"
 
 
 class NoColorCapsys:

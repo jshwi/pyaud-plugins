@@ -725,3 +725,11 @@ class DoctestPackage(SphinxBuild):
     @property
     def args(self) -> t.Tuple[t.Union[str, Path], ...]:
         return "-M", "doctest", e.DOCS, e.BUILDDIR
+
+
+@pyaud.plugins.register()
+class Doctest(pyaud.plugins.Parametrize):
+    """Run ``doctest`` on all code examples."""
+
+    def plugins(self) -> t.List[str]:
+        return ["doctest-package", "doctest-readme"]

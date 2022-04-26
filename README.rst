@@ -65,6 +65,7 @@ This package contains the following plugins on running `pyaud modules`
     deploy-cov      -- Upload coverage data to `Codecov`
     deploy-docs     -- Deploy package documentation to `gh-pages`
     docs            -- Compile package documentation with `Sphinx`
+    doctest         -- Run `doctest` on all code examples
     doctest-package -- Run `doctest` on package
     doctest-readme  -- Run `doctest` on Python code-blocks in README
     files           -- Audit project data files

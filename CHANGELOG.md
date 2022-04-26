@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 [Unreleased](https://github.com/jshwi/pyaud-plugins/compare/v0.3.0...HEAD)
 ------------------------------------------------------------------------
 ### Added
+- Adds `doctest` plugin
 - Adds `doctest-package` plugin
 - Adds `doctest-readme` plugin
 - Adds `const` plugin

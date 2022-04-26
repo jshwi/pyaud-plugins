@@ -19,6 +19,7 @@ from . import (
     COVERAGE,
     DEPLOY_COV,
     DEPLOY_DOCS,
+    DOCTEST,
     DOCTEST_PACKAGE,
     DOCTEST_README,
     FILE,
@@ -1345,3 +1346,30 @@ def test_doctest_package(
         f"<Subprocess (sphinx-build)> -M doctest {ppe.DOCS} {ppe.BUILDDIR}"
         in out
     )
+
+
+def test_doctest(
+    main: MockMainType,
+    monkeypatch: pytest.MonkeyPatch,
+    nocolorcapsys: NoColorCapsys,
+    call_status: MockCallStatusType,
+) -> None:
+    """Test the correct commands are run when running ``pyaud doctest``.
+
+    :param main: Patch package entry point.
+    :param monkeypatch: Mock patch environment and attributes.
+    :param nocolorcapsys: Capture system output while stripping ANSI
+        color codes.
+    :param call_status: Patch function to not do anything. Optionally
+        returns non-zero exit code (0 by default).
+    """
+    modules = DOCTEST_PACKAGE, DOCTEST_README
+    mocked_plugins = pyaud.plugins.mapping()
+    for module in modules:
+        mocked_plugins[module] = call_status(module)  # type: ignore
+
+    monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mocked_plugins)
+    main(DOCTEST)
+    out = nocolorcapsys.stdout().splitlines()
+    for module in modules:
+        assert f"{pyaud.__name__} {module}" in out
