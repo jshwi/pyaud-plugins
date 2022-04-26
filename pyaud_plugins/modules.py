@@ -12,7 +12,7 @@ from pathlib import Path
 import pyaud
 from object_colors import Color
 
-from ._environ import environ
+from ._environ import environ as e
 
 colors = Color()
 colors.populate_colors()
@@ -36,14 +36,12 @@ class Tests(pyaud.plugins.Action):
 
         :return: Does a test suite exist? True or False.
         """
-        patterns = ("test_*.py", "*_test.py")
-        rglob = [
+        return any(
             f
             for f in pyaud.files
-            for p in patterns
-            if f.match(p) and str(environ.TESTS) in str(f)
-        ]
-        return rglob != []
+            for p in ("test_*.py", "*_test.py")
+            if f.match(p) and str(e.TESTS) in str(f)
+        )
 
     def action(self, *args: str, **kwargs: bool) -> int:
         if self.is_tests:
@@ -65,14 +63,13 @@ class Coverage(Tests):
 
     def action(self, *args: str, **kwargs: bool) -> int:
         returncode = super().action(
-            *[f"--cov={e}" for e in pyaud.files.reduce()], **kwargs
+            *[f"--cov={i}" for i in pyaud.files.reduce()], **kwargs
         )
         if self.is_tests and not returncode:
             kwargs["suppress"] = True
-            self.subprocess[self.coverage].call("xml", *args, **kwargs)
-        else:
-            print("No coverage to report")
+            return self.subprocess[self.coverage].call("xml", *args, **kwargs)
 
+        print("No coverage to report")
         return returncode
 
 
@@ -103,18 +100,18 @@ class DeployCov(pyaud.plugins.Action):
         return [self.codecov]
 
     def action(self, *args: str, **kwargs: bool) -> int:
-        self.logger().debug("looking for %s", environ.COVERAGE_XML)
-        if environ.COVERAGE_XML.is_file():
-            if environ.CODECOV_TOKEN is not None:
-                self.subprocess[self.codecov].call(
-                    "--file", environ.COVERAGE_XML, **kwargs
-                )
-            else:
-                print("CODECOV_TOKEN not set")
-        else:
+        self.logger().debug("looking for %s", e.COVERAGE_XML)
+        if not e.COVERAGE_XML.is_file():
             print("No coverage report found")
+            return 0
 
-        return 0
+        if e.CODECOV_TOKEN is None:
+            print("CODECOV_TOKEN not set")
+            return 0
+
+        return self.subprocess[self.codecov].call(
+            "--file", e.COVERAGE_XML, **kwargs
+        )
 
 
 @pyaud.plugins.register()
@@ -129,6 +126,8 @@ class DeployDocs(pyaud.plugins.Action):  # pyli
     """
 
     _pushing_skipped = "Pushing skipped"
+    _origin = "origin"
+    _gh_pages = "gh-pages"
 
     def deploy_docs(self) -> None:
         """Series of functions for deploying docs."""
@@ -140,17 +139,17 @@ class DeployDocs(pyaud.plugins.Action):  # pyli
             pyaud.git.stash(devnull=True)
             stashed = True
 
-        shutil.move(str(environ.DOCS_HTML), root_html)
-        shutil.copy(environ.README_RST, root_html / environ.README_RST.name)
+        shutil.move(str(e.DOCS_HTML), root_html)
+        shutil.copy(e.README_RST, root_html / e.README_RST.name)
         pyaud.git.rev_list("--max-parents=0", "HEAD", capture=True)
         stdout = pyaud.git.stdout()
         if stdout:
             pyaud.git.checkout(stdout[-1])
 
-        pyaud.git.checkout("--orphan", "gh-pages")
-        pyaud.git.config("--global", "user.name", environ.GH_NAME)
-        pyaud.git.config("--global", "user.email", environ.GH_EMAIL)
-        shutil.rmtree(environ.DOCS)
+        pyaud.git.checkout("--orphan", self._gh_pages)
+        pyaud.git.config("--global", "user.name", e.GH_NAME)
+        pyaud.git.config("--global", "user.email", e.GH_EMAIL)
+        shutil.rmtree(e.DOCS)
         pyaud.git.rm("-rf", Path.cwd(), devnull=True)
         pyaud.git.clean("-fdx", "--exclude=html", devnull=True)
         for file in root_html.rglob("*"):
@@ -161,17 +160,17 @@ class DeployDocs(pyaud.plugins.Action):  # pyli
         pyaud.git.commit(
             "-m", '"[ci skip] Publishes updated documentation"', devnull=True
         )
-        pyaud.git.remote("rm", "origin")
-        pyaud.git.remote("add", "origin", environ.GH_REMOTE)
+        pyaud.git.remote("rm", self._origin)
+        pyaud.git.remote("add", self._origin, e.GH_REMOTE)
         pyaud.git.fetch()
         pyaud.git.stdout()
         pyaud.git.ls_remote(
-            "--heads", environ.GH_REMOTE, "gh-pages", capture=True
+            "--heads", e.GH_REMOTE, self._gh_pages, capture=True
         )
         result = pyaud.git.stdout()
         remote_exists = None if not result else result[-1]
         pyaud.git.diff(
-            "gh-pages", "origin/gh-pages", suppress=True, capture=True
+            self._gh_pages, "origin/gh-pages", suppress=True, capture=True
         )
         result = pyaud.git.stdout()
         remote_diff = None if not result else result[-1]
@@ -180,30 +179,28 @@ class DeployDocs(pyaud.plugins.Action):  # pyli
             print(self._pushing_skipped)
         else:
             colors.green.print("Pushing updated documentation")
-            pyaud.git.push("origin", "gh-pages", "-f")
+            pyaud.git.push(self._origin, self._gh_pages, "-f")
             print("Documentation Successfully deployed")
 
         pyaud.git.checkout("master", devnull=True)
         if stashed:
             pyaud.git.stash("pop", devnull=True)
 
-        pyaud.git.branch("-D", "gh-pages", devnull=True)
+        pyaud.git.branch("-D", self._gh_pages, devnull=True)
 
     def action(self, *args: str, **kwargs: bool) -> int:
         if pyaud.branch() == "master":
             git_credentials = ["GH_NAME", "GH_EMAIL", "GH_TOKEN"]
-            null_vals = [
-                k for k in git_credentials if getattr(environ, k) is None
-            ]
+            null_vals = [k for k in git_credentials if getattr(e, k) is None]
             if not null_vals:
-                if not environ.DOCS_HTML.is_dir():
+                if not e.DOCS_HTML.is_dir():
                     pyaud.plugins.get("docs")(**kwargs)
 
                 self.deploy_docs()
             else:
                 print("The following is not set:")
                 for null_val in null_vals:
-                    print(f"- {environ.PREFIX}{null_val}")
+                    print(f"- {e.PREFIX}{null_val}")
 
                 print()
                 print(self._pushing_skipped)
@@ -226,7 +223,6 @@ class Docs(pyaud.plugins.Action):
     """
 
     sphinx_build = "sphinx-build"
-    m2r = "m2r"
 
     @property
     def exe(self) -> t.List[str]:
@@ -234,29 +230,23 @@ class Docs(pyaud.plugins.Action):
 
     def action(self, *args: str, **kwargs: bool) -> int:
         pyaud.plugins.get("toc")(*args, **kwargs)
-        underline = len(environ.README_RST.name) * "="
-        if environ.BUILDDIR.is_dir():
-            shutil.rmtree(environ.BUILDDIR)
-
-        with pyaud.parsers.Md2Rst(environ.README_MD, temp=True):
-            if environ.DOCS_CONF.is_file() and environ.README_RST.is_file():
-                with pyaud.parsers.LineSwitch(
-                    environ.README_RST,
-                    {0: environ.README_RST.name, 1: underline},
-                ):
-                    command = [
-                        "-M",
-                        "html",
-                        environ.DOCS,
-                        environ.BUILDDIR,
-                        "-W",
-                    ]
-                    self.subprocess[self.sphinx_build].call(*command, **kwargs)
-                    colors.green.bold.print("Build successful")
-            else:
+        shutil.rmtree(e.BUILDDIR, ignore_errors=True)
+        with pyaud.parsers.Md2Rst(e.README_MD, temp=True):
+            if not e.DOCS_CONF.is_file() or not e.README_RST.is_file():
                 print("No docs found")
+                return 0
 
-        return 0
+            with pyaud.parsers.LineSwitch(
+                e.README_RST,
+                {0: e.README_RST.stem, 1: len(e.README_RST.stem) * "="},
+            ):
+                returncode = self.subprocess[self.sphinx_build].call(
+                    "-M", "html", e.DOCS, e.BUILDDIR, "-W", **kwargs
+                )
+                if not returncode:
+                    colors.green.bold.print("Build successful")
+
+        return returncode
 
 
 @pyaud.plugins.register()
@@ -327,14 +317,12 @@ class Requirements(pyaud.plugins.Write):
 
     @property
     def path(self) -> Path:
-        return environ.REQUIREMENTS
+        return e.REQUIREMENTS
 
     def required(self) -> Path:
-        return environ.PIPFILE_LOCK
+        return e.PIPFILE_LOCK
 
     def write(self, *args: str, **kwargs: bool) -> int:
-        # get the stdout for both production and development packages
-
         # get the stdout for both production and development packages
         self.subprocess[self.p2req].call(
             self.required(), *args, capture=True, **kwargs
@@ -345,11 +333,16 @@ class Requirements(pyaud.plugins.Write):
 
         # write to file and then use sed to remove the additional
         # information following the semicolon
-        stdout = list(
-            set("\n".join(self.subprocess[self.p2req].stdout()).splitlines())
+        stdout = sorted(
+            list(
+                set(
+                    "\n".join(
+                        self.subprocess[self.p2req].stdout()
+                    ).splitlines()
+                )
+            )
         )
-        stdout.sort()
-        with open(self.path, "w", encoding=environ.ENCODING) as fout:
+        with open(self.path, "w", encoding=e.ENCODING) as fout:
             for content in stdout:
                 fout.write(f"{content.split(';')[0]}\n")
 
@@ -368,35 +361,27 @@ class Toc(pyaud.plugins.Write):
 
     @property
     def path(self) -> Path:
-        return environ.PACKAGE_TOC
+        return e.PACKAGE_TOC
 
     def required(self) -> t.Optional[Path]:
-        return environ.DOCS_CONF
+        return e.DOCS_CONF
 
     @staticmethod
     def _populate(path: Path, contents: t.List[str]) -> None:
         if path.is_file():
-            with open(path, encoding=environ.ENCODING) as fin:
+            with open(path, encoding=e.ENCODING) as fin:
                 contents.extend(fin.read().splitlines())
 
     def write(self, *args: str, **kwargs: bool) -> int:
         toc_attrs = "   :members:\n   :undoc-members:\n   :show-inheritance:"
         self.subprocess[self.sphinx_apidoc].call(
-            "-o",
-            environ.DOCS,
-            environ.PACKAGE,
-            "-f",
-            *args,
-            devnull=True,
-            **kwargs,
+            "-o", e.DOCS, e.PACKAGE, "-f", *args, devnull=True, **kwargs
         )
 
         # dynamically populate a list of unwanted, overly nested files
         # nesting the file in the docs/<NAME>.rst file is preferred
         nested = [
-            environ.DOCS / f
-            for f in environ.DOCS.iterdir()
-            if len(f.name.split(".")) > 2
+            e.DOCS / f for f in e.DOCS.iterdir() if len(f.name.split(".")) > 2
         ]
 
         contents: t.List[str] = []
@@ -411,16 +396,14 @@ class Toc(pyaud.plugins.Write):
         )
         with open(self.path, "w", encoding="utf-8") as fout:
             fout.write(
-                "{}\n{}\n\n".format(
-                    environ.PACKAGE_NAME, len(environ.PACKAGE_NAME) * "="
-                )
+                "{}\n{}\n\n".format(e.PACKAGE_NAME, len(e.PACKAGE_NAME) * "=")
             )
             for content in contents:
                 fout.write(f"{content}\n{toc_attrs}\n")
 
         # files that we do not want included in docs modules creates an
         # extra layer that is not desired for this module
-        blacklist = [environ.DOCS / "modules.rst", *nested]
+        blacklist = [e.DOCS / "modules.rst", *nested]
 
         # remove unwanted files
         for module in blacklist:
@@ -470,9 +453,7 @@ class Typecheck(pyaud.plugins.Audit):
             # if error occurred it might be because the stub library is
             # not installed: automatically download and install stub
             # library if the below message occurred
-            if any(
-                "error: Library stubs not installed for" in i for i in stdout
-            ):
+            if "error: Library stubs not installed for" in stdout:
                 self.subprocess[self.mypy].call(
                     "--non-interactive", "--install-types"
                 )
@@ -514,8 +495,8 @@ class Unused(pyaud.plugins.Fix):
 
     def audit(self, *args: str, **kwargs: bool) -> int:
         args = tuple([*pyaud.files.args(reduce=True), *args])
-        if environ.WHITELIST.is_file():
-            args = str(environ.WHITELIST), *args
+        if e.WHITELIST.is_file():
+            args = str(e.WHITELIST), *args
 
         return self.subprocess[self.vulture].call(*args, **kwargs)
 
@@ -540,7 +521,7 @@ class Whitelist(pyaud.plugins.Write):
 
     @property
     def path(self) -> Path:
-        return environ.WHITELIST
+        return e.WHITELIST
 
     def write(self, *args: str, **kwargs: bool) -> int:
         # append whitelist exceptions for each individual module
@@ -555,7 +536,7 @@ class Whitelist(pyaud.plugins.Write):
         stdout = self.subprocess[self.vulture].stdout()
         stdout = [i.replace(str(Path.cwd()) + os.sep, "") for i in stdout]
         stdout.sort()
-        with open(self.path, "w", encoding=environ.ENCODING) as fout:
+        with open(self.path, "w", encoding=e.ENCODING) as fout:
             fout.write("\n".join(stdout) + "\n")
 
         return 0
@@ -584,28 +565,30 @@ class Imports(pyaud.plugins.FixFile):
     the temp file's contents.
     """
 
+    isort = "isort"
+    black = "black"
     result = ""
     content = ""
     cache = True
 
     @property
     def exe(self) -> t.List[str]:
-        return ["isort", "black"]
+        return [self.isort, self.black]
 
     def audit(self, file: Path, **kwargs: bool) -> int:
         # collect original file's contents
-        with open(file, encoding=environ.ENCODING) as fin:
+        with open(file, encoding=e.ENCODING) as fin:
             self.content = fin.read()
 
         # write original file's contents to temporary file
         with tempfile.NamedTemporaryFile(delete=False) as tmp:
-            with open(tmp.name, "w", encoding=environ.ENCODING) as fout:
+            with open(tmp.name, "w", encoding=e.ENCODING) as fout:
                 fout.write(self.content)
 
         # run both ``isort`` and ``black`` on the temporary file,
         # leaving the original file untouched
-        self.subprocess["isort"].call(tmp.name, devnull=True, **kwargs)
-        self.subprocess["black"].call(
+        self.subprocess[self.isort].call(tmp.name, devnull=True, **kwargs)
+        self.subprocess[self.black].call(
             tmp.name,
             "--line-length",
             "79",
@@ -615,7 +598,7 @@ class Imports(pyaud.plugins.FixFile):
         )
 
         # collect the results from the temporary file
-        with open(tmp.name, encoding=environ.ENCODING) as fin:
+        with open(tmp.name, encoding=e.ENCODING) as fin:
             self.result = fin.read()
 
         os.remove(tmp.name)
@@ -629,7 +612,7 @@ class Imports(pyaud.plugins.FixFile):
 
         # replace original file's contents with the temp file post
         # ``isort`` and ``Black``
-        with open(file, "w", encoding=environ.ENCODING) as fout:
+        with open(file, "w", encoding=e.ENCODING) as fout:
             fout.write(self.result)
 
 
@@ -648,9 +631,9 @@ class Readme(pyaud.plugins.Action):
         return [self.readmetester]
 
     def action(self, *args: str, **kwargs: bool) -> int:
-        if environ.README_RST.is_file():
+        if e.README_RST.is_file():
             self.subprocess[self.readmetester].call(
-                environ.README_RST, *args, **kwargs
+                e.README_RST, *args, **kwargs
             )
         else:
             print("No README.rst found in project root")

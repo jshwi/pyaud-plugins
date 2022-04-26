@@ -90,12 +90,11 @@ class _Environ(_Env):
     def GH_REMOTE(self) -> _t.Optional[str]:
         """URL of repository remote."""
         default = None
-        if all(
-            i is not None for i in (self.GH_NAME, self.GH_EMAIL, self.GH_TOKEN)
-        ):
+        if all([self.GH_NAME, self.GH_EMAIL, self.GH_TOKEN]):
             default = "https://{0}:{1}@github.com/{0}/{2}.git".format(
                 self.GH_NAME, self.GH_TOKEN, self.REPO
             )
+
         with self.prefixed(self.PREFIX):
             return self.str("GH_REMOTE", default=default)
 
