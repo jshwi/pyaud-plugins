@@ -5,9 +5,327 @@ tests.files
 Content to write to mock files.
 """
 # pylint: disable=too-many-lines,line-too-long,too-few-public-methods
+from templatest import BaseTemplate, templates
 
-README_RST = """package\n====\n"""
-PIPFILE_LOCK = """{
+PIPFILE2REQ_PROD = """
+alabaster==0.7.12
+appdirs==1.4.4
+astroid==2.4.2; python_version >= "3.5"
+attrs==20.3.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+babel==2.9.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+black==20.8b1
+certifi==2020.12.5
+chardet==4.0.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
+click==7.1.2; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
+codecov==2.1.11
+coverage[toml]==5.3.1
+docutils==0.16; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
+gprof2dot==2019.11.30
+idna==2.10; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+imagesize==1.2.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+iniconfig==1.1.1
+isort==5.7.0; python_version >= "3.6" and python_version < "4.0"
+jinja2==2.11.2; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
+lazy-object-proxy==1.4.3; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+markupsafe==1.1.1; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+mccabe==0.6.1
+mypy==0.800
+mypy-extensions==0.4.3
+object-colors==1.0.8
+packaging==20.8; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+pathspec==0.8.1
+pipfile-requirements==0.3.0
+pluggy==0.13.1; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+py==1.10.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+pyblake2==1.1.2
+pygments==2.7.4; python_version >= "3.5"
+pylint==2.6.0
+pyparsing==2.4.7; python_version >= "2.6" and python_version not in "3.0, 3.1, 3.2, 3.3"
+pytest==6.2.1
+pytest-cov==2.11.1
+pytest-profiling==1.7.0
+pytest-randomly==3.5.0
+pytest-sugar==0.9.4
+pytz==2020.5
+regex==2020.11.13
+requests==2.25.1; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
+six==1.15.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+snowballstemmer==2.1.0
+sphinx==3.4.3
+sphinxcontrib-applehelp==1.0.2; python_version >= "3.5"
+sphinxcontrib-devhelp==1.0.2; python_version >= "3.5"
+sphinxcontrib-fulltoc==1.2.0
+sphinxcontrib-htmlhelp==1.0.3; python_version >= "3.5"
+sphinxcontrib-jsmath==1.0.1; python_version >= "3.5"
+sphinxcontrib-programoutput==0.16
+sphinxcontrib-qthelp==1.0.3; python_version >= "3.5"
+sphinxcontrib-serializinghtml==1.1.4; python_version >= "3.5"
+termcolor==1.1.0
+toml==0.10.2; python_version >= "2.6" and python_version not in "3.0, 3.1, 3.2, 3.3"
+typed-ast==1.4.2
+typing-extensions==3.7.4.3
+urllib3==1.26.2; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4" and python_version < "4.0"
+vulture==2.3
+wrapt==1.12.1
+"""
+PIPFILE2REQ_DEV = """
+alabaster==0.7.12
+appdirs==1.4.4
+astroid==2.4.2; python_version >= "3.5"
+attrs==20.3.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+babel==2.9.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+backcall==0.2.0
+black==20.8b1
+bleach==3.2.2; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
+certifi==2020.12.5
+chardet==4.0.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
+click==7.1.2; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
+codecov==2.1.11
+coverage[toml]==5.3.1
+decorator==4.4.2
+docutils==0.16; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
+idna==2.10; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+imagesize==1.2.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+iniconfig==1.1.1
+ipython==7.19.0
+ipython-genutils==0.2.0
+isort==5.7.0; python_version >= "3.6" and python_version < "4.0"
+jedi==0.18.0; python_version >= "3.6"
+jinja2==2.11.2; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
+lazy-object-proxy==1.4.3; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+markupsafe==1.1.1; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+mccabe==0.6.1
+mypy==0.800
+mypy-extensions==0.4.3
+object-colors==1.0.8
+packaging==20.8; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+parso==0.8.1; python_version >= "3.6"
+pathspec==0.8.1
+pexpect==4.8.0; sys_platform != "win32"
+pickleshare==0.7.5
+pipfile-requirements==0.3.0
+pluggy==0.13.1; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+prompt-toolkit==3.0.13
+ptyprocess==0.7.0
+py==1.10.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+-e .
+pyblake2==1.1.2
+pygments==2.7.4; python_version >= "3.5"
+pylint==2.6.0
+pyparsing==2.4.7; python_version >= "2.6" and python_version not in "3.0, 3.1, 3.2, 3.3"
+pytest==6.2.1
+pytest-cov==2.11.1
+pytest-logging==2015.11.4
+pytz==2020.5
+readme-renderer==28.0
+regex==2020.11.13
+requests==2.25.1; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
+restview==2.9.2
+six==1.15.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
+snowballstemmer==2.1.0
+sphinx==3.4.3
+sphinxcontrib-applehelp==1.0.2; python_version >= "3.5"
+sphinxcontrib-devhelp==1.0.2; python_version >= "3.5"
+sphinxcontrib-fulltoc==1.2.0
+sphinxcontrib-htmlhelp==1.0.3; python_version >= "3.5"
+sphinxcontrib-jsmath==1.0.1; python_version >= "3.5"
+sphinxcontrib-programoutput==0.16
+sphinxcontrib-qthelp==1.0.3; python_version >= "3.5"
+sphinxcontrib-serializinghtml==1.1.4; python_version >= "3.5"
+toml==0.10.2; python_version >= "2.6" and python_version not in "3.0, 3.1, 3.2, 3.3"
+traitlets==5.0.5; python_version >= "3.7"
+typed-ast==1.4.2
+typing-extensions==3.7.4.3
+urllib3==1.26.2; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4" and python_version < "4.0"
+vulture==2.3
+wcwidth==0.2.5
+webencodings==0.5.1
+wrapt==1.12.1
+"""
+# from:
+# https://pypi.org/project/docformatter/
+# https://github.com/myint/docformatter
+DOCFORMATTER_EXAMPLE = """
+\"\"\"   Here are some examples.
+
+    This module docstring should be dedented.\"\"\"
+
+
+def launch_rocket():
+    \"\"\"Launch
+the
+rocket. Go colonize space.\"\"\"
+
+
+def factorial(x):
+    '''
+
+    Return x factorial.
+
+    This uses math.factorial.
+
+    '''
+    import math
+    return math.factorial(x)
+
+
+def print_factorial(x):
+    \"\"\"Print x factorial\"\"\"
+    print(factorial(x))
+
+
+def main():
+    \"\"\"Main
+    function\"\"\"
+    print_factorial(5)
+    if factorial(10):
+        launch_rocket()
+"""
+BEFORE_ISORT = (
+    "from . import (\n"
+    "    GH_EMAIL,\n"
+    "    GH_TOKEN,\n"
+    "    REAL_REPe,\n"
+    "    GH_NAME,\n"
+    "    FILES,\n"
+    "    REPO,\n"
+    "    files,\n"
+    ")"
+)
+EXPECTED_NESTED_TOC = """\
+package
+=======
+
+.. automodule:: package
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.admin
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.cli
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.config
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.deps
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.exceptions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.extensions
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.forms
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.log
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.mail
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.models
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.navbar
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.redirect
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.renderers
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.routes
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.routes.auth
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.routes.post
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.routes.views
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.security
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.shell
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.tasks
+   :members:
+   :undoc-members:
+   :show-inheritance:
+.. automodule:: package.user
+   :members:
+   :undoc-members:
+   :show-inheritance:
+"""
+
+
+@templates.register
+class TestToc(BaseTemplate):
+    """Template for testing ``pyaud toc``."""
+
+    @property
+    def template(self) -> str:
+        return """
+package package
+===============
+
+Module contents
+---------------
+
+.. automodule:: package
+   :members:
+   :undoc-members:
+   :show-inheritance:
+"""
+
+    @property
+    def expected(self) -> str:
+        return """\
+package
+=======
+
+.. automodule:: package
+   :members:
+   :undoc-members:
+   :show-inheritance:
+"""
+
+
+@templates.register
+class TestRequirements(BaseTemplate):
+    """Template for testing ``pyaud requirements``."""
+
+    @property
+    def template(self) -> str:
+        return """{
 {
     "_meta": {
         "hash": {
@@ -1424,19 +1742,11 @@ PIPFILE_LOCK = """{
     }
 }
 """
-DEFAULT_TOC = """
-package package
-===============
 
-Module contents
----------------
+    @property
+    def expected(self) -> str:
+        return """\
 
-.. automodule:: package
-   :members:
-   :undoc-members:
-   :show-inheritance:
-"""
-REQUIREMENTS = """
 -e .
 alabaster==0.7.12
 appdirs==1.4.4
@@ -1515,224 +1825,16 @@ wcwidth==0.2.5
 webencodings==0.5.1
 wrapt==1.12.1
 """
-PIPFILE2REQ_PROD = """
-alabaster==0.7.12
-appdirs==1.4.4
-astroid==2.4.2; python_version >= "3.5"
-attrs==20.3.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-babel==2.9.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-black==20.8b1
-certifi==2020.12.5
-chardet==4.0.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
-click==7.1.2; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
-codecov==2.1.11
-coverage[toml]==5.3.1
-docutils==0.16; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
-gprof2dot==2019.11.30
-idna==2.10; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-imagesize==1.2.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-iniconfig==1.1.1
-isort==5.7.0; python_version >= "3.6" and python_version < "4.0"
-jinja2==2.11.2; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
-lazy-object-proxy==1.4.3; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-markupsafe==1.1.1; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-mccabe==0.6.1
-mypy==0.800
-mypy-extensions==0.4.3
-object-colors==1.0.8
-packaging==20.8; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-pathspec==0.8.1
-pipfile-requirements==0.3.0
-pluggy==0.13.1; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-py==1.10.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-pyblake2==1.1.2
-pygments==2.7.4; python_version >= "3.5"
-pylint==2.6.0
-pyparsing==2.4.7; python_version >= "2.6" and python_version not in "3.0, 3.1, 3.2, 3.3"
-pytest==6.2.1
-pytest-cov==2.11.1
-pytest-profiling==1.7.0
-pytest-randomly==3.5.0
-pytest-sugar==0.9.4
-pytz==2020.5
-regex==2020.11.13
-requests==2.25.1; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
-six==1.15.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-snowballstemmer==2.1.0
-sphinx==3.4.3
-sphinxcontrib-applehelp==1.0.2; python_version >= "3.5"
-sphinxcontrib-devhelp==1.0.2; python_version >= "3.5"
-sphinxcontrib-fulltoc==1.2.0
-sphinxcontrib-htmlhelp==1.0.3; python_version >= "3.5"
-sphinxcontrib-jsmath==1.0.1; python_version >= "3.5"
-sphinxcontrib-programoutput==0.16
-sphinxcontrib-qthelp==1.0.3; python_version >= "3.5"
-sphinxcontrib-serializinghtml==1.1.4; python_version >= "3.5"
-termcolor==1.1.0
-toml==0.10.2; python_version >= "2.6" and python_version not in "3.0, 3.1, 3.2, 3.3"
-typed-ast==1.4.2
-typing-extensions==3.7.4.3
-urllib3==1.26.2; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4" and python_version < "4.0"
-vulture==2.3
-wrapt==1.12.1
-"""
-PIPFILE2REQ_DEV = """
-alabaster==0.7.12
-appdirs==1.4.4
-astroid==2.4.2; python_version >= "3.5"
-attrs==20.3.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-babel==2.9.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-backcall==0.2.0
-black==20.8b1
-bleach==3.2.2; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
-certifi==2020.12.5
-chardet==4.0.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
-click==7.1.2; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
-codecov==2.1.11
-coverage[toml]==5.3.1
-decorator==4.4.2
-docutils==0.16; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
-idna==2.10; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-imagesize==1.2.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-iniconfig==1.1.1
-ipython==7.19.0
-ipython-genutils==0.2.0
-isort==5.7.0; python_version >= "3.6" and python_version < "4.0"
-jedi==0.18.0; python_version >= "3.6"
-jinja2==2.11.2; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
-lazy-object-proxy==1.4.3; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-markupsafe==1.1.1; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-mccabe==0.6.1
-mypy==0.800
-mypy-extensions==0.4.3
-object-colors==1.0.8
-packaging==20.8; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-parso==0.8.1; python_version >= "3.6"
-pathspec==0.8.1
-pexpect==4.8.0; sys_platform != "win32"
-pickleshare==0.7.5
-pipfile-requirements==0.3.0
-pluggy==0.13.1; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-prompt-toolkit==3.0.13
-ptyprocess==0.7.0
-py==1.10.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
--e .
-pyblake2==1.1.2
-pygments==2.7.4; python_version >= "3.5"
-pylint==2.6.0
-pyparsing==2.4.7; python_version >= "2.6" and python_version not in "3.0, 3.1, 3.2, 3.3"
-pytest==6.2.1
-pytest-cov==2.11.1
-pytest-logging==2015.11.4
-pytz==2020.5
-readme-renderer==28.0
-regex==2020.11.13
-requests==2.25.1; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4"
-restview==2.9.2
-six==1.15.0; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3"
-snowballstemmer==2.1.0
-sphinx==3.4.3
-sphinxcontrib-applehelp==1.0.2; python_version >= "3.5"
-sphinxcontrib-devhelp==1.0.2; python_version >= "3.5"
-sphinxcontrib-fulltoc==1.2.0
-sphinxcontrib-htmlhelp==1.0.3; python_version >= "3.5"
-sphinxcontrib-jsmath==1.0.1; python_version >= "3.5"
-sphinxcontrib-programoutput==0.16
-sphinxcontrib-qthelp==1.0.3; python_version >= "3.5"
-sphinxcontrib-serializinghtml==1.1.4; python_version >= "3.5"
-toml==0.10.2; python_version >= "2.6" and python_version not in "3.0, 3.1, 3.2, 3.3"
-traitlets==5.0.5; python_version >= "3.7"
-typed-ast==1.4.2
-typing-extensions==3.7.4.3
-urllib3==1.26.2; python_version >= "2.7" and python_version not in "3.0, 3.1, 3.2, 3.3, 3.4" and python_version < "4.0"
-vulture==2.3
-wcwidth==0.2.5
-webencodings==0.5.1
-wrapt==1.12.1
-"""
-IMPORTS_UNSORTED = """
-from typing import Union, Callable, List, Any
-from pyaud import (
-    colors,
-    Subprocess,
-    write_command,
-    HashCap,
-    config,
-    Git,
-    LineSwitch,
-    check_command,
-    print_command,
-    environ,
-    PyaudSubprocessError,
-    EnterDir,
-    pyitems
-)
-import shutil
-import pathlib
-import os
-
-_ = (
-    Git,
-    List,
-    pathlib,
-    os,
-    colors,
-    config,
-    check_command,
-    Callable,
-    PyaudSubprocessError,
-    write_command,
-    shutil,
-    EnterDir,
-    LineSwitch,
-    Union,
-    HashCap,
-    pyitems,
-    Any,
-    Subprocess,
-    print_command,
-    environ,
-)
-"""
-IMPORTS_SORTED = """
-import os
-import pathlib
-import shutil
-from typing import Any, Callable, List, Union
-
-from pyaud import (
-    EnterDir,
-    Git,
-    HashCap,
-    LineSwitch,
-    PyaudSubprocessError,
-    Subprocess,
-    check_command,
-    colors,
-    config,
-    environ,
-    print_command,
-    pyitems,
-    write_command,
-)
-"""
-CODE_BLOCK_TEMPLATE = """
-.. code-block:: python
-
-    >>> print("Hello, world!")
-    'Hello, world!'
-..
-"""
-SUCCESS = f"\n{80 * '-'}\nSuccess!"
-CODE_BLOCK_EXPECTED = '\ncode-block 1\n. >>> print("Hello, world!")\n\u2713 Hello, world!\n{}'.format(
-    SUCCESS
-)
 
 
-class Whitelist:
-    """Output for whitelist.py on commit be8a443."""
+@templates.register
+class TestWhitelist(BaseTemplate):
+    """Template for testing ``pyaud requirements``."""
 
-    be8a443 = """fixture_is_env_path_var  # unused function (tests/conftest.py:16)
+    @property
+    def template(self) -> str:
+        return """\
+fixture_is_env_path_var  # unused function (tests/conftest.py:16)
 fixture_call_status  # unused function (tests/conftest.py:228)
 fixture_commit_test  # unused function (tests/conftest.py:160)
 fixture_main  # unused function (tests/conftest.py:211)
@@ -1767,20 +1869,39 @@ exc_val  # unused variable (pyaud/src/__init__.py:299)
 exc_val  # unused variable (pyaud/src/__init__.py:381)
 make_audit  # unused function (pyaud/src/modules.py:26)
 make_files  # unused function (pyaud/src/modules.py:205)
-""".splitlines()
+"""
 
-    @classmethod
-    def be8a443_all(cls):
-        """Concatenate and sort the two files worth of whitelist text.
-
-        :return: Concatenated and sorted ``str``.
-        """
-        seq = list(cls.be8a443)
-        seq.sort()
-        return "{}\n".format("\n".join(seq))
+    @property
+    def expected(self) -> str:
+        return "{}\n".format("\n".join(sorted(self.template.splitlines())))
 
 
-FORMAT_STR_FUNCS_PRE = """
+@templates.register
+class TestFormat(BaseTemplate):
+    """Template for testing ``pyaud format``."""
+
+    @property
+    def template(self) -> str:
+        return """\
+def reformat_this():
+    print('black will make sure this is double quoted')
+"""
+
+    @property
+    def expected(self) -> str:
+        return """\
+def reformat_this():
+    print("black will make sure this is double quoted")
+"""
+
+
+@templates.register
+class TestFormatStr(BaseTemplate):
+    """Template for testing ``pyaud format-str``."""
+
+    @property
+    def template(self) -> str:
+        return """
 def _print_module_docs():
     for key, value in self._modules.items():
         tab = len(max(self._modules, key=len)) + 1
@@ -1796,7 +1917,10 @@ def make_deploy_docs(**kwargs: bool) -> None:
         for null_val in null_vals:
             print("- " + null_val)
 """
-FORMAT_STR_FUNCS_POST = """
+
+    @property
+    def expected(self) -> str:
+        return """
 def _print_module_docs():
     for key, value in self._modules.items():
         tab = len(max(self._modules, key=len)) + 1
@@ -1811,157 +1935,4 @@ def make_deploy_docs(**kwargs: bool) -> None:
         print("The following is not set:")
         for null_val in null_vals:
             print(f"- {null_val}")
-"""
-ALTERED_TOC = (
-    "package\n"
-    "=======\n\n"
-    ".. automodule:: package\n"
-    "   :members:\n"
-    "   :undoc-members:\n"
-    "   :show-inheritance:\n"
-)
-# from:
-# https://pypi.org/project/docformatter/
-# https://github.com/myint/docformatter
-DOCFORMATTER_EXAMPLE = """
-\"\"\"   Here are some examples.
-
-    This module docstring should be dedented.\"\"\"
-
-
-def launch_rocket():
-    \"\"\"Launch
-the
-rocket. Go colonize space.\"\"\"
-
-
-def factorial(x):
-    '''
-
-    Return x factorial.
-
-    This uses math.factorial.
-
-    '''
-    import math
-    return math.factorial(x)
-
-
-def print_factorial(x):
-    \"\"\"Print x factorial\"\"\"
-    print(factorial(x))
-
-
-def main():
-    \"\"\"Main
-    function\"\"\"
-    print_factorial(5)
-    if factorial(10):
-        launch_rocket()
-"""
-BEFORE_ISORT = (
-    "from . import (\n"
-    "    GH_EMAIL,\n"
-    "    GH_TOKEN,\n"
-    "    REAL_REPe,\n"
-    "    GH_NAME,\n"
-    "    FILES,\n"
-    "    REPO,\n"
-    "    files,\n"
-    ")"
-)
-UNFORMATTED = """def reformat_this():
-    print('black will make sure this is double quoted')"""
-EXPECTED_NESTED_TOC = """\
-package
-=======
-
-.. automodule:: package
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.admin
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.cli
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.config
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.deps
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.exceptions
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.extensions
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.forms
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.log
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.mail
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.models
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.navbar
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.redirect
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.renderers
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.routes
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.routes.auth
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.routes.post
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.routes.views
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.security
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.shell
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.tasks
-   :members:
-   :undoc-members:
-   :show-inheritance:
-.. automodule:: package.user
-   :members:
-   :undoc-members:
-   :show-inheritance:
 """

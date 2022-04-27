@@ -14,6 +14,7 @@ MockCallStatusType = t.Callable[[str, int], MockFuncType]
 MockSPOutputType = t.Callable[..., None]
 MakeTreeType = t.Callable[[Path, t.Dict[str, t.Any]], None]
 MockSPPrintCalledType = t.Callable[[], None]
+MockSPCallNullType = t.Callable[[], None]
 
 
 class MockSPCallType(t.Protocol):  # pylint: disable=too-few-public-methods
@@ -24,13 +25,11 @@ class MockSPCallType(t.Protocol):  # pylint: disable=too-few-public-methods
 
 
 FILE = "file.py"
-PUSHING_SKIPPED = "Pushing skipped"
 GH_NAME = "test_user"
 GH_EMAIL = "test_email.com"
-GH_TOKEN = "token"
+TOKEN = "token"
 INITIAL_COMMIT = "Initial commit"
 NO_ISSUES = "Success: no issues found in 1 source files"
-INIT = "__init__.py"
 DEBUG = "DEBUG"
 SP_OPEN_PROC = "spall.Subprocess._open_process"
 PYAUD_PLUGINS_PLUGINS = "pyaud.plugins._plugins"
@@ -60,6 +59,12 @@ DOCTEST_README = "doctest-readme"
 DOCTEST_PACKAGE = "doctest-package"
 DOCTEST = "doctest"
 TEST = "test"
+DEPLOY = "deploy"
+FILES = "files"
+README = "readme"
+TESTS = "tests"
+MODULES_RST = "modules.rst"
+TEST_FORMAT = "test-format"
 
 
 class NoColorCapsys:
@@ -107,10 +112,3 @@ class NoColorCapsys:
         :return: Stdout.
         """
         return self.readouterr()[0]
-
-    def stderr(self) -> str:
-        """Return stderr without referencing the tuple indices.
-
-        :return: Stderr.
-        """
-        return self.readouterr()[1]

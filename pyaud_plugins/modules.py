@@ -228,20 +228,16 @@ class Docs(SphinxBuild):
         return "-M", "html", e.DOCS, e.BUILDDIR, "-W"
 
     def action(self, *args: str, **kwargs: bool) -> int:
+        returncode = 0
         pyaud.plugins.get("toc")(*args, **kwargs)
         shutil.rmtree(e.BUILDDIR, ignore_errors=True)
         with pyaud.parsers.Md2Rst(e.README_MD, temp=True):
-            if not e.DOCS_CONF.is_file() or not e.README_RST.is_file():
-                print("No docs found")
-                return 0
-
-            with pyaud.parsers.LineSwitch(
-                e.README_RST,
-                {0: e.README_RST.stem, 1: len(e.README_RST.stem) * "="},
-            ):
-                returncode = self.sphinx_build(*args, **kwargs)
-                if not returncode:
-                    colors.green.bold.print("Build successful")
+            if e.DOCS_CONF.is_file() and e.README_RST.is_file():
+                with pyaud.parsers.LineSwitch(
+                    e.README_RST,
+                    {0: e.README_RST.stem, 1: len(e.README_RST.stem) * "="},
+                ):
+                    returncode = self.sphinx_build(*args, **kwargs)
 
         return returncode
 
@@ -625,14 +621,9 @@ class Readme(pyaud.plugins.Action):
         return [self.readmetester]
 
     def action(self, *args: str, **kwargs: bool) -> int:
-        if e.README_RST.is_file():
-            self.subprocess[self.readmetester].call(
-                e.README_RST, *args, **kwargs
-            )
-        else:
-            print("No README.rst found in project root")
-
-        return 0
+        return self.subprocess[self.readmetester].call(
+            e.README_RST, *args, **kwargs
+        )
 
 
 @pyaud.plugins.register()

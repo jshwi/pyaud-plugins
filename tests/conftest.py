@@ -17,13 +17,14 @@ from . import (
     DEBUG,
     GH_EMAIL,
     GH_NAME,
-    GH_TOKEN,
     INIT_REMOTE,
     LOGGING,
+    TOKEN,
     MakeTreeType,
     MockCallStatusType,
     MockFuncType,
     MockMainType,
+    MockSPCallNullType,
     MockSPCallType,
     MockSPOutputType,
     MockSPPrintCalledType,
@@ -88,7 +89,7 @@ def fixture_mock_environment(
     # monkeypatch implemented on prefixes and override other
     monkeypatch.setenv("PYAUD_GH_NAME", GH_NAME)
     monkeypatch.setenv("PYAUD_GH_EMAIL", GH_EMAIL)
-    monkeypatch.setenv("PYAUD_GH_TOKEN", GH_TOKEN)
+    monkeypatch.setenv("PYAUD_GH_TOKEN", TOKEN)
     monkeypatch.setenv("CODECOV_TOKEN", "")
     monkeypatch.delenv("CODECOV_TOKEN")
     monkeypatch.setenv("PYAUD_GH_REMOTE", str(Path.home() / "origin.git"))
@@ -147,14 +148,6 @@ def fixture_mock_environment(
 
     monkeypatch.setattr("pyaud.git.status", lambda *_, **__: True)
     monkeypatch.setattr("pyaud.git.rev_parse", lambda *_, **__: None)
-    # noinspection PyProtectedMember
-    pyaud._indexing.HashMapping.unpatched_match_file = (  # type: ignore
-        pyaud._indexing.HashMapping.match_file
-    )
-    # noinspection PyProtectedMember
-    pyaud._indexing.HashMapping.unpatched_hash_files = (  # type: ignore
-        pyaud._indexing.HashMapping.hash_files
-    )
     monkeypatch.setattr(
         "pyaud._indexing.HashMapping.match_file", lambda *_: False
     )
@@ -313,6 +306,26 @@ def fixture_patch_sp_print_called(
     def _patch_sp_print_called() -> None:
         def _call(self, *args: str, **_: bool) -> int:
             print(f"{self} {' '.join(str(i) for i in args)}")
+            return 0
+
+        patch_sp_call(_call)
+
+    return _patch_sp_print_called
+
+
+@pytest.fixture(name="patch_sp_call_null")
+def fixture_patch_sp_call_null(
+    patch_sp_call: MockSPCallType,
+) -> MockSPCallNullType:
+    """Mock ``Subprocess.call``to do nothing and return returncode.
+
+    :param patch_sp_call: Mock ``Subprocess.call`` by injecting a new
+        function into it.
+    :return: Function for using this fixture.
+    """
+
+    def _patch_sp_print_called() -> None:
+        def _call(_, *__: str, **___: bool) -> int:
             return 0
 
         patch_sp_call(_call)
