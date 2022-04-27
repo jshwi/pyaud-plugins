@@ -5,7 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-[Unreleased](https://github.com/jshwi/pyaud-plugins/compare/v0.4.0...HEAD)
+[Unreleased](https://github.com/jshwi/pyaud-plugins/compare/v0.4.1...HEAD)
+------------------------------------------------------------------------
+
+[0.4.1](https://github.com/jshwi/pyaud-plugins/releases/tag/v0.4.1) - 2022-04-27
 ------------------------------------------------------------------------
 ### Fixed
 - Fixes `format-docs` plugin prior to v0.4.0
