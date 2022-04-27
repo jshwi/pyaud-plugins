@@ -260,8 +260,8 @@ def fixture_patch_sp_output(patch_sp_call: MockSPCallType) -> MockSPOutputType:
         _stdout = list(stdout)
 
         def _call(self, *_: str, **__: bool) -> int:
-            """Mock call to do nothing except send the expected stdout to
-            self."""
+            """Mock call to do nothing except send the expected stdout
+            to self."""
             self._stdout.append(_stdout.pop())
             return 0
 

@@ -666,8 +666,11 @@ class FormatDocs(CheckFix):
     """Format docstrings with ``docformatter``."""
 
     docformatter = "docformatter"
-    args = "--recursive", "--wrap-summaries", "72"
     cache = True
+
+    @property
+    def args(self) -> t.Tuple[t.Union[str, Path], ...]:
+        return "--recursive", "--wrap-summaries", "72"
 
     @property
     def exe(self) -> t.List[str]:
