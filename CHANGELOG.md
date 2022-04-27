@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased](https://github.com/jshwi/pyaud-plugins/compare/v0.4.1...HEAD)
 ------------------------------------------------------------------------
+### Fixed
+Fixes `typecheck` plugin prior to v0.4.0
 
 [0.4.1](https://github.com/jshwi/pyaud-plugins/releases/tag/v0.4.1) - 2022-04-27
 ------------------------------------------------------------------------

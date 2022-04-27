@@ -445,7 +445,9 @@ class Typecheck(pyaud.plugins.Audit):
             # if error occurred it might be because the stub library is
             # not installed: automatically download and install stub
             # library if the below message occurred
-            if "error: Library stubs not installed for" in stdout:
+            if any(
+                "error: Library stubs not installed for" in i for i in stdout
+            ):
                 self.subprocess[self.mypy].call(
                     "--non-interactive", "--install-types"
                 )
