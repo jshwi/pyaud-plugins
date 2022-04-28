@@ -80,7 +80,7 @@ def test_call_coverage_xml(
     :param expected: Expected output.
     """
 
-    class _Tests(pplugins.modules.Tests):
+    class _Tests(pplugins._plugins.Tests):
         @property
         def is_tests(self) -> bool:
             return is_tests
@@ -89,9 +89,9 @@ def test_call_coverage_xml(
             return 0
 
     patch_sp_print_called()
-    pplugins.modules.Coverage.__bases__ = (_Tests,)
+    pplugins._plugins.Coverage.__bases__ = (_Tests,)
     del pyaud.plugins._plugins[COVERAGE]
-    pyaud.plugins._plugins[COVERAGE] = pplugins.modules.Coverage
+    pyaud.plugins._plugins[COVERAGE] = pplugins._plugins.Coverage
     main(COVERAGE)
     assert expected in nocolorcapsys.stdout()
 

@@ -1,6 +1,6 @@
 """
-pyaud_plugins.modules
-=====================
+pyaud_plugins._plugins
+======================
 """
 import os
 import shutil
@@ -11,9 +11,9 @@ from pathlib import Path
 
 import pyaud
 
-from ._abc import CheckFix, SphinxBuild
-from ._environ import environ as e
-from ._utils import colors
+from pyaud_plugins._abc import CheckFix, SphinxBuild
+from pyaud_plugins._environ import environ as e
+from pyaud_plugins._utils import colors
 
 
 @pyaud.plugins.register()

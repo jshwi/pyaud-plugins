@@ -1,5 +1,5 @@
 """Plugin package for Pyaud."""
-from . import modules
+from . import _plugins
 from ._environ import environ
 from ._version import __version__
 
