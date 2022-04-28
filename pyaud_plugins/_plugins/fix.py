@@ -29,7 +29,7 @@ class Format(CheckFix):
 
 
 @pyaud.plugins.register()
-class Unused(pyaud.plugins.Fix):
+class Unused(pyaud.plugins.FixAll):
     """Audit unused code with ``vulture``.
 
     Create whitelist first with --fix.
@@ -54,7 +54,7 @@ class Unused(pyaud.plugins.Fix):
 
 
 @pyaud.plugins.register()
-class FormatStr(pyaud.plugins.Fix):
+class FormatStr(pyaud.plugins.FixAll):
     """Format f-strings with ``flynt``."""
 
     flynt = "flynt"
@@ -95,24 +95,3 @@ class FormatDocs(CheckFix):
     @property
     def exe(self) -> t.List[str]:
         return [self.docformatter]
-
-
-@pyaud.plugins.register()
-class SortPyproject(pyaud.plugins.Fix):
-    """Sort pyproject.toml file with ``toml-sort``."""
-
-    toml_sort = "toml-sort"
-
-    @property
-    def exe(self) -> t.List[str]:
-        return [self.toml_sort]
-
-    def audit(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.toml_sort].call(
-            e.PYPROJECT, "--check", *args, **kwargs
-        )
-
-    def fix(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.toml_sort].call(
-            e.PYPROJECT, "--in-place", "--all", *args, **kwargs
-        )

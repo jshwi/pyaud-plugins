@@ -3,6 +3,7 @@ pyaud_plugins._plugins.write
 ============================
 """
 import os
+import tempfile
 import typing as t
 from pathlib import Path
 
@@ -12,29 +13,30 @@ from pyaud_plugins._environ import environ as e
 
 
 @pyaud.plugins.register()
-class Requirements(pyaud.plugins.Write):
+class Requirements(pyaud.plugins.Fix):
     """Audit requirements.txt with Pipfile.lock."""
 
     p2req = "pipfile2req"
+    cache_file = e.REQUIREMENTS
+
+    def __init__(self, name: str) -> None:
+        super().__init__(name)
+        self._content = ""
 
     @property
     def exe(self) -> t.List[str]:
         return [self.p2req]
 
-    @property
-    def path(self) -> Path:
-        return e.REQUIREMENTS
-
-    def required(self) -> Path:
-        return e.PIPFILE_LOCK
-
-    def write(self, *args: str, **kwargs: bool) -> int:
+    def audit(self, *args: str, **kwargs: bool) -> int:
         # get the stdout for both production and development packages
+        if not e.PIPFILE_LOCK.is_file():
+            return 0
+
         self.subprocess[self.p2req].call(
-            self.required(), *args, capture=True, **kwargs
+            e.PIPFILE_LOCK, *args, capture=True, **kwargs
         )
         self.subprocess[self.p2req].call(
-            self.required(), "--dev", *args, capture=True, **kwargs
+            e.PIPFILE_LOCK, "--dev", *args, capture=True, **kwargs
         )
 
         # write to file and then use sed to remove the additional
@@ -48,79 +50,84 @@ class Requirements(pyaud.plugins.Write):
                 )
             )
         )
-        with open(self.path, "w", encoding=e.ENCODING) as fout:
-            for content in stdout:
-                fout.write(f"{content.split(';')[0]}\n")
+        for content in stdout:
+            self._content += f"{content.split(';')[0]}\n"
 
-        return 0
+        if self.cache_file.is_file():
+            return int(self.cache_file.read_text(e.ENCODING) != self._content)
+
+        return 1
+
+    def fix(self, *args: str, **kwargs: bool) -> int:
+        self.cache_file.write_text(self._content, e.ENCODING)
+        return int(self.cache_file.read_text(e.ENCODING) != self._content)
 
 
 @pyaud.plugins.register()
-class Toc(pyaud.plugins.Write):
+class Toc(pyaud.plugins.Fix):
     """Audit docs/<NAME>.rst toc-file."""
 
     sphinx_apidoc = "sphinx-apidoc"
+    cache_file = e.PACKAGE_TOC
+
+    def __init__(self, name: str) -> None:
+        super().__init__(name)
+        self._content = ""
 
     @property
     def exe(self) -> t.List[str]:
         return [self.sphinx_apidoc]
 
-    @property
-    def path(self) -> Path:
-        return e.PACKAGE_TOC
-
-    def required(self) -> t.Optional[Path]:
-        return e.DOCS_CONF
-
-    @staticmethod
-    def _populate(path: Path, contents: t.List[str]) -> None:
-        if path.is_file():
-            with open(path, encoding=e.ENCODING) as fin:
-                contents.extend(fin.read().splitlines())
-
-    def write(self, *args: str, **kwargs: bool) -> int:
-        toc_attrs = "   :members:\n   :undoc-members:\n   :show-inheritance:"
-        self.subprocess[self.sphinx_apidoc].call(
-            "-o", e.DOCS, e.PACKAGE, "-f", *args, devnull=True, **kwargs
-        )
-
+    def _read_temp(self, tempdir: Path) -> None:
         # dynamically populate a list of unwanted, overly nested files
         # nesting the file in the docs/<NAME>.rst file is preferred
-        nested = [
-            e.DOCS / f for f in e.DOCS.iterdir() if len(f.name.split(".")) > 2
-        ]
-
         contents: t.List[str] = []
-        self._populate(self.path, contents)
+        tmpfile = tempdir / e.PACKAGE_TOC.name
+        if tmpfile.is_file():
+            contents.extend(tmpfile.read_text(e.ENCODING).splitlines())
+
+        nested = [
+            tempdir / f
+            for f in tempdir.iterdir()
+            if len(f.name.split(".")) > 2
+        ]
         for file in nested:
 
             # extract the data from the nested toc
-            self._populate(file, contents)
+            contents.extend(file.read_text(e.ENCODING).splitlines())
 
         contents = sorted(
             [i for i in contents if i.startswith(".. automodule::")]
         )
-        with open(self.path, "w", encoding="utf-8") as fout:
-            fout.write(
-                "{}\n{}\n\n".format(e.PACKAGE_NAME, len(e.PACKAGE_NAME) * "=")
+
+        toc_attrs = "   :members:\n   :undoc-members:\n   :show-inheritance:"
+        self._content = "{}\n{}\n\n".format(
+            e.PACKAGE_NAME, len(e.PACKAGE_NAME) * "="
+        )
+        for content in contents:
+            self._content += f"{content}\n{toc_attrs}\n"
+
+    def audit(self, *args: str, **kwargs: bool) -> int:
+        # write original file's contents to temporary file
+        with tempfile.TemporaryDirectory() as tmp:
+            tempdir = Path(tmp)
+            self.subprocess[self.sphinx_apidoc].call(
+                "-o", tempdir, e.PACKAGE, "-f", *args, devnull=True, **kwargs
             )
-            for content in contents:
-                fout.write(f"{content}\n{toc_attrs}\n")
+            self._read_temp(tempdir)
 
-        # files that we do not want included in docs modules creates an
-        # extra layer that is not desired for this module
-        blacklist = [e.DOCS / "modules.rst", *nested]
+        if self.cache_file.is_file():
+            return int(self.cache_file.read_text(e.ENCODING) != self._content)
 
-        # remove unwanted files
-        for module in blacklist:
-            if module.is_file():
-                os.remove(module)
+        return 1
 
-        return 0
+    def fix(self, *args: str, **kwargs: bool) -> int:
+        self.cache_file.write_text(self._content, e.ENCODING)
+        return int(self.cache_file.read_text(e.ENCODING) != self._content)
 
 
 @pyaud.plugins.register()
-class Whitelist(pyaud.plugins.Write):
+class Whitelist(pyaud.plugins.Fix):
     """Check whitelist.py file with ``vulture``.
 
     This will consider all unused code an exception so resolve code that
@@ -128,16 +135,17 @@ class Whitelist(pyaud.plugins.Write):
     """
 
     vulture = "vulture"
+    cache_file = e.WHITELIST
+
+    def __init__(self, name: str) -> None:
+        super().__init__(name)
+        self._content = ""
 
     @property
     def exe(self) -> t.List[str]:
         return [self.vulture]
 
-    @property
-    def path(self) -> Path:
-        return e.WHITELIST
-
-    def write(self, *args: str, **kwargs: bool) -> int:
+    def audit(self, *args: str, **kwargs: bool) -> int:
         # append whitelist exceptions for each individual module
         kwargs["suppress"] = True
         self.subprocess[self.vulture].call(
@@ -148,9 +156,37 @@ class Whitelist(pyaud.plugins.Write):
             **kwargs,
         )
         stdout = self.subprocess[self.vulture].stdout()
-        stdout = [i.replace(str(Path.cwd()) + os.sep, "") for i in stdout]
-        stdout.sort()
-        with open(self.path, "w", encoding=e.ENCODING) as fout:
-            fout.write("\n".join(stdout) + "\n")
+        stdout = sorted(
+            [i.replace(str(Path.cwd()) + os.sep, "") for i in stdout]
+        )
+        self._content = "\n".join(stdout) + "\n"
+        if self.cache_file.is_file():
+            return int(self.cache_file.read_text(e.ENCODING) != self._content)
 
-        return 0
+        return 1
+
+    def fix(self, *args: str, **kwargs: bool) -> int:
+        self.cache_file.write_text(self._content, e.ENCODING)
+        return int(self.cache_file.read_text(e.ENCODING) != self._content)
+
+
+@pyaud.plugins.register()
+class SortPyproject(pyaud.plugins.Fix):
+    """Sort pyproject.toml file with ``toml-sort``."""
+
+    toml_sort = "toml-sort"
+    cache_file = e.PYPROJECT
+
+    @property
+    def exe(self) -> t.List[str]:
+        return [self.toml_sort]
+
+    def audit(self, *args: str, **kwargs: bool) -> int:
+        return self.subprocess[self.toml_sort].call(
+            e.PYPROJECT, "--check", *args, **kwargs
+        )
+
+    def fix(self, *args: str, **kwargs: bool) -> int:
+        return self.subprocess[self.toml_sort].call(
+            e.PYPROJECT, "--in-place", "--all", *args, **kwargs
+        )

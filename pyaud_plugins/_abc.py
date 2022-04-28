@@ -9,7 +9,7 @@ from pathlib import Path as _Path
 import pyaud as _pyaud
 
 
-class CheckFix(_pyaud.plugins.Fix):
+class CheckFix(_pyaud.plugins.FixAll):
     """Subclass for ``Fix`` plugins that check files and edit in place.
 
     Utilize the ``--check`` and ``--in-place`` flags.

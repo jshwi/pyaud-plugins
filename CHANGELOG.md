@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 [Unreleased](https://github.com/jshwi/pyaud-plugins/compare/v0.4.2...HEAD)
 ------------------------------------------------------------------------
 ### Added
+- Adds individual file cache
 - Adds cache to `pyaud doctest-package`
 
 [0.4.2](https://github.com/jshwi/pyaud-plugins/releases/tag/v0.4.2) - 2022-04-28

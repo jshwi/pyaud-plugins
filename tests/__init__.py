@@ -66,6 +66,7 @@ README = "readme"
 TESTS = "tests"
 MODULES_RST = "modules.rst"
 TEST_FORMAT = "test-format"
+CHANGE = "change"
 
 
 class NoColorCapsys:

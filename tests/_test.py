@@ -16,6 +16,7 @@ import pyaud_plugins as pplugins
 from pyaud_plugins import environ as ppe
 
 from . import (
+    CHANGE,
     CONST,
     COVERAGE,
     DEPLOY,
@@ -31,7 +32,6 @@ from . import (
     FORMAT,
     INIT_REMOTE,
     INITIAL_COMMIT,
-    MODULES_RST,
     NO_ISSUES,
     NO_TESTS_FOUND,
     PYAUD_FILES_POPULATE,
@@ -183,10 +183,12 @@ def test_pytest_is_tests(
 
 
 def test_toc(
+    tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     main: MockMainType,
     make_tree: MakeTreeType,
     patch_sp_call_null: MockSPCallNullType,
+    nocolorcapsys: NoColorCapsys,
 ) -> None:
     """Test that the default toc file is edited correctly.
 
@@ -198,18 +200,33 @@ def test_toc(
     :param patch_sp_call_null: Mock ``Subprocess.call``to do nothing and
         return returncode.
     """
-    path = ppe.DOCS / MODULES_RST
-    make_tree(
-        Path.cwd(),
-        {ppe.DOCS.name: {path.name: None, ppe.DOCS_CONF.name: None}},
-    )
+    path = Path.cwd() / ppe.PACKAGE_TOC
+    monkeypatch.setattr("pyaud_plugins._plugins.write.Toc.cache_file", path)
+    make_tree(Path.cwd(), {ppe.DOCS.name: {ppe.DOCS_CONF.name: None}})
     template = templatest.templates.registered.getbyname("test-toc")
-    ppe.PACKAGE_TOC.write_text(template.template, ppe.ENCODING)
-    monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda: None)
     patch_sp_call_null()
-    main(TOC)
+    with pytest.raises(pyaud.exceptions.AuditError):
+        main(TOC)
+
+    class _TempDir:
+        def __enter__(self) -> Path:
+            return tmp_path
+
+        def __exit__(self, exc_type, exc_val, exc_tb):
+            """Nothing to do."""
+
+    monkeypatch.setattr(
+        "pyaud_plugins._plugins.write.tempfile.TemporaryDirectory", _TempDir
+    )
+    package_toc = tmp_path / ppe.PACKAGE_TOC.name
+    package_toc.write_text(template.template, ppe.ENCODING)
+    monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda: None)
+    main(TOC, FLAG_FIX)
+    assert NO_ISSUES in nocolorcapsys.stdout()
     assert ppe.PACKAGE_TOC.read_text(ppe.ENCODING) == template.expected
-    assert not path.is_file()
+    path.write_text(CHANGE, ppe.ENCODING)
+    main(TOC, FLAG_FIX)
+    assert NO_ISSUES in nocolorcapsys.stdout()
 
 
 def test_requirements(
@@ -229,15 +246,27 @@ def test_requirements(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
+    main(REQUIREMENTS, FLAG_FIX)
+    path = Path.cwd() / ppe.REQUIREMENTS
+    monkeypatch.setattr(
+        "pyaud_plugins._plugins.write.Requirements.cache_file", path
+    )
     template = templatest.templates.registered.getbyname("test-requirements")
     ppe.PIPFILE_LOCK.write_text(template.template, ppe.ENCODING)
+    with pytest.raises(pyaud.exceptions.AuditError):
+        main(REQUIREMENTS)
+
     patch_sp_output(templates.PIPFILE2REQ_PROD, templates.PIPFILE2REQ_DEV)
     monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda: None)
-    main(REQUIREMENTS)
+    main(REQUIREMENTS, FLAG_FIX)
     out = nocolorcapsys.stdout()
-    assert f"Updating ``{ppe.REQUIREMENTS}``" in out
-    assert f"created ``{ppe.REQUIREMENTS.name}``" in out
+    assert NO_ISSUES in out
     assert ppe.REQUIREMENTS.read_text(ppe.ENCODING) == template.expected
+    path.write_text(CHANGE, ppe.ENCODING)
+    patch_sp_output(templates.PIPFILE2REQ_PROD, templates.PIPFILE2REQ_DEV)
+    monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda: None)
+    main(REQUIREMENTS, FLAG_FIX)
+    assert NO_ISSUES in nocolorcapsys.stdout()
 
 
 def test_whitelist(
@@ -254,16 +283,25 @@ def test_whitelist(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
+    path = Path.cwd() / "whitelist.py"
     template = templatest.templates.registered.getbyname("test-whitelist")
+    monkeypatch.setattr(
+        "pyaud_plugins._plugins.write.Whitelist.cache_file", path
+    )
     monkeypatch.setattr(
         "spall.Subprocess.stdout",
         lambda *_, **__: template.template.splitlines(),
     )
-    main(WHITELIST)
-    out = nocolorcapsys.stdout()
-    assert f"Updating ``{ppe.WHITELIST}``" in out
-    assert f"created ``{ppe.WHITELIST.name}``" in out
+    monkeypatch.setattr("pyaud._cache._get_commit_hash", lambda: "hash")
+    with pytest.raises(pyaud.exceptions.AuditError):
+        main(WHITELIST)
+
+    main(WHITELIST, FLAG_FIX)
+    assert NO_ISSUES in nocolorcapsys.stdout()
     assert ppe.WHITELIST.read_text(ppe.ENCODING) == template.expected
+    path.write_text(CHANGE, ppe.ENCODING)
+    main(WHITELIST, FLAG_FIX)
+    assert NO_ISSUES in nocolorcapsys.stdout()
 
 
 def test_pycharm_hosted(
@@ -481,7 +519,12 @@ def test_typecheck_re_raise_err(
     assert str(err.value) == "pyaud typecheck did not pass all checks"
 
 
-def test_nested_toc(main: MockMainType, make_tree: MakeTreeType) -> None:
+def test_nested_toc(
+    monkeypatch: pytest.MonkeyPatch,
+    main: MockMainType,
+    nocolorcapsys: NoColorCapsys,
+    make_tree: MakeTreeType,
+) -> None:
     """Test that only one file is completed with a nested project.
 
     Prior to this commit only ``repo.src.rst`` would be removed.
@@ -494,6 +537,10 @@ def test_nested_toc(main: MockMainType, make_tree: MakeTreeType) -> None:
     :param main: Patch package entry point.
     :param make_tree: Create directory tree from dict mapping.
     """
+    monkeypatch.setattr(
+        "pyaud_plugins._plugins.write.Toc.cache_file",
+        Path.cwd() / ppe.PACKAGE_TOC,
+    )
     make_tree(
         Path.cwd(),
         {
@@ -526,8 +573,11 @@ def test_nested_toc(main: MockMainType, make_tree: MakeTreeType) -> None:
             },
         },
     )
-    main(TOC)
-    assert not Path(ppe.DOCS / "repo.routes.rst").is_file()
+    with pytest.raises(pyaud.exceptions.AuditError):
+        main(TOC)
+
+    main(TOC, FLAG_FIX)
+    assert NO_ISSUES in nocolorcapsys.stdout()
     assert (
         ppe.PACKAGE_TOC.read_text(ppe.ENCODING)
         == templates.EXPECTED_NESTED_TOC
@@ -561,7 +611,9 @@ def test_call_doctest_readme(
 
 
 def test_call_sort_pyproject(
-    main: MockMainType, nocolorcapsys: NoColorCapsys
+    monkeypatch: pytest.MonkeyPatch,
+    main: MockMainType,
+    nocolorcapsys: NoColorCapsys,
 ) -> None:
     """Test register and call of ``sort-pyproject`` plugin.
 
@@ -569,6 +621,10 @@ def test_call_sort_pyproject(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
+    monkeypatch.setattr(
+        "pyaud_plugins._plugins.write.SortPyproject.cache_file",
+        Path.cwd() / ppe.PYPROJECT,
+    )
     path = Path.cwd() / FILE
     pyaud.files.append(path)
     test_obj = {"tool": {"b_package": {"key1": "value1"}}}
@@ -576,7 +632,7 @@ def test_call_sort_pyproject(
         tomli_w.dump(test_obj, fout)
 
     main("sort-pyproject")
-    assert NO_ISSUES in nocolorcapsys.stdout().splitlines()
+    assert NO_ISSUES in nocolorcapsys.stdout()
     test_obj = {
         "tool": {
             "b_package": {"key2": "value2"},
@@ -587,7 +643,7 @@ def test_call_sort_pyproject(
         tomli_w.dump(test_obj, fout)
 
     main("sort-pyproject", FLAG_FIX)
-    assert NO_ISSUES in nocolorcapsys.stdout().splitlines()
+    assert NO_ISSUES in nocolorcapsys.stdout()
 
 
 @pytest.mark.parametrize(

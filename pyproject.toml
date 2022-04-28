@@ -97,7 +97,8 @@ templatest = "^0.3.0"
 
 [tool.pyaud.audit]
 modules = [
-    "files",
+    "toc",
+    "whitelist",
     "sort-pyproject",
     "format",
     "format-docs",

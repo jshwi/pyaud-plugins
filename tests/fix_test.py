@@ -5,6 +5,7 @@ tests.fix_tests
 from pathlib import Path
 
 import pyaud
+import pytest
 import templatest
 
 from pyaud_plugins import environ as ppe
@@ -18,6 +19,7 @@ from . import (
     FORMAT_STR,
     IMPORTS,
     NO_ISSUES,
+    NO_ISSUES_ALL,
     TEST_FORMAT,
     UNUSED,
     MockMainType,
@@ -59,7 +61,9 @@ def test_make_format_fix(main: MockMainType) -> None:
 
 
 def test_make_unused_fix(
-    main: MockMainType, nocolorcapsys: NoColorCapsys
+    monkeypatch: pytest.MonkeyPatch,
+    main: MockMainType,
+    nocolorcapsys: NoColorCapsys,
 ) -> None:
     """Test ``pyaud unused`` when ``-f/--fix`` is provided.
 
@@ -67,6 +71,10 @@ def test_make_unused_fix(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
+    monkeypatch.setattr(
+        "pyaud_plugins._plugins.write.Whitelist.cache_file",
+        Path.cwd() / "whitelist.py",
+    )
     template = templatest.templates.registered.getbyname(TEST_FORMAT)
     path = Path.cwd() / ppe.PACKAGE_NAME / FILE
     path.parent.mkdir()
@@ -76,7 +84,8 @@ def test_make_unused_fix(
     out = nocolorcapsys.stdout()
     unused_function = "reformat_this"
     assert unused_function in out
-    assert "created ``whitelist.py``" in out
+    assert "Success: no issues found in 1 source files" in out
+    assert NO_ISSUES in out
     assert unused_function in ppe.WHITELIST.read_text(ppe.ENCODING)
 
 
@@ -95,7 +104,7 @@ def test_make_format_docs_fix(
     pyaud.files.append(path)
     path.write_text(templates.DOCFORMATTER_EXAMPLE, ppe.ENCODING)
     main(FORMAT_DOCS, FLAG_FIX)
-    assert NO_ISSUES in nocolorcapsys.stdout()
+    assert NO_ISSUES_ALL in nocolorcapsys.stdout()
 
 
 def test_format_str_fix(
