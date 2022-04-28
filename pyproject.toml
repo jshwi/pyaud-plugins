@@ -21,7 +21,7 @@ skip-magic-trailing-comma = true
 filter = true
 
 [tool.constcheck.ignore_from]
-"pyaud_plugins/_plugins/__init__.py" = [
+"pyaud_plugins/_plugins/audit.py" = [
     'PYCHARM_HOSTED',
     "True",
     "doctest",
