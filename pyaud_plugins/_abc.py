@@ -52,3 +52,20 @@ class SphinxBuild(_pyaud.plugins.Action):
 
     def action(self, *args: str, **kwargs: bool) -> int:
         return self.sphinx_build(*args, **kwargs)
+
+
+class ColorAudit(_pyaud.plugins.Audit):
+    """Instantiate with ``PYCHARM_HOSTED`` as ``True``."""
+
+    @property
+    def env(self) -> _t.Dict[str, str]:
+        return {"PYCHARM_HOSTED": "True"}
+
+    @property
+    @_abstractmethod
+    def exe(self) -> _t.List[str]:
+        """List of executables to add to ``subprocess`` dict."""
+
+    @_abstractmethod
+    def audit(self, *args: str, **kwargs: bool) -> int:
+        """All audit logic to be written within this method."""

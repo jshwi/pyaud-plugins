@@ -11,7 +11,7 @@ from pathlib import Path
 
 import pyaud
 
-from pyaud_plugins._abc import CheckFix, SphinxBuild
+from pyaud_plugins._abc import CheckFix, ColorAudit, SphinxBuild
 from pyaud_plugins._environ import environ as e
 from pyaud_plugins._utils import colors
 
@@ -270,7 +270,7 @@ class Format(CheckFix):
 
 
 @pyaud.plugins.register()
-class Lint(pyaud.plugins.Audit):
+class Lint(ColorAudit):
     """Lint code with ``pylint``."""
 
     pylint = "pylint"
@@ -279,10 +279,6 @@ class Lint(pyaud.plugins.Audit):
     @property
     def exe(self) -> t.List[str]:
         return [self.pylint]
-
-    @property
-    def env(self) -> t.Dict[str, str]:
-        return {"PYCHARM_HOSTED": "True"}
 
     def audit(self, *args: str, **kwargs: bool) -> int:
         return self.subprocess[self.pylint].call(
@@ -668,16 +664,12 @@ class FormatDocs(CheckFix):
 
 
 @pyaud.plugins.register()
-class Const(pyaud.plugins.Audit):
+class Const(ColorAudit):
     """Check code for repeat use of strings."""
 
     constcheck = "constcheck"
     cache = True
     cache_all = True
-
-    @property
-    def env(self) -> t.Dict[str, str]:
-        return {"PYCHARM_HOSTED": "True"}
 
     @property
     def exe(self) -> t.List[str]:
