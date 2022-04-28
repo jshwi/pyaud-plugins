@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="__init__" pattern="file:pyaud_plugins/__init__.py||file:pyaud_plugins/_plugins/__init__.py" />
+</component>
