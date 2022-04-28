@@ -10,13 +10,10 @@ import typing as t
 from pathlib import Path
 
 import pyaud
-from object_colors import Color
 
 from ._abc import CheckFix, SphinxBuild
 from ._environ import environ as e
-
-colors = Color()
-colors.populate_colors()
+from ._utils import colors
 
 
 @pyaud.plugins.register()
