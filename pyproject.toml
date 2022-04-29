@@ -52,7 +52,7 @@ keywords = [
 license = "MIT"
 name = "pyaud-plugins"
 readme = "README.rst"
-version = "0.4.2"
+version = "0.5.0"
 
 [tool.poetry.dependencies]
 Sphinx = "^4.3.2"
