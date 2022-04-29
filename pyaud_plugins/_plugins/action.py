@@ -126,6 +126,8 @@ class DoctestReadme(pyaud.plugins.Action):
 class DoctestPackage(SphinxBuild):
     """Run ``doctest`` on package."""
 
+    cache = True
+
     @property
     def args(self) -> t.Tuple[t.Union[str, Path], ...]:
         return "-M", "doctest", e.DOCS, e.BUILDDIR
