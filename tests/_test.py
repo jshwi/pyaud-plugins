@@ -576,8 +576,7 @@ def test_call_sort_pyproject(
         tomli_w.dump(test_obj, fout)
 
     main("sort-pyproject")
-    out = nocolorcapsys.stdout().splitlines()
-    assert NO_ISSUES in out
+    assert NO_ISSUES in nocolorcapsys.stdout().splitlines()
     test_obj = {
         "tool": {
             "b_package": {"key2": "value2"},
@@ -588,8 +587,7 @@ def test_call_sort_pyproject(
         tomli_w.dump(test_obj, fout)
 
     main("sort-pyproject", FLAG_FIX)
-    out = nocolorcapsys.stdout().splitlines()
-    assert NO_ISSUES in out
+    assert NO_ISSUES in nocolorcapsys.stdout().splitlines()
 
 
 @pytest.mark.parametrize(

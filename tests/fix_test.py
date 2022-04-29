@@ -95,7 +95,7 @@ def test_make_format_docs_fix(
     pyaud.files.append(path)
     path.write_text(templates.DOCFORMATTER_EXAMPLE, ppe.ENCODING)
     main(FORMAT_DOCS, FLAG_FIX)
-    assert nocolorcapsys.stdout().strip() == NO_ISSUES
+    assert NO_ISSUES in nocolorcapsys.stdout()
 
 
 def test_format_str_fix(

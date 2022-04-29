@@ -149,11 +149,9 @@ def fixture_mock_environment(
     monkeypatch.setattr("pyaud.git.status", lambda *_, **__: True)
     monkeypatch.setattr("pyaud.git.rev_parse", lambda *_, **__: None)
     monkeypatch.setattr(
-        "pyaud._indexing.HashMapping.match_file", lambda *_: False
+        "pyaud._cache.HashMapping.match_file", lambda *_: False
     )
-    monkeypatch.setattr(
-        "pyaud._indexing.HashMapping.hash_files", lambda _: None
-    )
+    monkeypatch.setattr("pyaud._cache.HashMapping.hash_files", lambda _: None)
     # noinspection PyProtectedMember
     monkeypatch.setattr(
         "pyaud.plugins._plugins", copy.deepcopy(pyaud.plugins._plugins)
