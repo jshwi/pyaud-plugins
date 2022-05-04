@@ -10,6 +10,7 @@ import pyaud
 
 from pyaud_plugins._abc import SphinxBuild
 from pyaud_plugins._environ import environ as e
+from pyaud_plugins._parsers import LineSwitch, Md2Rst
 from pyaud_plugins._utils import colors
 
 
@@ -87,9 +88,9 @@ class Docs(SphinxBuild):
         returncode = 0
         pyaud.plugins.get("toc")(*args, **kwargs)
         shutil.rmtree(e.BUILDDIR, ignore_errors=True)
-        with pyaud.parsers.Md2Rst(e.README_MD, temp=True):
+        with Md2Rst(e.README_MD, temp=True):
             if e.DOCS_CONF.is_file() and e.README_RST.is_file():
-                with pyaud.parsers.LineSwitch(
+                with LineSwitch(
                     e.README_RST,
                     {0: e.README_RST.stem, 1: len(e.README_RST.stem) * "="},
                 ):

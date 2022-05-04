@@ -55,6 +55,7 @@ from . import (
     MockSPOutputType,
     MockSPPrintCalledType,
     NoColorCapsys,
+    Tracker,
     templates,
 )
 
@@ -712,3 +713,55 @@ def test_parametrize(
     main(module)
     out = nocolorcapsys.stdout().splitlines()
     assert all(f"{pyaud.__name__} {i}" in out for i in plugins)
+
+
+@pytest.mark.parametrize("temp,expected", [(True, False), (False, True)])
+def test_call_m2r_on_markdown(
+    monkeypatch: pytest.MonkeyPatch, temp: bool, expected: bool
+) -> None:
+    """Test creation of an RST README when only markdown is present.
+
+    :param monkeypatch: Mock patch environment and attributes.
+    :param temp: Is the RST file temporary? True or False.
+    :param expected: Expected value of ``Path(...).is_file``.
+    """
+
+    class Plugin(pyaud.plugins.Action):
+        """Nothing to do."""
+
+        def action(self, *args: t.Any, **kwargs: bool) -> t.Any:
+            """Nothing to do."""
+
+    pyaud.plugins.register(name="plugin")(Plugin)
+    old_path = Path.cwd() / "README.md"
+    new_path = Path.cwd() / "README.rst"
+    old_path.touch()
+    tracker = Tracker()
+    tracker.return_values.append("rst text")
+    monkeypatch.setattr("pyaud_plugins._parsers._m2r.parse_from_file", tracker)
+    # noinspection PyUnresolvedReferences
+    with pplugins._parsers.Md2Rst(old_path, temp=temp):
+        # do stuff here
+        pass
+
+    assert tracker.was_called()
+    assert new_path.is_file() == expected
+
+
+def test_readme_replace() -> None:
+    """Test that ``LineSwitch`` properly edits a file."""
+    path = Path.cwd() / README
+
+    # def _test_file_index(title: str, underline: str) -> None:
+
+    repo = "repo"
+    readme = "README"
+    repo_underline = len(repo) * "="
+    readme_underline = len(readme) * "="
+    path.write_text(f"{repo}\n{repo_underline}\n", ppe.ENCODING)
+    assert f"{repo}\n{repo_underline}" in path.read_text(ppe.ENCODING)
+    # noinspection PyUnresolvedReferences
+    with pplugins._parsers.LineSwitch(path, {0: readme, 1: readme_underline}):
+        assert f"{readme}\n{readme_underline}" in path.read_text(ppe.ENCODING)
+
+    assert f"{repo}\n{repo_underline}" in path.read_text(ppe.ENCODING)
