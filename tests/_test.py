@@ -247,11 +247,11 @@ def test_requirements(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
-    main(REQUIREMENTS, FLAG_FIX)
     path = Path.cwd() / ppe.REQUIREMENTS
     monkeypatch.setattr(
         "pyaud_plugins._plugins.write.Requirements.cache_file", path
     )
+    main(REQUIREMENTS, FLAG_FIX)
     template = templatest.templates.registered.getbyname("test-requirements")
     ppe.PIPFILE_LOCK.write_text(template.template, ppe.ENCODING)
     with pytest.raises(pyaud.exceptions.AuditError):
