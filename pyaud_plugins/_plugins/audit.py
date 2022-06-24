@@ -110,3 +110,19 @@ class Const(ColorAudit):
 
     def audit(self, *args: str, **kwargs: bool) -> int:
         return self.subprocess[self.constcheck].call(*pyaud.files.args())
+
+
+@pyaud.plugins.register()
+class Params(ColorAudit):
+    """Check docstring params match function signatures."""
+
+    docsig = "docsig"
+    cache = True
+    cache_all = True
+
+    @property
+    def exe(self) -> t.List[str]:
+        return [self.docsig]
+
+    def audit(self, *args: str, **kwargs: bool) -> int:
+        return self.subprocess[self.docsig].call(*pyaud.files.args())

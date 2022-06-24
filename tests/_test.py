@@ -662,6 +662,7 @@ def test_call_sort_pyproject(
         (CONST, "<Subprocess (constcheck)>"),
         (TYPECHECK, "<Subprocess (mypy)> --ignore-missing-imports"),
         (FORMAT, "<Subprocess (black)>"),
+        ("params", "<Subprocess (docsig)>"),
     ],
 )
 def test_action(
