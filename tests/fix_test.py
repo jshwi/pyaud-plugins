@@ -67,6 +67,7 @@ def test_make_unused_fix(
 ) -> None:
     """Test ``pyaud unused`` when ``-f/--fix`` is provided.
 
+    :param monkeypatch: Mock patch environment and attributes.
     :param main: Patch package entry point.
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.

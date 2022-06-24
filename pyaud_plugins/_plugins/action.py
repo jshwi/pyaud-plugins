@@ -28,10 +28,7 @@ class Tests(pyaud.plugins.Action):
 
     @property
     def is_tests(self) -> bool:
-        """Confirm that a test suite exists.
-
-        :return: Does a test suite exist? True or False.
-        """
+        """Confirm that a test suite exists."""
         return any(
             f
             for f in pyaud.files

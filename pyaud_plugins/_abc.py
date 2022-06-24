@@ -42,7 +42,12 @@ class SphinxBuild(_pyaud.plugins.Action):
         return ["sphinx-build"]
 
     def sphinx_build(self, *args: str, **kwargs: bool) -> int:
-        """``sphinx-build`` executable ready to go."""
+        """``sphinx-build`` executable ready to go.
+
+        :param args: Args to pass to subprocess.
+        :param kwargs: Kwargs to pass to subprocess.
+        :return: Returncode.
+        """
         return self.subprocess[self.exe[0]].call(*self.args, *args, **kwargs)
 
     @property
@@ -68,4 +73,9 @@ class ColorAudit(_pyaud.plugins.Audit):
 
     @_abstractmethod
     def audit(self, *args: str, **kwargs: bool) -> int:
-        """All audit logic to be written within this method."""
+        """All audit logic to be written within this method.
+
+        :param args: Args to pass to subprocess.
+        :param kwargs: Kwargs to pass to subprocess.
+        :return: Returncode.
+        """

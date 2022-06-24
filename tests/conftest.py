@@ -244,6 +244,8 @@ def fixture_patch_sp_output(patch_sp_call: MockSPCallType) -> MockSPOutputType:
 
     Return test strings to ``self.stdout``.
 
+    :param patch_sp_call: Mock ``Subprocess.call``to print the command
+        that is being run.
     :return: Function for using this fixture.
     """
 
@@ -282,10 +284,7 @@ def fixture_make_tree() -> MakeTreeType:
 
 @pytest.fixture(name=INIT_REMOTE)
 def fixture_init_remote() -> None:
-    """Initialize local "remote origin".
-
-    :return: Function for using this fixture.
-    """
+    """Initialize local "remote origin"."""
     pyaud.git.init("--bare", ppe.GH_REMOTE, devnull=True)
     pyaud.git.remote("add", "origin", "origin", devnull=True)
 
