@@ -81,7 +81,7 @@ sphinxcontrib-programoutput = "^0.17"
 toml = "^0.10.2"
 toml-sort = "^0.20.0"
 vulture = "^2.3"
-docsig = "^0.7.0"
+docsig = ">=0.7,<0.12"
 
 [tool.poetry.dev-dependencies]
 bump2version = "^1.0.1"
