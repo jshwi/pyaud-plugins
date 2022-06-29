@@ -350,14 +350,16 @@ untokenize = "*"
 
 [[package]]
 name = "docsig"
-version = "0.7.0"
+version = "0.12.1"
 description = "Check signature params for proper documentation"
 category = "main"
 optional = false
 python-versions = ">=3.8,<4.0"
 
 [package.dependencies]
+astroid = ">=2.11.6,<3.0.0"
 object-colors = ">=2.1.0,<3.0.0"
+tomli = ">=2.0.1,<3.0.0"
 
 [[package]]
 name = "docutils"
@@ -1601,7 +1603,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "8482f995739c3e112d2d007b318250d9689edd0ed16441df1ea99f01427e0c66"
+content-hash = "5aa5a5a9af691c8c51480fed77fbd89f1f4a4937d9cc407bda173e6b8eb42715"
 
 [metadata.files]
 alabaster = [
@@ -1785,8 +1787,8 @@ docformatter = [
     {file = "docformatter-1.4.tar.gz", hash = "sha256:064e6d81f04ac96bc0d176cbaae953a0332482b22d3ad70d47c8a7f2732eef6f"},
 ]
 docsig = [
-    {file = "docsig-0.7.0-py3-none-any.whl", hash = "sha256:6dace3e855dd70463bf521e64c2b5213acb65ece119c7ed3ebf115dc8d85ba79"},
-    {file = "docsig-0.7.0.tar.gz", hash = "sha256:180f37522c9980965f58be8a20dc3ebed3eeb23650d245dcefd0cdd58be7279e"},
+    {file = "docsig-0.12.1-py3-none-any.whl", hash = "sha256:04cefb29ca8b5cf7e32ff6d0feb56e26cf46f7e22d723966b473747fa00a5a3a"},
+    {file = "docsig-0.12.1.tar.gz", hash = "sha256:e08b836f4451972ea8858c399c2745aa9ca1292ac2b75293d24a232f622604f7"},
 ]
 docutils = [
     {file = "docutils-0.17.1-py2.py3-none-any.whl", hash = "sha256:cf316c8370a737a022b72b56874f6602acf974a37a9fba42ec2876387549fc61"},
