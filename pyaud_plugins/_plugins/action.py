@@ -2,6 +2,9 @@
 pyaud_plugins._plugins.action
 =============================
 """
+from __future__ import annotations
+
+import os
 import shutil
 import typing as t
 from pathlib import Path
@@ -78,7 +81,7 @@ class Docs(SphinxBuild):
     """
 
     @property
-    def args(self) -> t.Tuple[t.Union[str, Path], ...]:
+    def args(self) -> t.Tuple[str | os.PathLike, ...]:
         return "-M", "html", e.DOCS, e.BUILDDIR, "-W"
 
     def action(self, *args: str, **kwargs: bool) -> int:
@@ -127,5 +130,5 @@ class DoctestPackage(SphinxBuild):
     cache = True
 
     @property
-    def args(self) -> t.Tuple[t.Union[str, Path], ...]:
+    def args(self) -> t.Tuple[str | os.PathLike, ...]:
         return "-M", "doctest", e.DOCS, e.BUILDDIR
