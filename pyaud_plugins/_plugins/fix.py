@@ -2,8 +2,10 @@
 pyaud_plugins._plugins.fix
 ==========================
 """
+from __future__ import annotations
+
+import os
 import typing as t
-from pathlib import Path
 
 import pyaud
 
@@ -89,7 +91,7 @@ class FormatDocs(CheckFix):
     cache = True
 
     @property
-    def args(self) -> t.Tuple[t.Union[str, Path], ...]:
+    def args(self) -> t.Tuple[str | os.PathLike, ...]:
         return "--recursive", "--wrap-summaries", "72"
 
     @property

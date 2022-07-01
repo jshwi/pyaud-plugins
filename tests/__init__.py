@@ -132,7 +132,7 @@ class Tracker:  # pylint: disable=too-few-public-methods
         """
         return self._called
 
-    def __call__(self, *args: t.Any, **kwargs: t.Any) -> t.Optional[t.Any]:
+    def __call__(self, *args: t.Any, **kwargs: t.Any) -> t.Any:
         """Call the object, update its fields, and return values passed.
 
         Fields to update:

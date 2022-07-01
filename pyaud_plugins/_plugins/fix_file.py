@@ -2,6 +2,8 @@
 pyaud_plugins._plugins.fix_file
 ===============================
 """
+from __future__ import annotations
+
 import os
 import tempfile
 import typing as t
@@ -74,7 +76,7 @@ class Imports(pyaud.plugins.FixFile):
         os.remove(tmp.name)
         return 0
 
-    def fail_condition(self) -> t.Optional[bool]:
+    def fail_condition(self) -> bool | None:
         return self.result != self.content
 
     def fix(self, file: Path, **kwargs: bool) -> None:

@@ -5,6 +5,8 @@ pyaud.environ
 Set up the environment variables for the current project.
 """
 # pylint: disable=invalid-name,too-many-public-methods
+from __future__ import annotations
+
 import typing as _t
 from pathlib import Path as _Path
 
@@ -21,7 +23,7 @@ class _Environ(_Env):
             return getattr(_pyaud.environ, item)
 
     @property
-    def GITHUB_REPOSITORY_OWNER(self) -> _t.Optional[str]:
+    def GITHUB_REPOSITORY_OWNER(self) -> str | None:
         """Env variable which may exist in a GitHub workflow."""
         return self.str("GITHUB_REPOSITORY_OWNER", default=None)
 
@@ -64,30 +66,30 @@ class _Environ(_Env):
             )
 
     @property
-    def GH_NAME(self) -> _t.Optional[str]:
+    def GH_NAME(self) -> str | None:
         """Username of GH user."""
         with self.prefixed(self.PREFIX):
             return self.str("GH_NAME", default=self.GITHUB_REPOSITORY_OWNER)
 
     @property
-    def GH_EMAIL(self) -> _t.Optional[str]:
+    def GH_EMAIL(self) -> str | None:
         """Email of GH user."""
         with self.prefixed(self.PREFIX):
             return self.str("GH_EMAIL", default=None)
 
     @property
-    def GH_TOKEN(self) -> _t.Optional[str]:
+    def GH_TOKEN(self) -> str | None:
         """Authentication token of GH user."""
         with self.prefixed(self.PREFIX):
             return self.str("GH_TOKEN", default=None)
 
     @property
-    def CODECOV_TOKEN(self) -> _t.Optional[str]:
+    def CODECOV_TOKEN(self) -> str | None:
         """Authentication token for codecov.io."""
         return self.str("CODECOV_TOKEN", default=None)
 
     @property
-    def GH_REMOTE(self) -> _t.Optional[str]:
+    def GH_REMOTE(self) -> str | None:
         """URL of repository remote."""
         default = None
         if all([self.GH_NAME, self.GH_EMAIL, self.GH_TOKEN]):

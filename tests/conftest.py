@@ -12,7 +12,6 @@ import pyaud
 import pytest
 
 from pyaud_plugins import environ as ppe
-
 from . import (
     DEBUG,
     GH_EMAIL,

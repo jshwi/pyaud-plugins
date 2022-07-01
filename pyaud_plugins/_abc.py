@@ -2,9 +2,11 @@
 pyaud_plugins._abc
 ==================
 """
+from __future__ import annotations
+
+import os as _os
 import typing as _t
 from abc import abstractmethod as _abstractmethod
-from pathlib import Path as _Path
 
 import pyaud as _pyaud
 
@@ -19,7 +21,7 @@ class CheckFix(_pyaud.plugins.FixAll):
     in_place = "--in-place"
 
     @property
-    def args(self) -> _t.Tuple[_t.Union[str, _Path], ...]:
+    def args(self) -> _t.Tuple[str | _os.PathLike, ...]:
         """Default args to include with subclass."""
         return ()
 
@@ -52,7 +54,7 @@ class SphinxBuild(_pyaud.plugins.Action):
 
     @property
     @_abstractmethod
-    def args(self) -> _t.Tuple[_t.Union[str, _Path], ...]:
+    def args(self) -> _t.Tuple[str | _os.PathLike, ...]:
         """Args for ``sphinx-build``."""
 
     def action(self, *args: str, **kwargs: bool) -> int:
