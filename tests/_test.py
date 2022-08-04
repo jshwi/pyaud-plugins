@@ -57,6 +57,7 @@ from . import (
     MockSPPrintCalledType,
     NoColorCapsys,
     Tracker,
+    git,
     templates,
 )
 
@@ -337,7 +338,9 @@ def test_deploy_not_master(
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
-    monkeypatch.setattr("pyaud.branch", lambda: "not_master")
+    monkeypatch.setattr(
+        "pyaud_plugins._plugins.deprecate.branch", lambda: "not_master"
+    )
     main(DEPLOY_DOCS)
     assert "Documentation not for master" in nocolorcapsys.stdout()
 
@@ -397,8 +400,8 @@ def test_deploy_master(
     mock_plugins[ppe.DOCS.name] = _docs  # type: ignore
     monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mock_plugins)
     ppe.README_RST.touch()  # force stash
-    pyaud.git.add(".")
-    pyaud.git.commit("-m", INITIAL_COMMIT, file=os.devnull)
+    git.add(".")
+    git.commit("-m", INITIAL_COMMIT, file=os.devnull)
     ppe.README_RST.write_text("package\n====\n", ppe.ENCODING)
     main(DEPLOY_DOCS, FLAG_FIX)
     out = nocolorcapsys.stdout()
@@ -443,8 +446,8 @@ def test_deploy_master_param(
     monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mock_plugins)
     ppe.README_RST.touch()
     Path(Path.cwd(), FILE).touch()
-    pyaud.git.add(".", file=os.devnull)
-    pyaud.git.commit("-m", INITIAL_COMMIT, file=os.devnull)
+    git.add(".", file=os.devnull)
+    git.commit("-m", INITIAL_COMMIT, file=os.devnull)
     for _ in range(rounds):
         main(DEPLOY_DOCS, FLAG_FIX)
 
@@ -777,3 +780,14 @@ def test_readme_replace() -> None:
         assert f"{readme}\n{readme_underline}" in path.read_text(ppe.ENCODING)
 
     assert f"{repo}\n{repo_underline}" in path.read_text(ppe.ENCODING)
+
+
+def test_get_branch_none(monkeypatch: pytest.MonkeyPatch) -> None:
+    """Test that ``branch`` returns None.
+
+    :param monkeypatch: Mock patch environment and attributes.
+    """
+    monkeypatch.setattr(
+        "pyaud_plugins._plugins.deprecate.git.stdout", lambda: []
+    )
+    assert pplugins._plugins.deprecate.branch() is None

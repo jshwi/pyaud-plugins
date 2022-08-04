@@ -30,6 +30,7 @@ from . import (
     MockSPOutputType,
     MockSPPrintCalledType,
     NoColorCapsys,
+    git,
 )
 
 MOCK_PACKAGE = "package"
@@ -112,7 +113,7 @@ def fixture_mock_environment(
 
     # initialize repository
     # =====================
-    pyaud.git.init(file=os.devnull)
+    git.init(file=os.devnull)
 
     # prepare default config
     # ======================
@@ -147,8 +148,8 @@ def fixture_mock_environment(
     # noinspection PyProtectedMember
     pyaud._environ.initialize_dirs()
 
-    monkeypatch.setattr("pyaud.git.status", lambda *_, **__: True)
-    monkeypatch.setattr("pyaud.git.rev_parse", lambda *_, **__: None)
+    monkeypatch.setattr("pyaud._utils.git.status", lambda *_, **__: True)
+    monkeypatch.setattr("pyaud._utils.git.rev_parse", lambda *_, **__: None)
     monkeypatch.setattr(
         "pyaud._cache.HashMapping.match_file", lambda *_: False
     )
@@ -286,8 +287,8 @@ def fixture_make_tree() -> MakeTreeType:
 @pytest.fixture(name=INIT_REMOTE)
 def fixture_init_remote() -> None:
     """Initialize local "remote origin"."""
-    pyaud.git.init("--bare", ppe.GH_REMOTE, file=os.devnull)
-    pyaud.git.remote("add", "origin", "origin", file=os.devnull)
+    git.init("--bare", ppe.GH_REMOTE, file=os.devnull)
+    git.remote("add", "origin", "origin", file=os.devnull)
 
 
 @pytest.fixture(name="patch_sp_print_called")

@@ -8,6 +8,8 @@ import re
 import typing as t
 from pathlib import Path
 
+from gitspy import Git
+
 MockMainType = t.Callable[..., None]
 MockFuncType = t.Callable[..., int]
 MockCallStatusType = t.Callable[[str, int], MockFuncType]
@@ -67,6 +69,9 @@ TESTS = "tests"
 MODULES_RST = "modules.rst"
 TEST_FORMAT = "test-format"
 CHANGE = "change"
+
+
+git = Git()
 
 
 class NoColorCapsys:
