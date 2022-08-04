@@ -7,7 +7,6 @@ Set up the environment variables for the current project.
 # pylint: disable=invalid-name,too-many-public-methods
 from __future__ import annotations
 
-import typing as _t
 from pathlib import Path as _Path
 
 import pyaud as _pyaud
@@ -15,12 +14,15 @@ from environs import Env as _Env
 
 
 class _Environ(_Env):
-    def __getattribute__(self, item: str) -> _t.Any:
-        """Roughly equivalent to inheriting ``pyaud.environ``'s type."""
-        try:
-            return object.__getattribute__(self, item)
-        except AttributeError:
-            return getattr(_pyaud.environ, item)
+    @property
+    def PREFIX(self) -> str:
+        """Prefix for variables which may turn out to be ambiguous."""
+        return "PYAUD_"
+
+    @property
+    def REPO(self) -> str:
+        """The name of the repo that this is being run in."""
+        return _Path.cwd().name
 
     @property
     def GITHUB_REPOSITORY_OWNER(self) -> str | None:

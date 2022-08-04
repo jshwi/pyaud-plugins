@@ -9,6 +9,7 @@ import pytest
 import templatest
 
 from pyaud_plugins import environ as ppe
+
 from . import (
     FILE,
     FLAG_FIX,
