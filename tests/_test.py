@@ -4,6 +4,7 @@ tests._test
 """
 # pylint: disable=too-many-lines,too-many-arguments,cell-var-from-loop
 # pylint: disable=too-few-public-methods,protected-access
+import os
 import typing as t
 from pathlib import Path
 
@@ -397,7 +398,7 @@ def test_deploy_master(
     monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mock_plugins)
     ppe.README_RST.touch()  # force stash
     pyaud.git.add(".")
-    pyaud.git.commit("-m", INITIAL_COMMIT, devnull=True)
+    pyaud.git.commit("-m", INITIAL_COMMIT, file=os.devnull)
     ppe.README_RST.write_text("package\n====\n", ppe.ENCODING)
     main(DEPLOY_DOCS, FLAG_FIX)
     out = nocolorcapsys.stdout()
@@ -442,8 +443,8 @@ def test_deploy_master_param(
     monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mock_plugins)
     ppe.README_RST.touch()
     Path(Path.cwd(), FILE).touch()
-    pyaud.git.add(".", devnull=True)
-    pyaud.git.commit("-m", INITIAL_COMMIT, devnull=True)
+    pyaud.git.add(".", file=os.devnull)
+    pyaud.git.commit("-m", INITIAL_COMMIT, file=os.devnull)
     for _ in range(rounds):
         main(DEPLOY_DOCS, FLAG_FIX)
 

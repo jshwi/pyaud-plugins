@@ -4,6 +4,7 @@ tests.conftest
 """
 # pylint: disable=protected-access,no-member,too-many-statements
 import copy
+import os
 import typing as t
 from configparser import ConfigParser
 from pathlib import Path
@@ -111,7 +112,7 @@ def fixture_mock_environment(
 
     # initialize repository
     # =====================
-    pyaud.git.init(devnull=True)
+    pyaud.git.init(file=os.devnull)
 
     # prepare default config
     # ======================
@@ -285,8 +286,8 @@ def fixture_make_tree() -> MakeTreeType:
 @pytest.fixture(name=INIT_REMOTE)
 def fixture_init_remote() -> None:
     """Initialize local "remote origin"."""
-    pyaud.git.init("--bare", ppe.GH_REMOTE, devnull=True)
-    pyaud.git.remote("add", "origin", "origin", devnull=True)
+    pyaud.git.init("--bare", ppe.GH_REMOTE, file=os.devnull)
+    pyaud.git.remote("add", "origin", "origin", file=os.devnull)
 
 
 @pytest.fixture(name="patch_sp_print_called")

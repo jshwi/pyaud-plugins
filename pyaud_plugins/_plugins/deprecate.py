@@ -2,6 +2,7 @@
 pyaud_plugins_plugins.deprecate
 ===============================
 """
+import os
 import shutil
 import typing as t
 from pathlib import Path
@@ -75,7 +76,7 @@ class DeployDocs(pyaud.plugins.Action):  # pyli
         pyaud.git.diff_index("--cached", "HEAD", capture=True)
         stashed = False
         if pyaud.git.stdout():
-            pyaud.git.stash(devnull=True)
+            pyaud.git.stash(file=os.devnull)
             stashed = True
 
         shutil.move(str(e.DOCS_HTML), root_html)
@@ -89,15 +90,17 @@ class DeployDocs(pyaud.plugins.Action):  # pyli
         pyaud.git.config("--global", "user.name", e.GH_NAME)
         pyaud.git.config("--global", "user.email", e.GH_EMAIL)
         shutil.rmtree(e.DOCS)
-        pyaud.git.rm("-rf", Path.cwd(), devnull=True)
-        pyaud.git.clean("-fdx", "--exclude=html", devnull=True)
+        pyaud.git.rm("-rf", Path.cwd(), file=os.devnull)
+        pyaud.git.clean("-fdx", "--exclude=html", file=os.devnull)
         for file in root_html.rglob("*"):
             shutil.move(str(file), Path.cwd() / file.name)
 
         shutil.rmtree(root_html)
         pyaud.git.add(".")
         pyaud.git.commit(
-            "-m", '"[ci skip] Publishes updated documentation"', devnull=True
+            "-m",
+            '"[ci skip] Publishes updated documentation"',
+            file=os.devnull,
         )
         pyaud.git.remote("rm", self._origin)
         pyaud.git.remote("add", self._origin, e.GH_REMOTE)
@@ -121,11 +124,11 @@ class DeployDocs(pyaud.plugins.Action):  # pyli
             pyaud.git.push(self._origin, self._gh_pages, "-f")
             print("Documentation Successfully deployed")
 
-        pyaud.git.checkout("master", devnull=True)
+        pyaud.git.checkout("master", file=os.devnull)
         if stashed:
-            pyaud.git.stash("pop", devnull=True)
+            pyaud.git.stash("pop", file=os.devnull)
 
-        pyaud.git.branch("-D", self._gh_pages, devnull=True)
+        pyaud.git.branch("-D", self._gh_pages, file=os.devnull)
 
     def action(self, *args: str, **kwargs: bool) -> int:
         if pyaud.branch() == "master":

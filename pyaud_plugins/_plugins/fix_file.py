@@ -59,13 +59,13 @@ class Imports(pyaud.plugins.FixFile):
 
         # run both ``isort`` and ``black`` on the temporary file,
         # leaving the original file untouched
-        self.subprocess[self.isort].call(tmp.name, devnull=True, **kwargs)
+        self.subprocess[self.isort].call(tmp.name, file=os.devnull, **kwargs)
         self.subprocess[self.black].call(
             tmp.name,
             "--line-length",
             "79",
             loglevel="debug",
-            devnull=True,
+            file=os.devnull,
             **kwargs,
         )
 

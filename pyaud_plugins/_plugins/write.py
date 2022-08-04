@@ -112,7 +112,13 @@ class Toc(pyaud.plugins.Fix):
         with tempfile.TemporaryDirectory() as tmp:
             tempdir = Path(tmp)
             self.subprocess[self.sphinx_apidoc].call(
-                "-o", tempdir, e.PACKAGE, "-f", *args, devnull=True, **kwargs
+                "-o",
+                tempdir,
+                e.PACKAGE,
+                "-f",
+                *args,
+                file=os.devnull,
+                **kwargs,
             )
             self._read_temp(tempdir)
 
