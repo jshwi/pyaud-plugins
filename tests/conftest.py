@@ -12,6 +12,13 @@ from pathlib import Path
 import pyaud
 import pytest
 
+# noinspection PyUnresolvedReferences,PyProtectedMember
+from pyaud import _config as pc
+from pyaud.__main__ import main
+
+# noinspection PyProtectedMember
+from pyaud._locations import AppFiles
+
 from pyaud_plugins import environ as ppe
 
 from . import (
@@ -36,14 +43,30 @@ from . import (
 MOCK_PACKAGE = "package"
 
 
+@pytest.fixture(name="app_files")
+def fixture_app_files(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> AppFiles:
+    """App files for testing.
+
+    :param tmp_path: Create and return temporary directory.
+    :param monkeypatch: Mock patch environment and attributes.
+    :return: Instantiated ``AppFiles`` object.
+    """
+    monkeypatch.setenv("HOME", str(tmp_path))
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / ".config"))
+    return AppFiles()
+
+
 @pytest.fixture(name="mock_environment", autouse=True)
 def fixture_mock_environment(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, app_files: AppFiles
 ) -> None:
     """Mock imports to reflect the temporary testing environment.
 
     :param tmp_path: Create and return temporary directory.
     :param monkeypatch: Mock patch environment and attributes.
+    :param app_files: App file locations object.
     """
     # set environment variables
     # =========================
@@ -75,16 +98,6 @@ def fixture_mock_environment(
         Path.cwd() / "_main.py"
     )
     monkeypatch.setattr("inspect.currentframe", lambda: current_frame)
-
-    # patch pyaud attributes
-    # ======================
-    # make default testing branch ``master``
-    # replace default config with changes values from above
-    # set config file to test config within the temporary home dir
-    monkeypatch.setattr("pyaud.branch", lambda: "master")
-    monkeypatch.setattr(
-        "pyaud.config.CONFIGDIR", tmp_path / ".config" / pyaud.__name__
-    )
 
     # load default key-value pairs
     # ============================
@@ -119,17 +132,14 @@ def fixture_mock_environment(
     # ======================
     # override log file path to point to test repository
     # loglevel to DEBUG
-    default_config: t.Dict[str, t.Any] = copy.deepcopy(
-        pyaud.config.DEFAULT_CONFIG
-    )
+    default_config: t.Dict[str, t.Any] = copy.deepcopy(pc.DEFAULT_CONFIG)
     default_config[LOGGING]["root"]["level"] = DEBUG
-    monkeypatch.setattr("pyaud.config.DEFAULT_CONFIG", default_config)
+    monkeypatch.setattr("pyaud._config.DEFAULT_CONFIG", default_config)
     logfile = Path(
         tmp_path / ".cache" / pyaud.__name__ / "log" / f"{pyaud.__name__}.log"
     )
     default_config[LOGGING]["handlers"]["default"]["filename"] = str(logfile)
     default_config[LOGGING]["root"]["level"] = DEBUG
-    monkeypatch.setattr("pyaud.config.DEFAULT_CONFIG", default_config)
     logfile.parent.mkdir(parents=True)
 
     # create ~/.gitconfig
@@ -145,15 +155,11 @@ def fixture_mock_environment(
     with open(Path.home() / ".gitconfig", "w", encoding="utf-8") as fout:
         config.write(fout)
 
-    # noinspection PyProtectedMember
-    pyaud._environ.initialize_dirs()
-
     monkeypatch.setattr("pyaud._utils.git.status", lambda *_, **__: True)
     monkeypatch.setattr("pyaud._utils.git.rev_parse", lambda *_, **__: None)
     monkeypatch.setattr(
         "pyaud._cache.HashMapping.match_file", lambda *_: False
     )
-    monkeypatch.setattr("pyaud._cache.HashMapping.hash_files", lambda _: None)
     # noinspection PyProtectedMember
     monkeypatch.setattr(
         "pyaud.plugins._plugins", copy.deepcopy(pyaud.plugins._plugins)
@@ -164,11 +170,11 @@ def fixture_mock_environment(
     # setup singletons
     # ================
     pyaud.files.clear()
-    pyaud.config.toml.clear()
+    pc.toml.clear()
     pyaud.files.populate()
-    pyaud.config.configure_global()
-    pyaud.config.load_config()
-    pyaud.config.configure_logging()
+    pc.configure_global(app_files)
+    pc.load_config(app_files)
+    pc.configure_logging()
 
 
 @pytest.fixture(name="nocolorcapsys")
@@ -194,7 +200,7 @@ def fixture_main(monkeypatch: pytest.MonkeyPatch) -> MockMainType:
     def _main(*args: str) -> None:
         """Run main with custom args."""
         monkeypatch.setattr("sys.argv", [pyaud.__name__, *args])
-        pyaud.main()
+        main()
 
     return _main
 
