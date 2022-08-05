@@ -31,8 +31,7 @@ class Lint(ColorAudit):
 class Typecheck(pyaud.plugins.Audit):
     """Typecheck code with ``mypy``.
 
-    Check that there are no errors between the files and their stub-
-    files.
+    Check there are no errors between the files and their stub-files.
     """
 
     mypy = "mypy"
