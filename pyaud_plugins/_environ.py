@@ -149,14 +149,6 @@ class _Environ(_Env):
             )
 
     @property
-    def README_MD(self) -> _Path:
-        """Location of the README.md."""
-        with self.prefixed(self.PREFIX):
-            return _Path.cwd() / self.path(
-                "README", default=_Path("README.md")
-            )
-
-    @property
     def TESTS(self) -> _Path:
         """Location of tests."""
         with self.prefixed(self.PREFIX):

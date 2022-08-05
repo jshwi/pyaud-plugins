@@ -56,7 +56,6 @@ from . import (
     MockSPOutputType,
     MockSPPrintCalledType,
     NoColorCapsys,
-    Tracker,
     git,
     templates,
 )
@@ -728,39 +727,6 @@ def test_parametrize(
     main(module)
     out = nocolorcapsys.stdout().splitlines()
     assert all(f"{pyaud.__name__} {i}" in out for i in plugins)
-
-
-@pytest.mark.parametrize("temp,expected", [(True, False), (False, True)])
-def test_call_m2r_on_markdown(
-    monkeypatch: pytest.MonkeyPatch, temp: bool, expected: bool
-) -> None:
-    """Test creation of an RST README when only markdown is present.
-
-    :param monkeypatch: Mock patch environment and attributes.
-    :param temp: Is the RST file temporary? True or False.
-    :param expected: Expected value of ``Path(...).is_file``.
-    """
-
-    class Plugin(pyaud.plugins.Action):
-        """Nothing to do."""
-
-        def action(self, *args: t.Any, **kwargs: bool) -> t.Any:
-            """Nothing to do."""
-
-    pyaud.plugins.register(name="plugin")(Plugin)
-    old_path = Path.cwd() / "README.md"
-    new_path = Path.cwd() / "README.rst"
-    old_path.touch()
-    tracker = Tracker()
-    tracker.return_values.append("rst text")
-    monkeypatch.setattr("pyaud_plugins._parsers._m2r.parse_from_file", tracker)
-    # noinspection PyUnresolvedReferences
-    with pplugins._parsers.Md2Rst(old_path, temp=temp):
-        # do stuff here
-        pass
-
-    assert tracker.was_called()
-    assert new_path.is_file() == expected
 
 
 def test_readme_replace() -> None:

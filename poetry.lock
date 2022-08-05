@@ -634,18 +634,6 @@ python-versions = ">=3.8,<4.0"
 gitspy = ">=0,<1"
 
 [[package]]
-name = "m2r"
-version = "0.2.1"
-description = "Markdown and reStructuredText in a single file."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-docutils = "*"
-mistune = "*"
-
-[[package]]
 name = "markupsafe"
 version = "2.1.1"
 description = "Safely add untrusted strings to HTML/XML markup."
@@ -688,14 +676,6 @@ description = "McCabe checker, plugin for flake8"
 category = "main"
 optional = false
 python-versions = ">=3.6"
-
-[[package]]
-name = "mistune"
-version = "0.8.4"
-description = "The fastest markdown parser in pure Python"
-category = "main"
-optional = false
-python-versions = "*"
 
 [[package]]
 name = "msgpack"
@@ -1603,7 +1583,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "6cac311aab4dedf7f2bc00580253a0896b4cb6f23c83ff9a09f27fd8352e222a"
+content-hash = "c84459af7ff09b058abf6afcb6a0fa681c449e5edb100a578d84088daedfb602"
 
 [metadata.files]
 alabaster = [
@@ -1846,9 +1826,6 @@ lsfiles = [
     {file = "lsfiles-0.1.2-py3-none-any.whl", hash = "sha256:2b45f7a12af5c8ba3124875bf7bc2e410c991dd3152f29dad95483d776d5f96e"},
     {file = "lsfiles-0.1.2.tar.gz", hash = "sha256:0555f777cb3d6117639bdc900362db0df5838cc92bf5a517ebe4505ec3bf798d"},
 ]
-m2r = [
-    {file = "m2r-0.2.1.tar.gz", hash = "sha256:bf90bad66cda1164b17e5ba4a037806d2443f2a4d5ddc9f6a5554a0322aaed99"},
-]
 markupsafe = [
     {file = "MarkupSafe-2.1.1-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:86b1f75c4e7c2ac2ccdaec2b9022845dbb81880ca318bb7a0a01fbf7813e3812"},
     {file = "MarkupSafe-2.1.1-cp310-cp310-macosx_10_9_x86_64.whl", hash = "sha256:f121a1420d4e173a5d96e47e9a0c0dcff965afdf1626d28de1460815f7c4ee7a"},
@@ -1902,10 +1879,6 @@ matplotlib-inline = [
 mccabe = [
     {file = "mccabe-0.7.0-py2.py3-none-any.whl", hash = "sha256:6c2d30ab6be0e4a46919781807b4f0d834ebdd6c6e3dca0bda5a15f863427b6e"},
     {file = "mccabe-0.7.0.tar.gz", hash = "sha256:348e0240c33b60bbdf4e523192ef919f28cb2c3d7d5c7794f74009290f236325"},
-]
-mistune = [
-    {file = "mistune-0.8.4-py2.py3-none-any.whl", hash = "sha256:88a1051873018da288eee8538d476dffe1262495144b33ecb586c4ab266bb8d4"},
-    {file = "mistune-0.8.4.tar.gz", hash = "sha256:59a3429db53c50b5c6bcc8a07f8848cb00d7dc8bdb431a4ab41920d201d4756e"},
 ]
 msgpack = [
     {file = "msgpack-1.0.4-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:4ab251d229d10498e9a2f3b1e68ef64cb393394ec477e3370c457f9430ce9250"},
