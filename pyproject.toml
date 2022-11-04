@@ -93,7 +93,7 @@ pytest-xdist = "^3.0.2"
 restview = "^3.0.0"
 sphinx-toolbox = "^3.2.0"
 tomli-w = "^1.0.0"
-templatest = "^0.5.0"
+templatest = "^0.7.0"
 
 [tool.pyaud.audit]
 modules = [
