@@ -84,7 +84,7 @@ docsig = "^0"
 
 [tool.poetry.dev-dependencies]
 bump2version = "^1.0.1"
-ipython = "^8.6.0"
+ipython = "^8.7.0"
 pyaud = "^4.0.2"
 pytest = ">=6.2.5,<8.0.0"
 pytest-randomly = "^3.12.0"
