@@ -1008,11 +1008,11 @@ termcolor = ">=1.1.0"
 
 [[package]]
 name = "pytest-xdist"
-version = "3.0.2"
-description = "pytest xdist plugin for distributed testing and loop-on-failing modes"
+version = "3.1.0"
+description = "pytest xdist plugin for distributed testing, most importantly across multiple CPUs"
 category = "dev"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
 execnet = ">=1.1"
@@ -1572,7 +1572,7 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=6)", "pytest-black (>=
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "c9d038b3f7e3da35fa73a42a7d6490b07926b77e4dc4d5063aac83b8245e0de4"
+content-hash = "2aca70a1dfcfb1658ac879ff21e12073eadee7ba81ac4b27fc97e83637951c46"
 
 [metadata.files]
 alabaster = [
@@ -2118,8 +2118,8 @@ pytest-sugar = [
     {file = "pytest_sugar-0.9.6-py2.py3-none-any.whl", hash = "sha256:30e5225ed2b3cc988a8a672f8bda0fc37bcd92d62e9273937f061112b3f2186d"},
 ]
 pytest-xdist = [
-    {file = "pytest-xdist-3.0.2.tar.gz", hash = "sha256:688da9b814370e891ba5de650c9327d1a9d861721a524eb917e620eec3e90291"},
-    {file = "pytest_xdist-3.0.2-py3-none-any.whl", hash = "sha256:9feb9a18e1790696ea23e1434fa73b325ed4998b0e9fcb221f16fd1945e6df1b"},
+    {file = "pytest-xdist-3.1.0.tar.gz", hash = "sha256:40fdb8f3544921c5dfcd486ac080ce22870e71d82ced6d2e78fa97c2addd480c"},
+    {file = "pytest_xdist-3.1.0-py3-none-any.whl", hash = "sha256:70a76f191d8a1d2d6be69fc440cdf85f3e4c03c08b520fd5dc5d338d6cf07d89"},
 ]
 python-dotenv = [
     {file = "python-dotenv-0.21.0.tar.gz", hash = "sha256:b77d08274639e3d34145dfa6c7008e66df0f04b7be7a75fd0d5292c191d79045"},
