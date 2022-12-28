@@ -62,6 +62,7 @@ codecov = "^2.1.12"
 constcheck = "^0"
 coverage = ">=6.2,<8.0"
 docformatter = "^1.4"
+docsig = "^0"
 environs = "^9.4.0"
 flynt = ">=0.75,<0.77"
 gitspy = "^0"
@@ -80,7 +81,6 @@ sphinxcontrib-programoutput = "^0.17"
 toml = "^0.10.2"
 toml-sort = "^0.20.0"
 vulture = "^2.3"
-docsig = "^0"
 
 [tool.poetry.dev-dependencies]
 bump2version = "^1.0.1"
@@ -92,8 +92,8 @@ pytest-sugar = "^0.9.6"
 pytest-xdist = "^3.1.0"
 restview = "^3.0.0"
 sphinx-toolbox = "^3.2.0"
-tomli-w = "^1.0.0"
 templatest = "^0.7.0"
+tomli-w = "^1.0.0"
 
 [tool.pyaud.audit]
 modules = [
