@@ -14,7 +14,10 @@ from pyaud_plugins._environ import environ as e
 
 @pyaud.plugins.register()
 class Requirements(pyaud.plugins.Fix):
-    """Audit requirements.txt with Pipfile.lock."""
+    """Audit requirements.txt with Pipfile.lock.
+
+    :param name: Name of plugin.
+    """
 
     p2req = "pipfile2req"
     cache_file = e.REQUIREMENTS
@@ -65,7 +68,10 @@ class Requirements(pyaud.plugins.Fix):
 
 @pyaud.plugins.register()
 class Toc(pyaud.plugins.Fix):
-    """Audit docs/<NAME>.rst toc-file."""
+    """Audit docs/<NAME>.rst toc-file.
+
+    :param name: Name of plugin.
+    """
 
     sphinx_apidoc = "sphinx-apidoc"
     cache_file = e.PACKAGE_TOC
@@ -138,6 +144,8 @@ class Whitelist(pyaud.plugins.Fix):
 
     This will consider all unused code an exception so resolve code that
     is not to be excluded from the ``vulture`` search first.
+
+    :param name: Name of plugin.
     """
 
     vulture = "vulture"
