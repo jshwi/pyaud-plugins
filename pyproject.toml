@@ -37,6 +37,10 @@ omit = [
     "pyaud_plugins/__main__.py",
 ]
 
+[tool.docsig]
+check-class = true
+summary = true
+
 [tool.isort]
 ensure_newline_before_comments = true
 force_grid_wrap = 0
