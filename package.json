@@ -1,42 +1,18 @@
 {
-  "name": "pyaud-plugins",
-  "version": "0.9.0",
+  "author": "Stephen Whitlock",
+  "bugs": {
+    "url": "https://github.com/jshwi/pyaud-plugins/issues"
+  },
   "description": "Plugin package for Pyaud",
-  "private": true,
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "prettier": "^2.5.1"
+  },
   "directories": {
     "doc": "docs",
     "test": "tests"
   },
-  "scripts": {
-    "toml:sort": "poetry run pyaud sort-pyproject",
-    "audit": "npm-run-all audit:*",
-    "audit:misc": "npx prettier -c .",
-    "audit:py": "poetry run pyaud audit",
-    "bump:major": "poetry run bump2version major",
-    "bump:minor": "poetry run bump2version minor",
-    "bump:patch": "poetry run bump2version patch",
-    "clean": "poetry run pyaud clean",
-    "deploy:cov": "poetry run pyaud deploy-cov",
-    "deploy:docs": "poetry run pyaud deploy-docs",
-    "format": "npm-run-all format:*",
-    "format:misc": "prettier -w .",
-    "format:py": "npm-run-all format:py:*",
-    "format:py:code": "poetry run pyaud format",
-    "format:py:docs": "poetry run pyaud format-docs",
-    "format:py:str": "poetry run pyaud format-str",
-    "lint": "poetry run pyaud lint",
-    "test": "poetry run pyaud test",
-    "test:doctest": "poetry run pyaud doctest",
-    "test:doctest:package": "poetry run pyaud doctest-package",
-    "test:doctest:readme": "poetry run pyaud doctest-readme",
-    "test:unit": "poetry run pyaud tests",
-    "types": "poetry run pyaud typecheck",
-    "const": "poetry run pyaud const"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jshwi/pyaud-plugins.git"
-  },
+  "homepage": "https://jshwi.github.io/pyaud-plugins/",
   "keywords": [
     "pyaud",
     "plugins",
@@ -44,14 +20,37 @@
     "ci",
     "python"
   ],
-  "author": "Stephen Whitlock",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/jshwi/pyaud-plugins/issues"
+  "name": "pyaud-plugins",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jshwi/pyaud-plugins.git"
   },
-  "homepage": "https://jshwi.github.io/pyaud-plugins/",
-  "devDependencies": {
-    "npm-run-all": "^4.1.5",
-    "prettier": "^2.5.1"
-  }
+  "scripts": {
+    "audit": "npm-run-all audit:*",
+    "audit:misc": "npx prettier -c .",
+    "audit:py": "poetry run pyaud audit",
+    "bump:major": "poetry run bump2version major",
+    "bump:minor": "poetry run bump2version minor",
+    "bump:patch": "poetry run bump2version patch",
+    "clean": "poetry run pyaud clean",
+    "const": "poetry run pyaud const",
+    "format": "npm-run-all format:*",
+    "format:misc": "prettier -w .",
+    "format:py": "npm-run-all format:py:*",
+    "format:py:code": "poetry run pyaud format",
+    "format:py:docs": "poetry run pyaud format-docs",
+    "format:py:str": "poetry run pyaud format-str",
+    "lint": "poetry run pyaud lint",
+    "params": "poetry run pyaud params",
+    "test": "poetry run pyaud test",
+    "test:doctest": "poetry run pyaud doctest",
+    "test:doctest:package": "poetry run pyaud doctest-package",
+    "test:doctest:readme": "poetry run pyaud doctest-readme",
+    "test:unit": "poetry run pyaud tests",
+    "toml:sort": "poetry run pyaud sort-pyproject",
+    "types": "poetry run pyaud typecheck"
+  },
+  "version": "0.9.0"
 }
