@@ -9,6 +9,9 @@ pyaud-plugins
 .. image:: https://github.com/jshwi/pyaud-plugins/actions/workflows/ci.yml/badge.svg
     :target: https://github.com/jshwi/pyaud-plugins/actions/workflows/ci.yml
     :alt: CI
+.. image:: https://results.pre-commit.ci/badge/github/jshwi/pyaud-plugins/master.svg
+   :target: https://results.pre-commit.ci/latest/github/jshwi/pyaud-plugins/master
+   :alt: pre-commit.ci status
 .. image:: https://github.com/jshwi/pyaud-plugins/actions/workflows/codeql-analysis.yml/badge.svg
     :target: https://github.com/jshwi/pyaud-plugins/actions/workflows/codeql-analysis.yml
     :alt: CodeQL
@@ -24,6 +27,9 @@ pyaud-plugins
 .. image:: https://img.shields.io/badge/code%20style-black-000000.svg
     :target: https://github.com/psf/black
     :alt: black
+.. image:: https://img.shields.io/badge/linting-pylint-yellowgreen
+    :target: https://github.com/PyCQA/pylint
+    :alt: pylint
 
 Plugin package for Pyaud
 ------------------------
