@@ -98,7 +98,7 @@ toml = "^0.10.2"
 toml-sort = "^0.20.0"
 vulture = "^2.3"
 
-[tool.poetry.dev-dependencies]
+[tool.poetry.group.dev.dependencies]
 bump2version = "^1.0.1"
 ipython = "^8.6.0"
 pyaud = "^4.0.2"
