@@ -103,7 +103,7 @@ class Toc(pyaud.plugins.Fix):
             contents.extend(file.read_text(e.ENCODING).splitlines())
 
         contents = sorted(
-            [i for i in contents if i.startswith(".. automodule::")]
+            i for i in contents if i.startswith(".. automodule::")
         )
 
         toc_attrs = "   :members:\n   :undoc-members:\n   :show-inheritance:"
@@ -171,7 +171,7 @@ class Whitelist(pyaud.plugins.Fix):
         )
         stdout = self.subprocess[self.vulture].stdout()
         stdout = sorted(
-            [i.replace(str(Path.cwd()) + os.sep, "") for i in stdout]
+            i.replace(str(Path.cwd()) + os.sep, "") for i in stdout
         )
         self._content = "\n".join(stdout) + "\n"
         if self.cache_file.is_file():
