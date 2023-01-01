@@ -18,14 +18,10 @@ line-length = 79
 skip-magic-trailing-comma = true
 
 [tool.constcheck]
-filter = true
-
-[tool.constcheck.ignore_from]
-"pyaud_plugins/_plugins/audit.py" = [
-    'PYCHARM_HOSTED',
-    "True",
-    "doctest",
-    "suppress",
+ignore_strings = [
+    "store",
+    "store_true",
+    "utf-8",
 ]
 
 [tool.coverage.report]
@@ -34,14 +30,28 @@ fail_under = 100
 [tool.coverage.run]
 omit = [
     "whitelist.py",
-    "pyaud_plugins/__main__.py",
 ]
+
+[tool.docsig]
+check-class = true
+summary = true
+
+[tool.isort]
+ensure_newline_before_comments = true
+force_grid_wrap = 0
+include_trailing_comma = true
+line_length = 79
+multi_line_output = 3
+profile = "black"
+use_parentheses = true
 
 [tool.poetry]
 authors = [
     "jshwi <stephen@jshwisolutions.com>",
 ]
 description = "Plugin package for Pyaud"
+documentation = "https://pyaud-plugins.readthedocs.io/en/latest"
+homepage = "https://pypi.org/project/pyaud-plugins/"
 keywords = [
     "pyaud",
     "plugins",
@@ -50,8 +60,12 @@ keywords = [
     "python",
 ]
 license = "MIT"
+maintainers = [
+    "jshwi <stephen@jshwisolutions.com>",
+]
 name = "pyaud-plugins"
 readme = "README.rst"
+repository = "https://github.com/jshwi/pyaud-plugins"
 version = "0.9.0"
 
 [tool.poetry.dependencies]
@@ -97,9 +111,7 @@ templatest = "^0.5.0"
 
 [tool.pyaud.audit]
 modules = [
-    "toc",
-    "whitelist",
-    "sort-pyproject",
+    "files",
     "format",
     "format-docs",
     "format-str",
@@ -115,9 +127,9 @@ modules = [
 
 [tool.pyaud.clean]
 exclude = [
-    "*.egg*",
     ".mypy_cache",
     ".env",
+    "node_modules",
 ]
 
 [tool.pyaud.indexing]
@@ -160,8 +172,8 @@ addopts = [
 filterwarnings = "ignore::DeprecationWarning"
 norecursedirs = [
     "docs",
-    "*.egg-info",
     ".git",
     ".mypy_cache",
     ".idea",
+    ".pytest_cache"
 ]
