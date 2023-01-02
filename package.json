@@ -36,8 +36,6 @@
     "bump:patch": "poetry run bump2version patch",
     "clean": "poetry run pyaud clean",
     "const": "poetry run pyaud const",
-    "deploy:cov": "poetry run pyaud deploy-cov",
-    "deploy:docs": "poetry run pyaud deploy-docs",
     "format": "npm-run-all format:*",
     "format:misc": "prettier -w .",
     "format:py": "npm-run-all format:py:*",
