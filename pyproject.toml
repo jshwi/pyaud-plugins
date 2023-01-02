@@ -1,7 +1,7 @@
 [build-system]
 build-backend = "poetry.core.masonry.api"
 requires = [
-    "poetry-core>=1.0.0",
+  "poetry-core>=1.0.0"
 ]
 
 [tool.black]
@@ -22,17 +22,17 @@ ignore-words-list = "astroid,dedented"
 
 [tool.constcheck]
 ignore_strings = [
-    "store",
-    "store_true",
-    "utf-8",
+  "store",
+  "store_true",
+  "utf-8"
 ]
 
 [tool.constcheck.ignore_from]
 "pyaud_plugins/_plugins/audit.py" = [
-    'PYCHARM_HOSTED',
-    "True",
-    "doctest",
-    "suppress",
+  "True",
+  "doctest",
+  "suppress",
+  'PYCHARM_HOSTED'
 ]
 
 [tool.coverage.report]
@@ -40,7 +40,7 @@ fail_under = 100
 
 [tool.coverage.run]
 omit = [
-    "whitelist.py",
+  "whitelist.py"
 ]
 
 [tool.docsig]
@@ -58,21 +58,21 @@ use_parentheses = true
 
 [tool.poetry]
 authors = [
-    "jshwi <stephen@jshwisolutions.com>",
+  "jshwi <stephen@jshwisolutions.com>"
 ]
 description = "Plugin package for Pyaud"
 documentation = "https://pyaud-plugins.readthedocs.io/en/latest"
 homepage = "https://pypi.org/project/pyaud-plugins/"
 keywords = [
-    "pyaud",
-    "plugins",
-    "audit",
-    "ci",
-    "python",
+  "audit",
+  "ci",
+  "plugins",
+  "pyaud",
+  "python"
 ]
 license = "MIT"
 maintainers = [
-    "jshwi <stephen@jshwisolutions.com>",
+  "jshwi <stephen@jshwisolutions.com>"
 ]
 name = "pyaud-plugins"
 readme = "README.rst"
@@ -123,31 +123,31 @@ tomli-w = "^1.0.0"
 
 [tool.pyaud.audit]
 modules = [
-    "files",
-    "format",
-    "format-docs",
-    "format-str",
-    "imports",
-    "typecheck",
-    "unused",
-    "lint",
-    "const",
-    "params",
-    "test",
-    "docs",
+  "const",
+  "docs",
+  "files",
+  "format",
+  "format-docs",
+  "format-str",
+  "imports",
+  "lint",
+  "params",
+  "test",
+  "typecheck",
+  "unused"
 ]
 
 [tool.pyaud.clean]
 exclude = [
-    ".mypy_cache",
-    ".env",
-    "node_modules",
+  ".env",
+  ".mypy_cache",
+  "node_modules"
 ]
 
 [tool.pyaud.indexing]
 exclude = [
-    "whitelist.py",
-    "conf.py",
+  "conf.py",
+  "whitelist.py"
 ]
 
 [tool.pyaud.logging]
@@ -166,26 +166,26 @@ when = "d"
 
 [tool.pyaud.logging.root]
 handlers = [
-    "default",
+  "default"
 ]
 level = "DEBUG"
 propagate = false
 
 [tool.pytest.ini_options]
 addopts = [
-    "--durations=5",
-    "-vv",
-    "--color=yes",
-    "--cov-report",
-    "term-missing",
-    "-n",
-    "auto"
+  "--color=yes",
+  "--cov-report",
+  "--durations=5",
+  "-n",
+  "-vv",
+  "auto",
+  "term-missing"
 ]
 filterwarnings = "ignore::DeprecationWarning"
 norecursedirs = [
-    "docs",
-    ".git",
-    ".mypy_cache",
-    ".idea",
-    ".pytest_cache"
+  ".git",
+  ".idea",
+  ".mypy_cache",
+  ".pytest_cache",
+  "docs"
 ]
