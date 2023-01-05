@@ -1198,7 +1198,7 @@ md = ["cmarkgfm (>=0.8.0)"]
 
 [[package]]
 name = "readmetester"
-version = "2.3.0"
+version = "2.4.0"
 description = "Parse, test, and assert RST code-blocks"
 category = "main"
 optional = false
@@ -1207,7 +1207,7 @@ python-versions = ">=3.8,<4.0"
 [package.dependencies]
 object-colors = ">=2.0.0,<3.0.0"
 Pygments = ">=2.8.1,<3.0.0"
-pyproject-parser = ">=0.4.3,<0.5.0"
+pyproject-parser = ">=0.4.3,<0.8.0"
 restructuredtext-lint = ">=1.4.0,<2.0.0"
 
 [[package]]
@@ -2378,8 +2378,8 @@ readme-renderer = [
     {file = "readme_renderer-37.3.tar.gz", hash = "sha256:cd653186dfc73055656f090f227f5cb22a046d7f71a841dfa305f55c9a513273"},
 ]
 readmetester = [
-    {file = "readmetester-2.3.0-py3-none-any.whl", hash = "sha256:eea55f19ae4ded34c0250f69eae9f569d284f5cb950922dbf3e0dc25b46ee041"},
-    {file = "readmetester-2.3.0.tar.gz", hash = "sha256:2c310b29f4d099e71fc7b43c1885bfb5ff357941c18d0dcf5832a33924545887"},
+    {file = "readmetester-2.4.0-py3-none-any.whl", hash = "sha256:01aba0b9a99f676e193ae42304f19d762a1d5a8147a6a145739f11708ccd3ef6"},
+    {file = "readmetester-2.4.0.tar.gz", hash = "sha256:1a8352f4827a8d4134eb49dca7a91b50bf6470d39e8cca6c1ae1ca43ea436e96"},
 ]
 requests = [
     {file = "requests-2.28.1-py3-none-any.whl", hash = "sha256:8fefa2a1a1365bf5520aac41836fbee479da67864514bdb821f31ce07ce65349"},
