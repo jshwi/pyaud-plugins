@@ -77,7 +77,7 @@ repository = "https://github.com/jshwi/pyaud-plugins"
 version = "0.10.0"
 
 [tool.poetry.dependencies]
-Sphinx = "^4.3.2"
+Sphinx = ">=4.3.2,<7.0.0"
 appdirs = "^1.4.4"
 black = ">=21.12,<23.0"
 codecov = "^2.1.12"
