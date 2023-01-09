@@ -1198,7 +1198,7 @@ md = ["cmarkgfm (>=0.8.0)"]
 
 [[package]]
 name = "readmetester"
-version = "2.4.0"
+version = "2.4.1"
 description = "Parse, test, and assert RST code-blocks"
 category = "main"
 optional = false
@@ -2376,8 +2376,8 @@ readme-renderer = [
     {file = "readme_renderer-37.3.tar.gz", hash = "sha256:cd653186dfc73055656f090f227f5cb22a046d7f71a841dfa305f55c9a513273"},
 ]
 readmetester = [
-    {file = "readmetester-2.4.0-py3-none-any.whl", hash = "sha256:01aba0b9a99f676e193ae42304f19d762a1d5a8147a6a145739f11708ccd3ef6"},
-    {file = "readmetester-2.4.0.tar.gz", hash = "sha256:1a8352f4827a8d4134eb49dca7a91b50bf6470d39e8cca6c1ae1ca43ea436e96"},
+    {file = "readmetester-2.4.1-py3-none-any.whl", hash = "sha256:f471b3180056171dd496e70ef64a63194b341c5eb33ee85c2d9121b885b80ea1"},
+    {file = "readmetester-2.4.1.tar.gz", hash = "sha256:10851e41908a4e1a28c2d1f09a74f8bc2e079529c506d5a5683bb9a189449382"},
 ]
 requests = [
     {file = "requests-2.28.1-py3-none-any.whl", hash = "sha256:8fefa2a1a1365bf5520aac41836fbee479da67864514bdb821f31ce07ce65349"},
