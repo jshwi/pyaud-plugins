@@ -79,10 +79,12 @@ class Imports(pyaud.plugins.FixFile):
     def fail_condition(self) -> bool | None:
         return self.result != self.content
 
-    def fix(self, file: Path, **kwargs: bool) -> None:
+    def fix(self, file: Path, **kwargs: bool) -> int:
         print(f"Fixed {file.relative_to(Path.cwd())}")
 
         # replace original file's contents with the temp file post
         # ``isort`` and ``Black``
         with open(file, "w", encoding=e.ENCODING) as fout:
             fout.write(self.result)
+
+        return 0
