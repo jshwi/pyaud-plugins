@@ -30,6 +30,9 @@ pyaud-plugins
 .. image:: https://img.shields.io/badge/linting-pylint-yellowgreen
     :target: https://github.com/PyCQA/pylint
     :alt: pylint
+.. image:: https://snyk.io/test/github/jshwi/pyaud-plugins/badge.svg
+    :target: https://snyk.io/test/github/jshwi/pyaud-plugins/badge.svg
+    :alt: Known Vulnerabilities
 
 Plugin package for Pyaud
 ------------------------
