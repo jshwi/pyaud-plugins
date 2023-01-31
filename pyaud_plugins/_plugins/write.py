@@ -3,6 +3,7 @@ pyaud_plugins._plugins.write
 ============================
 """
 import os
+import re
 import tempfile
 import typing as t
 from pathlib import Path
@@ -10,6 +11,12 @@ from pathlib import Path
 import pyaud
 
 from pyaud_plugins._environ import environ as e
+
+BANNER = """\
+<!--
+This file is auto-generated and any changes made to it will be overwritten
+-->
+"""
 
 
 @pyaud.plugins.register()
@@ -203,4 +210,72 @@ class SortPyproject(pyaud.plugins.Fix):
     def fix(self, *args: str, **kwargs: bool) -> int:
         return self.subprocess[self.toml_sort].call(
             e.PYPROJECT, "--in-place", "--all", *args, **kwargs
+        )
+
+
+@pyaud.plugins.register()
+class AboutTests(pyaud.plugins.Fix):
+    """Check tests README is up-to-date.
+
+    :param name: Name of this plugin.
+    """
+
+    TEST_RST = """
+tests
+=====
+
+.. automodule:: tests._test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+"""
+
+    sphinx_build = "sphinx-build"
+    cache_file = Path("tests") / "TESTS.md"
+
+    def __init__(self, name: str) -> None:
+        super().__init__(name)
+        self._content = ""
+
+    @property
+    def exe(self) -> t.List[str]:
+        return [self.sphinx_build]
+
+    def audit(self, *args: str, **kwargs: bool) -> int:
+        self._content = BANNER
+        docs = Path.cwd() / "docs"
+        builddir = docs / "_build"
+        tests_rst = docs / "tests.rst"
+        unformatted_md = builddir / "markdown" / "tests.md"
+        tests_rst.write_text(self.TEST_RST)
+        self.subprocess[self.sphinx_build].call(
+            "-M", "markdown", docs, builddir, file=os.devnull, *args, **kwargs
+        )
+        tests_rst.unlink()
+        lines = unformatted_md.read_text(encoding="utf-8").splitlines()
+        skip_lines = False
+        for line in lines:
+            match = re.match(r"(.*)tests\._test\.test_(.*)\((.*)", line)
+            if match:
+                skip_lines = False
+                self._content += "{}{}\n\n".format(
+                    match.group(1),
+                    match.group(2).capitalize().replace("_", " "),
+                )
+            elif line.startswith("* **"):
+                skip_lines = True
+            elif not skip_lines:
+                self._content += f"{line}\n"
+
+        if self.cache_file.is_file():
+            return int(
+                self.cache_file.read_text(encoding="utf-8") != self._content
+            )
+
+        return 1
+
+    def fix(self, *args: str, **kwargs: bool) -> int:
+        self.cache_file.write_text(self._content, encoding="utf-8")
+        return int(
+            self.cache_file.read_text(encoding="utf-8") != self._content
         )

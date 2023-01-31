@@ -757,3 +757,44 @@ def test_get_branch_none(monkeypatch: pytest.MonkeyPatch) -> None:
         "pyaud_plugins._plugins.deprecate.git.stdout", lambda: []
     )
     assert pplugins._plugins.deprecate.branch() is None
+
+
+def test_about_tests(
+    monkeypatch: pytest.MonkeyPatch,
+    main: MockMainType,
+    make_tree: MakeTreeType,
+    nocolorcapsys: NoColorCapsys,
+) -> None:
+    """Test test README is formatted correctly.
+
+    :param monkeypatch: Mock patch environment and attributes.
+    :param main: Patch package entry point.
+    :param make_tree: Create directory tree from dict mapping.
+    :param nocolorcapsys: Capture system output while stripping ANSI
+        color codes.
+    """
+    about_tests = "about-tests"
+    path = Path.cwd() / ppe.ABOUT_TESTS
+    markdown_file = Path.cwd() / ppe.DOCS / "_build" / "markdown" / "tests.md"
+    monkeypatch.setattr(
+        "pyaud_plugins._plugins.write.AboutTests.cache_file", path
+    )
+    template = templatest.templates.registered.getbyname("test-about-tests")
+    make_tree(
+        Path.cwd(),
+        {ppe.DOCS.name: {ppe.DOCS_CONF.name: None}, ppe.TESTS.name: {}},
+    )
+
+    def _call(*_: t.Any, **__: t.Any) -> None:
+        markdown_file.parent.mkdir(exist_ok=True, parents=True)
+        markdown_file.write_text(template.template)
+
+    monkeypatch.setattr(SP_CALL, _call)
+    with pytest.raises(pyaud.exceptions.AuditError):
+        main(about_tests)
+
+    main(about_tests, FLAG_FIX)
+    assert NO_ISSUES in nocolorcapsys.stdout()
+    assert path.read_text(ppe.ENCODING) == template.expected
+    main(about_tests, FLAG_FIX)
+    assert NO_ISSUES in nocolorcapsys.stdout()

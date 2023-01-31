@@ -176,6 +176,14 @@ class _Environ(_Env):
                 "PYPROJECT", default=_Path("pyproject.toml")
             )
 
+    @property
+    def ABOUT_TESTS(self):
+        """Location of the about tests README."""
+        with self.prefixed(self.PREFIX):
+            return _Path.cwd() / self.path(
+                "ABOUT_TESTS", default=self.TESTS / "TESTS.md"
+            )
+
 
 #: package environment, both parsed from .env file (with set defaults
 #: for missing keys), and static values
