@@ -184,6 +184,14 @@ class _Environ(_Env):
                 "ABOUT_TESTS", default=self.TESTS / "TESTS.md"
             )
 
+    @property
+    def COMMIT_POLICY(self):
+        """Location of the commit policy."""
+        with self.prefixed(self.PREFIX):
+            return _Path.cwd() / self.path(
+                "ABOUT_TESTS", default=_Path(".github") / "COMMIT_POLICY.md"
+            )
+
 
 #: package environment, both parsed from .env file (with set defaults
 #: for missing keys), and static values

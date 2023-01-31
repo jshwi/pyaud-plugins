@@ -9,6 +9,7 @@ import typing as t
 from pathlib import Path
 
 import pyaud
+import yaml
 
 from pyaud_plugins._environ import environ as e
 
@@ -266,6 +267,67 @@ tests
                 skip_lines = True
             elif not skip_lines:
                 self._content += f"{line}\n"
+
+        if self.cache_file.is_file():
+            return int(
+                self.cache_file.read_text(encoding="utf-8") != self._content
+            )
+
+        return 1
+
+    def fix(self, *args: str, **kwargs: bool) -> int:
+        self.cache_file.write_text(self._content, encoding="utf-8")
+        return int(
+            self.cache_file.read_text(encoding="utf-8") != self._content
+        )
+
+
+@pyaud.plugins.register()
+class CommitPolicy(pyaud.plugins.Fix):
+    """Test commit policy is up to date.
+
+    :param name: Name of this plugin.
+    """
+
+    cache_file = Path(".github") / "COMMIT_POLICY.md"
+
+    def __init__(self, name: str) -> None:
+        super().__init__(name)
+        self._content = ""
+
+    def audit(self, *args: str, **kwargs: bool) -> int:
+        conform_yaml = Path.cwd() / ".conform.yaml"
+        if not conform_yaml.is_file():
+            return 0
+
+        self._content = BANNER
+        self._content += "# Commit Policy\n\n"
+        commit_policy = {}
+        for policy in yaml.safe_load(conform_yaml.read_text(encoding="utf-8"))[
+            "policies"
+        ]:
+            if policy["type"] == "commit":
+                commit_policy.update(policy["spec"])
+
+        for header, obj in commit_policy.items():
+            self._content += f"## {header.capitalize()}\n\n"
+            if not isinstance(obj, dict):
+                self._content += f"{obj}\n\n"
+            else:
+                for key, value in obj.items():
+                    if isinstance(value, (bool, int, str)):
+                        match = [
+                            i for i in re.split("([A-Z][^A-Z]*)", key) if i
+                        ]
+                        if match:
+                            key = " ".join(match).capitalize()
+                        value = f"{key}: {value}"
+                    else:
+                        if isinstance(value, list):
+                            value = "### {}\n\n- {}".format(
+                                key.capitalize(), "\n- ".join(value)
+                            )
+                    self._content += f"{value}\n\n"
 
         if self.cache_file.is_file():
             return int(

@@ -798,3 +798,38 @@ def test_about_tests(
     assert path.read_text(ppe.ENCODING) == template.expected
     main(about_tests, FLAG_FIX)
     assert NO_ISSUES in nocolorcapsys.stdout()
+
+
+def test_commit_policy(
+    monkeypatch: pytest.MonkeyPatch,
+    main: MockMainType,
+    make_tree: MakeTreeType,
+    nocolorcapsys: NoColorCapsys,
+) -> None:
+    """Test commit policy generation from .conform.yaml.
+
+    :param monkeypatch: Mock patch environment and attributes.
+    :param main: Patch package entry point.
+    :param make_tree: Create directory tree from dict mapping.
+    :param nocolorcapsys: Capture system output while stripping ANSI
+        color codes.
+    """
+    commit_policy = "commit-policy"
+    path = Path.cwd() / ppe.COMMIT_POLICY
+    conform_yaml = Path.cwd() / ".conform.yaml"
+    monkeypatch.setattr(
+        "pyaud_plugins._plugins.write.CommitPolicy.cache_file", path
+    )
+    template = templatest.templates.registered.getbyname("test-commit-policy")
+    make_tree(Path.cwd(), {".github": {}})
+
+    main(commit_policy, FLAG_FIX)
+    conform_yaml.write_text(template.template)
+    with pytest.raises(pyaud.exceptions.AuditError):
+        main(commit_policy)
+
+    main(commit_policy, FLAG_FIX)
+    assert NO_ISSUES in nocolorcapsys.stdout()
+    assert path.read_text(ppe.ENCODING) == template.expected
+    main(commit_policy, FLAG_FIX)
+    assert NO_ISSUES in nocolorcapsys.stdout()
