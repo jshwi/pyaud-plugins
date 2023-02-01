@@ -79,7 +79,7 @@ version = "0.11.0"
 [tool.poetry.dependencies]
 Sphinx = ">=4.3.2,<7.0.0"
 appdirs = "^1.4.4"
-black = ">=21.12,<23.0"
+black = ">=21.12,<24.0"
 codecov = "^2.1.12"
 constcheck = "^0"
 coverage = ">=6.2,<8.0"
