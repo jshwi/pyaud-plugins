@@ -106,7 +106,6 @@ class Toc(pyaud.plugins.Fix):
             if len(f.name.split(".")) > 2
         ]
         for file in nested:
-
             # extract the data from the nested toc
             contents.extend(file.read_text(e.ENCODING).splitlines())
 
