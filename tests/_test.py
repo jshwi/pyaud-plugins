@@ -47,6 +47,7 @@ from . import (
     TESTS,
     TOC,
     TOKEN,
+    TOOL,
     TYPECHECK,
     WHITELIST,
     MakeTreeType,
@@ -638,14 +639,14 @@ def test_call_sort_pyproject(
     )
     path = Path.cwd() / FILE
     pyaud.files.append(path)
-    test_obj = {"tool": {"b_package": {"key1": "value1"}}}
+    test_obj = {TOOL: {"b_package": {"key1": "value1"}}}
     with open(ppe.PYPROJECT, "wb") as fout:
         tomli_w.dump(test_obj, fout)
 
     main("sort-pyproject")
     assert NO_ISSUES in nocolorcapsys.stdout()
     test_obj = {
-        "tool": {
+        TOOL: {
             "b_package": {"key2": "value2"},
             "a_package": {"key3": "value3"},
         }

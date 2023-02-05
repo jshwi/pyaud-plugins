@@ -69,6 +69,7 @@ TESTS = "tests"
 MODULES_RST = "modules.rst"
 TEST_FORMAT = "test-format"
 CHANGE = "change"
+TOOL = "tool"
 
 
 git = Git()
