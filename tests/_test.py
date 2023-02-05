@@ -4,7 +4,6 @@ tests._test
 """
 # pylint: disable=too-many-lines,too-many-arguments,cell-var-from-loop
 # pylint: disable=too-few-public-methods,protected-access,no-member
-import os
 import typing as t
 from pathlib import Path
 
@@ -20,9 +19,6 @@ from . import (
     CHANGE,
     CONST,
     COVERAGE,
-    DEPLOY,
-    DEPLOY_COV,
-    DEPLOY_DOCS,
     DOCTEST,
     DOCTEST_PACKAGE,
     DOCTEST_README,
@@ -33,8 +29,6 @@ from . import (
     FORMAT,
     GIT,
     INIT,
-    INIT_REMOTE,
-    INITIAL_COMMIT,
     NO_ISSUES,
     NO_TESTS_FOUND,
     PACKAGE,
@@ -50,7 +44,6 @@ from . import (
     TEST,
     TESTS,
     TOC,
-    TOKEN,
     TOOL,
     TYPECHECK,
     WHITELIST,
@@ -61,7 +54,6 @@ from . import (
     MockSPOutputType,
     MockSPPrintCalledType,
     NoColorCapsys,
-    git,
     templates,
 )
 
@@ -329,176 +321,6 @@ def test_pycharm_hosted(
     assert "\x1b[0m" in capsys.readouterr()[0]
 
 
-@pytest.mark.usefixtures(INIT_REMOTE)
-def test_deploy_not_master(
-    main: MockMainType,
-    monkeypatch: pytest.MonkeyPatch,
-    nocolorcapsys: NoColorCapsys,
-) -> None:
-    """Test that deployment is skipped when branch is not ``master``.
-
-    :param main: Patch package entry point.
-    :param monkeypatch: Mock patch environment and attributes.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
-    """
-    monkeypatch.setattr(
-        "pyaud_plugins._plugins.deprecate.branch", lambda: "not_master"
-    )
-    main(DEPLOY_DOCS)
-    assert "Documentation not for master" in nocolorcapsys.stdout()
-
-
-@pytest.mark.usefixtures(INIT_REMOTE)
-def test_deploy_master_not_set(
-    main: MockMainType,
-    monkeypatch: pytest.MonkeyPatch,
-    nocolorcapsys: NoColorCapsys,
-) -> None:
-    """Test correct notification is displayed.
-
-    Test for when essential environment variables are not set in
-    ``master``.
-
-    :param main: Patch package entry point.
-    :param monkeypatch: Mock patch environment and attributes.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
-    """
-    monkeypatch.setenv("PYAUD_GH_NAME", "")
-    monkeypatch.setenv("PYAUD_GH_EMAIL", "")
-    monkeypatch.setenv("PYAUD_GH_TOKEN", "")
-    monkeypatch.delenv("PYAUD_GH_NAME")
-    monkeypatch.delenv("PYAUD_GH_EMAIL")
-    monkeypatch.delenv("PYAUD_GH_TOKEN")
-    main(DEPLOY_DOCS)
-    out = nocolorcapsys.stdout()
-    assert "The following is not set:" in out
-    assert "- PYAUD_GH_NAME" in out
-    assert "- PYAUD_GH_EMAIL" in out
-    assert "- PYAUD_GH_TOKEN" in out
-
-
-@pytest.mark.usefixtures(INIT_REMOTE)
-def test_deploy_master(
-    main: MockMainType,
-    monkeypatch: pytest.MonkeyPatch,
-    nocolorcapsys: NoColorCapsys,
-) -> None:
-    """Test docs are properly deployed.
-
-    Test for when environment variables are set and checked out at
-    ``master``.
-
-    :param main: Patch package entry point.
-    :param monkeypatch: Mock patch environment and attributes.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
-    """
-
-    def _docs(*_: str, **__: int) -> int:
-        Path(Path.cwd() / ppe.BUILDDIR / "html").mkdir(parents=True)
-        return 0
-
-    mock_plugins = pyaud.plugins.mapping()
-    mock_plugins[ppe.DOCS.name] = _docs  # type: ignore
-    monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mock_plugins)
-    ppe.README_RST.touch()  # force stash
-    git.add(".")
-    git.commit("-m", INITIAL_COMMIT, file=os.devnull)
-    ppe.README_RST.write_text("package\n====\n", ppe.ENCODING)
-    main(DEPLOY_DOCS, FLAG_FIX)
-    out = nocolorcapsys.stdout()
-    assert "Documentation Successfully deployed" in out
-    main(DEPLOY_DOCS, FLAG_FIX)
-    out = nocolorcapsys.stdout()
-    assert "No difference between local branch and remote" in out
-
-
-@pytest.mark.parametrize(
-    "rounds,expected",
-    [
-        (1, "Pushing updated documentation"),
-        (2, "No difference between local branch and remote"),
-    ],
-    ids=["stashed", "multi"],
-)
-@pytest.mark.usefixtures(INIT_REMOTE)
-def test_deploy_master_param(
-    main: MockMainType,
-    monkeypatch: pytest.MonkeyPatch,
-    nocolorcapsys: NoColorCapsys,
-    rounds: int,
-    expected: str,
-) -> None:
-    """Check that nothing happens when not checkout at master.
-
-    :param main: Patch package entry point.
-    :param monkeypatch: Mock patch environment and attributes.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
-    :param rounds: How many times ``make_deploy_docs`` needs to be run.
-    :param expected: Expected stdout result.
-    """
-
-    def _docs(*_: str, **__: bool) -> int:
-        Path(ppe.BUILDDIR / "html").mkdir(parents=True)
-        return 0
-
-    mock_plugins = pyaud.plugins.mapping()
-    mock_plugins[ppe.DOCS.name] = _docs  # type: ignore
-    monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mock_plugins)
-    ppe.README_RST.touch()
-    Path(Path.cwd(), FILE).touch()
-    git.add(".", file=os.devnull)
-    git.commit("-m", INITIAL_COMMIT, file=os.devnull)
-    for _ in range(rounds):
-        main(DEPLOY_DOCS, FLAG_FIX)
-
-    assert expected in nocolorcapsys.stdout()
-
-
-@pytest.mark.parametrize(
-    "file,env,expected",
-    [
-        (ppe.COVERAGE_XML.name, "CODECOV_TOKEN", "<Subprocess (codecov)>"),
-        (ppe.COVERAGE_XML.name, "NOT_CODECOV_TOKEN", "CODECOV_TOKEN not set"),
-        (ppe.WHITELIST.name, "CODECOV_TOKEN", "No coverage report found"),
-        (ppe.WHITELIST.name, "NOT_CODECOV_TOKEN", "No coverage report found"),
-    ],
-    ids=["file-set", "file-not-set", "no-file-set", "no-file-not-set"],
-)
-def test_deploy_cov_token(
-    main: MockMainType,
-    monkeypatch: pytest.MonkeyPatch,
-    nocolorcapsys: NoColorCapsys,
-    patch_sp_print_called: MockSPPrintCalledType,
-    file: Path,
-    env: str,
-    expected: str,
-) -> None:
-    """Test ``pyaud deploy-cov`` token.
-
-    Test when ``CODECOV_TOKEN`` is set and not set and a coverage.xml
-    file exists.
-
-    :param main: Patch package entry point.
-    :param monkeypatch: Mock patch environment and attributes.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
-    :param patch_sp_print_called: Patch ``Subprocess.call`` to only
-        announce what is called.
-    :param file: File to create.
-    :param env: Environment variable to set.
-    :param expected: Expected result from stdout.
-    """
-    Path(Path.cwd() / file).touch()
-    patch_sp_print_called()
-    monkeypatch.setenv(env, TOKEN)
-    main(DEPLOY_COV)
-    assert expected in nocolorcapsys.stdout()
-
-
 def test_download_missing_stubs(
     monkeypatch: pytest.MonkeyPatch, main: MockMainType
 ) -> None:
@@ -666,7 +488,6 @@ def test_call_sort_pyproject(
     "module,expected",
     [
         (DOCTEST_PACKAGE, "<Subprocess (sphinx-build)> -M doctest"),
-        (README, "<Subprocess (readmetester)>"),
         (CONST, "<Subprocess (constcheck)>"),
         (TYPECHECK, "<Subprocess (mypy)> --ignore-missing-imports"),
         (FORMAT, "<Subprocess (black)>"),
@@ -699,7 +520,6 @@ def test_action(
 @pytest.mark.parametrize(
     "module,plugins",
     [
-        (DEPLOY, [DEPLOY_COV, DEPLOY_DOCS]),
         (FILES, [REQUIREMENTS, TOC, WHITELIST]),
         (DOCTEST, [DOCTEST_PACKAGE, DOCTEST_README]),
         (TEST, [DOCTEST, COVERAGE]),
@@ -751,17 +571,6 @@ def test_readme_replace() -> None:
         assert f"{readme}\n{readme_underline}" in path.read_text(ppe.ENCODING)
 
     assert f"{repo}\n{repo_underline}" in path.read_text(ppe.ENCODING)
-
-
-def test_get_branch_none(monkeypatch: pytest.MonkeyPatch) -> None:
-    """Test that ``branch`` returns None.
-
-    :param monkeypatch: Mock patch environment and attributes.
-    """
-    monkeypatch.setattr(
-        "pyaud_plugins._plugins.deprecate.git.stdout", lambda: []
-    )
-    assert pplugins._plugins.deprecate.branch() is None
 
 
 def test_about_tests(

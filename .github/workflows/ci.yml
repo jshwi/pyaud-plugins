@@ -13,10 +13,6 @@ jobs:
       -python${{ matrix.python-version }}
       -node@${{ matrix.node-version }}
     runs-on: ${{ matrix.os }}
-    env:
-      PYAUD_GH_NAME: jshwi
-      PYAUD_GH_EMAIL: stephen@jshwisolutions.com
-      PYAUD_GH_TOKEN: ${{ secrets.PYAUD_GH_TOKEN }}
     strategy:
       matrix:
         python-version:

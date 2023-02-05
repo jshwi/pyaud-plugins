@@ -183,10 +183,7 @@ def main():
 """
 BEFORE_ISORT = (
     "from . import (\n"
-    "    GH_EMAIL,\n"
-    "    GH_TOKEN,\n"
     "    REAL_REPe,\n"
-    "    GH_NAME,\n"
     "    FILES,\n"
     "    REPO,\n"
     "    files,\n"

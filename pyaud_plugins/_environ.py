@@ -21,29 +21,11 @@ class _Environ(_Env):
         return "PYAUD_"
 
     @property
-    def REPO(self) -> str:
-        """The name of the repo that this is being run in."""
-        return _Path.cwd().name
-
-    @property
-    def GITHUB_REPOSITORY_OWNER(self) -> str | None:
-        """Env variable which may exist in a GitHub workflow."""
-        return self.str("GITHUB_REPOSITORY_OWNER", default=None)
-
-    @property
     def WHITELIST(self) -> _Path:
         """File for allowed "unused" code (usually false-positives)."""
         with self.prefixed(self.PREFIX):
             return _Path.cwd() / self.path(
                 "WHITELIST", default=_Path("whitelist.py")
-            )
-
-    @property
-    def COVERAGE_XML(self) -> _Path:
-        """Location to store coverage.xml file."""
-        with self.prefixed(self.PREFIX):
-            return _Path.cwd() / self.path(
-                "COVERAGE_XML", default=_Path("coverage.xml")
             )
 
     @property
@@ -69,41 +51,6 @@ class _Environ(_Env):
             )
 
     @property
-    def GH_NAME(self) -> str | None:
-        """Username of GH user."""
-        with self.prefixed(self.PREFIX):
-            return self.str("GH_NAME", default=self.GITHUB_REPOSITORY_OWNER)
-
-    @property
-    def GH_EMAIL(self) -> str | None:
-        """Email of GH user."""
-        with self.prefixed(self.PREFIX):
-            return self.str("GH_EMAIL", default=None)
-
-    @property
-    def GH_TOKEN(self) -> str | None:
-        """Authentication token of GH user."""
-        with self.prefixed(self.PREFIX):
-            return self.str("GH_TOKEN", default=None)
-
-    @property
-    def CODECOV_TOKEN(self) -> str | None:
-        """Authentication token for codecov.io."""
-        return self.str("CODECOV_TOKEN", default=None)
-
-    @property
-    def GH_REMOTE(self) -> str | None:
-        """URL of repository remote."""
-        default = None
-        if all([self.GH_NAME, self.GH_EMAIL, self.GH_TOKEN]):
-            default = "https://{0}:{1}@github.com/{0}/{2}.git".format(
-                self.GH_NAME, self.GH_TOKEN, self.REPO
-            )
-
-        with self.prefixed(self.PREFIX):
-            return self.str("GH_REMOTE", default=default)
-
-    @property
     def ENCODING(self) -> str:
         """Default encoding."""
         with self.prefixed(self.PREFIX):
@@ -123,14 +70,6 @@ class _Environ(_Env):
         with self.prefixed(self.PREFIX):
             return _Path.cwd() / self.path(
                 "PACKAGE_TOC", default=self.DOCS / f"{self.PACKAGE_NAME}.rst"
-            )
-
-    @property
-    def DOCS_HTML(self) -> _Path:
-        """Location of the user's html docs."""
-        with self.prefixed(self.PREFIX):
-            return _Path.cwd() / self.path(
-                "DOCS_HTML", default=self.BUILDDIR / "html"
             )
 
     @property

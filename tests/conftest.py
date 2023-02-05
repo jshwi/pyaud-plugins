@@ -20,15 +20,9 @@ from pyaud.__main__ import main
 # noinspection PyProtectedMember
 from pyaud._locations import AppFiles
 
-from pyaud_plugins import environ as ppe
-
 from . import (
     DEBUG,
-    GH_EMAIL,
-    GH_NAME,
-    INIT_REMOTE,
     LOGGING,
-    TOKEN,
     MakeTreeType,
     MockCallStatusType,
     MockFuncType,
@@ -76,7 +70,6 @@ def fixture_mock_environment(
     # load generic env variables so as to avoid a KeyError and override
     # relevant variables for test environment
     monkeypatch.setenv("HOME", str(tmp_path))
-    monkeypatch.setenv("CODECOV_SLUG", f"{GH_NAME}/{MOCK_PACKAGE}")
 
     # load plugins dir
     # ================
@@ -105,12 +98,6 @@ def fixture_mock_environment(
     # load default key-value pairs
     # ============================
     # monkeypatch implemented on prefixes and override other
-    monkeypatch.setenv("PYAUD_GH_NAME", GH_NAME)
-    monkeypatch.setenv("PYAUD_GH_EMAIL", GH_EMAIL)
-    monkeypatch.setenv("PYAUD_GH_TOKEN", TOKEN)
-    monkeypatch.setenv("CODECOV_TOKEN", "")
-    monkeypatch.delenv("CODECOV_TOKEN")
-    monkeypatch.setenv("PYAUD_GH_REMOTE", str(Path.home() / "origin.git"))
     monkeypatch.setenv(
         "PYAUD_DATADIR", str(Path.home() / ".local" / "share" / pyaud.__name__)
     )
@@ -150,7 +137,6 @@ def fixture_mock_environment(
     config = ConfigParser(default_section="")
     config.read_dict(
         {
-            "user": {"name": GH_NAME, "email": GH_EMAIL},
             "advice": {"detachedHead": "false"},
             "init": {"defaultBranch": "master"},
         }
@@ -291,13 +277,6 @@ def fixture_make_tree() -> MakeTreeType:
                 fullpath.touch()
 
     return _make_tree
-
-
-@pytest.fixture(name=INIT_REMOTE)
-def fixture_init_remote() -> None:
-    """Initialize local "remote origin"."""
-    git.init("--bare", ppe.GH_REMOTE, file=os.devnull)
-    git.remote("add", "origin", "origin", file=os.devnull)
 
 
 @pytest.fixture(name="patch_sp_print_called")
