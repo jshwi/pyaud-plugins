@@ -29,7 +29,6 @@ from . import (
     MockMainType,
     MockSPCallNullType,
     MockSPCallType,
-    MockSPOutputType,
     MockSPPrintCalledType,
     NoColorCapsys,
     git,
@@ -233,31 +232,6 @@ def fixture_patch_sp_call(monkeypatch: pytest.MonkeyPatch) -> MockSPCallType:
         monkeypatch.setattr("spall.Subprocess.call", call)
 
     return _patch_sp_call
-
-
-@pytest.fixture(name="patch_sp_output")
-def fixture_patch_sp_output(patch_sp_call: MockSPCallType) -> MockSPOutputType:
-    """Patch ``Subprocess``.
-
-    Return test strings to ``self.stdout``.
-
-    :param patch_sp_call: Mock ``Subprocess.call``to print the command
-        that is being run.
-    :return: Function for using this fixture.
-    """
-
-    def _patch_sp_output(*stdout: str) -> None:
-        _stdout = list(stdout)
-
-        def _call(self, *_: str, **__: bool) -> int:
-            """Mock call to do nothing except send the expected stdout
-            to self."""
-            self._stdout.append(_stdout.pop())
-            return 0
-
-        patch_sp_call(_call)
-
-    return _patch_sp_output
 
 
 @pytest.fixture(name="make_tree")

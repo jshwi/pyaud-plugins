@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Add `ChangeLogged` plugin
 
 ### Removed
+- Remove `Requirements` plugin
 - Remove deprecated plugins
 - Remove logger for `DeployCov`
 

@@ -21,60 +21,6 @@ This file is auto-generated and any changes made to it will be overwritten
 
 
 @pyaud.plugins.register()
-class Requirements(pyaud.plugins.Fix):
-    """Audit requirements.txt with Pipfile.lock.
-
-    :param name: Name of plugin.
-    """
-
-    p2req = "pipfile2req"
-    cache_file = e.REQUIREMENTS
-
-    def __init__(self, name: str) -> None:
-        super().__init__(name)
-        self._content = ""
-
-    @property
-    def exe(self) -> t.List[str]:
-        return [self.p2req]
-
-    def audit(self, *args: str, **kwargs: bool) -> int:
-        # get the stdout for both production and development packages
-        if not e.PIPFILE_LOCK.is_file():
-            return 0
-
-        self.subprocess[self.p2req].call(
-            e.PIPFILE_LOCK, *args, capture=True, **kwargs
-        )
-        self.subprocess[self.p2req].call(
-            e.PIPFILE_LOCK, "--dev", *args, capture=True, **kwargs
-        )
-
-        # write to file and then use sed to remove the additional
-        # information following the semicolon
-        stdout = sorted(
-            list(
-                set(
-                    "\n".join(
-                        self.subprocess[self.p2req].stdout()
-                    ).splitlines()
-                )
-            )
-        )
-        for content in stdout:
-            self._content += f"{content.split(';')[0]}\n"
-
-        if self.cache_file.is_file():
-            return int(self.cache_file.read_text(e.ENCODING) != self._content)
-
-        return 1
-
-    def fix(self, *args: str, **kwargs: bool) -> int:
-        self.cache_file.write_text(self._content, e.ENCODING)
-        return int(self.cache_file.read_text(e.ENCODING) != self._content)
-
-
-@pyaud.plugins.register()
 class Toc(pyaud.plugins.Fix):
     """Audit docs/<NAME>.rst toc-file.
 

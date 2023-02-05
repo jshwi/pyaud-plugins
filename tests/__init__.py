@@ -14,7 +14,6 @@ from templatest.utils import VarSeq
 MockMainType = t.Callable[..., None]
 MockFuncType = t.Callable[..., int]
 MockCallStatusType = t.Callable[[str, int], MockFuncType]
-MockSPOutputType = t.Callable[..., None]
 MakeTreeType = t.Callable[[Path, t.Dict[str, t.Any]], None]
 MockSPPrintCalledType = t.Callable[[], None]
 MockSPCallNullType = t.Callable[[], None]
@@ -42,7 +41,6 @@ FLAG_SUPPRESS = "--suppress"
 FLAG_FIX = "--fix"
 NO_TESTS_FOUND = "No tests found"
 FORMAT_STR = "format-str"
-REQUIREMENTS = "requirements"
 UNUSED = "unused"
 WHITELIST = "whitelist"
 SP_REPR_PYTEST = "<Subprocess (pytest)>"

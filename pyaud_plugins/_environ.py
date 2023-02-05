@@ -29,14 +29,6 @@ class _Environ(_Env):
             )
 
     @property
-    def REQUIREMENTS(self) -> _Path:
-        """Where to find requirements.txt (or other named) file."""
-        with self.prefixed(self.PREFIX):
-            return _Path.cwd() / self.path(
-                "REQUIREMENTS", default=_Path("requirements.txt")
-            )
-
-    @property
     def DOCS(self) -> _Path:
         """Location of the user's documentation."""
         with self.prefixed(self.PREFIX):
@@ -55,14 +47,6 @@ class _Environ(_Env):
         """Default encoding."""
         with self.prefixed(self.PREFIX):
             return self.str("ENCODING", default="utf-8")
-
-    @property
-    def PIPFILE_LOCK(self) -> _Path:
-        """Location of the user's Pipfile.lock."""
-        with self.prefixed(self.PREFIX):
-            return _Path.cwd() / self.path(
-                "PIPFILE_LOCK", default=_Path("Pipfile.lock")
-            )
 
     @property
     def PACKAGE_TOC(self):

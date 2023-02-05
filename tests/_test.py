@@ -36,7 +36,6 @@ from . import (
     PYAUD_PLUGINS_PLUGINS,
     README,
     REPO,
-    REQUIREMENTS,
     SP_CALL,
     SP_OPEN_PROC,
     SP_REPR_PYTEST,
@@ -51,7 +50,6 @@ from . import (
     MockCallStatusType,
     MockMainType,
     MockSPCallNullType,
-    MockSPOutputType,
     MockSPPrintCalledType,
     NoColorCapsys,
     templates,
@@ -228,46 +226,6 @@ def test_toc(
     assert ppe.PACKAGE_TOC.read_text(ppe.ENCODING) == template.expected
     path.write_text(CHANGE, ppe.ENCODING)
     main(TOC, FLAG_FIX)
-    assert NO_ISSUES in nocolorcapsys.stdout()
-
-
-def test_requirements(
-    monkeypatch: pytest.MonkeyPatch,
-    main: MockMainType,
-    patch_sp_output: MockSPOutputType,
-    nocolorcapsys: NoColorCapsys,
-) -> None:
-    """Test that requirements.txt file is correctly edited.
-
-     Tested for use with ``pipfile2req``.
-
-    :param monkeypatch: Mock patch environment and attributes.
-    :param main: Patch package entry point.
-    :param patch_sp_output: Patch ``Subprocess`` so that ``call`` sends
-        expected stdout out to self.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
-    """
-    path = Path.cwd() / ppe.REQUIREMENTS
-    monkeypatch.setattr(
-        "pyaud_plugins._plugins.write.Requirements.cache_file", path
-    )
-    main(REQUIREMENTS, FLAG_FIX)
-    template = templatest.templates.registered.getbyname("test-requirements")
-    ppe.PIPFILE_LOCK.write_text(template.template, ppe.ENCODING)
-    with pytest.raises(pyaud.exceptions.AuditError):
-        main(REQUIREMENTS)
-
-    patch_sp_output(templates.PIPFILE2REQ_PROD, templates.PIPFILE2REQ_DEV)
-    monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda: None)
-    main(REQUIREMENTS, FLAG_FIX)
-    out = nocolorcapsys.stdout()
-    assert NO_ISSUES in out
-    assert ppe.REQUIREMENTS.read_text(ppe.ENCODING) == template.expected
-    path.write_text(CHANGE, ppe.ENCODING)
-    patch_sp_output(templates.PIPFILE2REQ_PROD, templates.PIPFILE2REQ_DEV)
-    monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda: None)
-    main(REQUIREMENTS, FLAG_FIX)
     assert NO_ISSUES in nocolorcapsys.stdout()
 
 
@@ -520,7 +478,7 @@ def test_action(
 @pytest.mark.parametrize(
     "module,plugins",
     [
-        (FILES, [REQUIREMENTS, TOC, WHITELIST]),
+        (FILES, [TOC, WHITELIST]),
         (DOCTEST, [DOCTEST_PACKAGE, DOCTEST_README]),
         (TEST, [DOCTEST, COVERAGE]),
     ],

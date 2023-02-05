@@ -25,7 +25,7 @@ class Files(pyaud.plugins.Parametrize):
     """
 
     def plugins(self) -> t.List[str]:
-        return ["requirements", "toc", "whitelist"]
+        return ["toc", "whitelist"]
 
 
 @pyaud.plugins.register()
