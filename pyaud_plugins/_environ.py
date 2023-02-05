@@ -9,8 +9,9 @@ from __future__ import annotations
 
 from pathlib import Path as _Path
 
-import pyaud as _pyaud
 from environs import Env as _Env
+
+from ._utils import package as _package
 
 
 class _Environ(_Env):
@@ -166,7 +167,7 @@ class _Environ(_Env):
     def PACKAGE_NAME(self) -> str:
         """Name of the package this is being run on."""
         with self.prefixed(self.PREFIX):
-            return self.str("PACKAGE_NAME", default=_pyaud.package())
+            return self.str("PACKAGE_NAME", default=_package())
 
     @property
     def PYPROJECT(self) -> _Path:

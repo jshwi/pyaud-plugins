@@ -11,6 +11,7 @@ from pathlib import Path
 
 import pyaud
 import pytest
+import setuptools
 
 # noinspection PyUnresolvedReferences,PyProtectedMember
 from pyaud import _config as pc
@@ -41,6 +42,8 @@ from . import (
 )
 
 MOCK_PACKAGE = "package"
+
+original_setuptools_find_packages = setuptools.find_packages
 
 
 @pytest.fixture(name="app_files")
@@ -336,3 +339,16 @@ def fixture_patch_sp_call_null(
         patch_sp_call(_call)
 
     return _patch_sp_print_called
+
+
+@pytest.fixture(name="unpatch_setuptools_find_packages")
+def fixture_unpatch_setuptools_find_packages(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Unpatch ``setuptools_find_packages``.
+
+    :param monkeypatch: Mock patch environment and attributes.
+    """
+    monkeypatch.setattr(
+        "setuptools.find_packages", original_setuptools_find_packages
+    )

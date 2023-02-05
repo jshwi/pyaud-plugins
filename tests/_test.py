@@ -31,13 +31,16 @@ from . import (
     FLAG_FIX,
     FLAG_SUPPRESS,
     FORMAT,
+    INIT,
     INIT_REMOTE,
     INITIAL_COMMIT,
     NO_ISSUES,
     NO_TESTS_FOUND,
+    PACKAGE,
     PYAUD_FILES_POPULATE,
     PYAUD_PLUGINS_PLUGINS,
     README,
+    REPO,
     REQUIREMENTS,
     SP_CALL,
     SP_OPEN_PROC,
@@ -834,3 +837,42 @@ def test_commit_policy(
     assert path.read_text(ppe.ENCODING) == template.expected
     main(commit_policy, FLAG_FIX)
     assert NO_ISSUES in nocolorcapsys.stdout()
+
+
+# noinspection PyUnresolvedReferences
+@pytest.mark.usefixtures("unpatch_setuptools_find_packages")
+def test_get_packages(make_tree: MakeTreeType) -> None:
+    """Test process when searching for project's package.
+
+    :param make_tree: Create directory tree from dict mapping.
+    """
+    # search for only package
+    # =======================
+    make_tree(Path.cwd(), {PACKAGE[1]: {INIT: None}})
+    assert pplugins._utils.get_packages() == [PACKAGE[1]]
+    assert pplugins._utils.package() == PACKAGE[1]
+
+    # search for ambiguous package
+    # ============================
+    make_tree(Path.cwd(), {PACKAGE[2]: {INIT: None}, PACKAGE[3]: {INIT: None}})
+    assert pplugins._utils.get_packages() == [
+        PACKAGE[1],
+        PACKAGE[2],
+        PACKAGE[3],
+    ]
+    assert pplugins._utils.package() is None
+
+    # search for package with the same name as repo
+    # =============================================
+    make_tree(Path.cwd(), {REPO: {INIT: None}})
+    assert pplugins._utils.get_packages() == [
+        REPO,
+        PACKAGE[1],
+        PACKAGE[2],
+        PACKAGE[3],
+    ]
+    assert pplugins._utils.package() == REPO
+    (Path.cwd() / "pyproject.toml").write_text(
+        tomli_w.dumps({TOOL: {"poetry": {"name": PACKAGE[2]}}})
+    )
+    assert pplugins._utils.package() == PACKAGE[2].replace("-", "_")

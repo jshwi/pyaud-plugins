@@ -9,6 +9,7 @@ import typing as t
 from pathlib import Path
 
 from gitspy import Git
+from templatest.utils import VarSeq
 
 MockMainType = t.Callable[..., None]
 MockFuncType = t.Callable[..., int]
@@ -25,6 +26,8 @@ class MockSPCallType(t.Protocol):  # pylint: disable=too-few-public-methods
     def __call__(self, func: MockFuncType, returncode: int = ..., /) -> None:
         """Type for ``fixture_patch_sp_call``"""
 
+
+PACKAGE = VarSeq("package")
 
 FILE = "file.py"
 GH_NAME = "test_user"
@@ -70,6 +73,8 @@ MODULES_RST = "modules.rst"
 TEST_FORMAT = "test-format"
 CHANGE = "change"
 TOOL = "tool"
+INIT = "__init__.py"
+REPO = "package"
 
 
 git = Git()

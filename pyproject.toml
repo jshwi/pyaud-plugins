@@ -103,6 +103,7 @@ sphinxcontrib-fulltoc = "^1.2.0"
 sphinxcontrib-programoutput = "^0.17"
 toml = "^0.10.2"
 toml-sort = ">=0.20,<0.23"
+tomli = "^2.0.1"
 vulture = "^2.3"
 
 [tool.poetry.group.dev.dependencies]
