@@ -8,7 +8,9 @@ import os
 import shutil
 import typing as t
 from pathlib import Path
+from subprocess import CalledProcessError
 
+import git
 import pyaud
 
 from pyaud_plugins._abc import SphinxBuild
@@ -131,3 +133,36 @@ class DoctestPackage(SphinxBuild):
     @property
     def args(self) -> t.Tuple[str | os.PathLike, ...]:
         return "-M", "doctest", e.DOCS, e.BUILDDIR
+
+
+@pyaud.plugins.register()
+class ChangeLogged(pyaud.plugins.Action):
+    """Check commits with loggable tags are added to CHANGELOG."""
+
+    cache = False
+    cache_all = False
+
+    def action(self, *args: str, **kwargs: bool) -> int:
+        loggable = {
+            "Added": "add",
+            "Changed": "change",
+            "Deprecated": "deprecate",
+            "Removed": "remove",
+            "Fixed": "fix",
+            "Security": "security",
+        }
+        repo = git.Repo(Path.cwd())
+        for key, value in loggable.items():
+            message = str(repo.head.commit.message).splitlines()[0]
+            diff = repo.git.diff("HEAD^", "CHANGELOG.md")
+            if message.startswith(value) and key not in diff:
+                if not diff:
+                    raise CalledProcessError(
+                        1, "CHANGELOG has not been updated"
+                    )
+
+                raise CalledProcessError(
+                    1, "CHANGELOG not updated with correct type"
+                )
+
+        return 0

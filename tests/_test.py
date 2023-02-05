@@ -3,7 +3,7 @@ tests._test
 ===========
 """
 # pylint: disable=too-many-lines,too-many-arguments,cell-var-from-loop
-# pylint: disable=too-few-public-methods,protected-access
+# pylint: disable=too-few-public-methods,protected-access,no-member
 import os
 import typing as t
 from pathlib import Path
@@ -31,6 +31,7 @@ from . import (
     FLAG_FIX,
     FLAG_SUPPRESS,
     FORMAT,
+    GIT,
     INIT,
     INIT_REMOTE,
     INITIAL_COMMIT,
@@ -876,3 +877,98 @@ def test_get_packages(make_tree: MakeTreeType) -> None:
         tomli_w.dumps({TOOL: {"poetry": {"name": PACKAGE[2]}}})
     )
     assert pplugins._utils.package() == PACKAGE[2].replace("-", "_")
+
+
+@pytest.mark.parametrize(
+    "commit_message,diff",
+    [
+        ("refactor: commit message\nsigned off by", ""),
+        (
+            "add: commit message\nsigned off by",
+            "### Added\n+- Add additional info for audit",
+        ),
+    ],
+    ids=["no-change-tag", "change-tag-logged"],
+)
+def test_change_logged_pass(
+    monkeypatch: pytest.MonkeyPatch,
+    capsys: pytest.CaptureFixture,
+    main: MockMainType,
+    commit_message: str,
+    diff: str,
+) -> None:
+    """Test change-logged when passing.
+
+    :param monkeypatch: Mock patch environment and attributes.
+    :param capsys: Capture sys output.
+    :param main: Patch package entry point.
+    :param commit_message: Commit message to mock.
+    :param diff: CHANGELOG diff to mock.
+    """
+
+    class _Repo:
+        def __init__(self, _) -> None:
+            self.head = type("head", (), {})  # type: ignore
+            self.head.commit = type("commit", (), {})  # type: ignore
+            self.head.commit.message = commit_message  # type: ignore
+            self.git = type(GIT, (), {})  # type: ignore
+            self.git.diff = self.diff  # type: ignore
+
+        @staticmethod
+        def diff(*_, **__) -> str:
+            """Return patched diff."""
+            return diff
+
+    change_logged = "change-logged"
+    _git = type(GIT, (), {})  # type: ignore
+    _git.Repo = _Repo  # type: ignore
+    monkeypatch.setattr("pyaud_plugins._plugins.action.git", _git)
+    main(change_logged)
+    std = capsys.readouterr()
+    assert not std.out
+
+
+@pytest.mark.parametrize(
+    "commit_message,diff",
+    [
+        ("add: commit message\nsigned off by", ""),
+        (
+            "add: commit message\nsigned off by",
+            "### Changed\n+- Add additional info for audit",
+        ),
+    ],
+    ids=["change-tag-not-logged", "change-tag-logged-wrong"],
+)
+def test_change_logged_fail(
+    monkeypatch: pytest.MonkeyPatch,
+    main: MockMainType,
+    commit_message: str,
+    diff: str,
+) -> None:
+    """Test change-logged when failing.
+
+    :param monkeypatch: Mock patch environment and attributes.
+    :param main: Patch package entry point.
+    :param commit_message: Commit message to mock.
+    :param diff: CHANGELOG diff to mock.
+    """
+
+    class _Repo:
+        def __init__(self, _) -> None:
+            self.head = type("head", (), {})  # type: ignore
+            self.head.commit = type("commit", (), {})  # type: ignore
+            self.head.commit.message = commit_message  # type: ignore
+            self.git = type(GIT, (), {})  # type: ignore
+            self.git.diff = self.diff  # type: ignore
+
+        @staticmethod
+        def diff(*_, **__) -> str:
+            """Return patched diff."""
+            return diff
+
+    change_logged = "change-logged"
+    _git = type(GIT, (), {})  # type: ignore
+    _git.Repo = _Repo  # type: ignore
+    monkeypatch.setattr("pyaud_plugins._plugins.action.git", _git)
+    with pytest.raises(pyaud.exceptions.AuditError):
+        main(change_logged)

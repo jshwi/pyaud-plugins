@@ -75,6 +75,7 @@ CHANGE = "change"
 TOOL = "tool"
 INIT = "__init__.py"
 REPO = "package"
+GIT = "git"
 
 
 git = Git()
