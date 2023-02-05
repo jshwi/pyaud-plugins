@@ -68,11 +68,13 @@ This package contains the following plugins on running `pyaud modules`
 
 .. code-block:: console
 
+    about-tests     -- Check tests README is up-to-date
+    audit           -- Read from [audit] key in config
+    change-logged   -- Check commits with loggable tags are added to CHANGELOG
+    clean           -- Remove all unversioned package files recursively
+    commit-policy   -- Test commit policy is up to date
     const           -- Check code for repeat use of strings
     coverage        -- Run package unit-tests with `pytest` and `coverage`
-    deploy          -- Deploy package documentation and test coverage
-    deploy-cov      -- Upload coverage data to `Codecov`
-    deploy-docs     -- Deploy package documentation to `gh-pages`
     docs            -- Compile package documentation with `Sphinx`
     doctest         -- Run `doctest` on all code examples
     doctest-package -- Run `doctest` on package
@@ -81,10 +83,10 @@ This package contains the following plugins on running `pyaud modules`
     format          -- Audit code with `Black`
     format-docs     -- Format docstrings with `docformatter`
     format-str      -- Format f-strings with `flynt`
+    generate-rcfile -- Print rcfile to stdout
     imports         -- Audit imports with `isort`
     lint            -- Lint code with `pylint`
-    readme          -- Parse, test, and assert RST code-blocks
-    requirements    -- Audit requirements.txt with Pipfile.lock
+    params          -- Check docstring params match function signatures
     sort-pyproject  -- Sort pyproject.toml file with `toml-sort`
     test            -- Run all tests
     tests           -- Run the package unit-tests with `pytest`
