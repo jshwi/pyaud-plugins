@@ -8,11 +8,9 @@ from pathlib import Path as _Path
 
 import setuptools as _setuptools
 import tomli
-from gitspy import Git as _Git
 from object_colors import Color as _Color
 
 colors = _Color()
-git = _Git()
 
 colors.populate_colors()
 
