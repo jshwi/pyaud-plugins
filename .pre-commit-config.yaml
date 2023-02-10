@@ -8,6 +8,7 @@ ci:
     - vulture
     - tests
     - toc
+    - commit-policy
 default_language_version:
   python: python3.8
 default_stages:
@@ -19,7 +20,8 @@ exclude: |
     | migrations\/.*
     | \.bumpversion\.cfg
     | whitelist\.py
-    | \.idea
+    | \.idea\/.*
+    | \.github\/COMMIT_POLICY\.md
   )$
 repos:
   - repo: local
@@ -74,14 +76,12 @@ repos:
         language: system
         entry: poetry run pyaud toc --fix
         pass_filenames: false
-      # audit commits between HEAD and origin/master
-      - id: audit
-        name: audit repo
+      # update commit policy
+      - id: commit-policy
+        name: commit policy
         language: system
-        entry: bash scripts/audit.sh
+        entry: poetry run pyaud commit-policy
         pass_filenames: false
-        stages:
-          - push
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: "v4.4.0"
     hooks:
