@@ -106,7 +106,7 @@ toml-sort = ">=0.20,<0.23"
 tomli = "^2.0.1"
 vulture = "^2.3"
 
-[tool.poetry.group.dev.dependencies]
+[tool.poetry.dev-dependencies]
 bump2version = "^1.0.1"
 ipython = "^8.4.0"
 pre-commit = "^2.21.0"
