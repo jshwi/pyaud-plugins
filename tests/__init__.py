@@ -9,9 +9,10 @@ import typing as t
 from pathlib import Path
 
 from gitspy import Git
+from mypy_extensions import KwArg
 from templatest.utils import VarSeq
 
-MockMainType = t.Callable[..., None]
+MockMainType = t.Callable[..., int]
 MockFuncType = t.Callable[..., int]
 MockCallStatusType = t.Callable[[str, int], MockFuncType]
 MakeTreeType = t.Callable[[Path, t.Dict[str, t.Any]], None]
@@ -34,7 +35,7 @@ NO_ISSUES_ALL = "Success: no issues found in 1 source files"
 DEBUG = "DEBUG"
 SP_OPEN_PROC = "spall.Subprocess._open_process"
 PYAUD_PLUGINS_PLUGINS = "pyaud.plugins._plugins"
-PYAUD_FILES_POPULATE = "pyaud.files.populate"
+PYAUD_FILES_POPULATE = "pyaud.files.populate_regex"
 SP_CALL = "spall.Subprocess.call"
 SP_STDOUT = "spall.Subprocess.stdout"
 FLAG_SUPPRESS = "--suppress"
@@ -68,6 +69,8 @@ GIT = "git"
 
 
 git = Git()
+
+FixtureMockRepo = t.Callable[[KwArg(t.Callable[..., t.Any])], None]
 
 
 class NoColorCapsys:

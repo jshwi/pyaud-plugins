@@ -2,7 +2,6 @@
 pyaud_plugins._plugins.audit
 ============================
 """
-import sys
 import typing as t
 
 import pyaud
@@ -86,12 +85,9 @@ class Typecheck(pyaud.plugins.Audit):
             # if any error occurred that wasn't because of a missing
             # stub library
             print("\n".join(stdout))
-            if not suppress:
-                raise pyaud.exceptions.AuditError(" ".join(sys.argv))
+            return 1
 
-        else:
-            print("\n".join(stdout))
-
+        print("\n".join(stdout))
         return returncode
 
 

@@ -14,15 +14,11 @@ import pytest
 import setuptools
 
 # noinspection PyUnresolvedReferences,PyProtectedMember
-from pyaud import _config as pc
+from pyaud import _objects as pc
 from pyaud.__main__ import main
 
-# noinspection PyProtectedMember
-from pyaud._locations import AppFiles
-
 from . import (
-    DEBUG,
-    LOGGING,
+    FixtureMockRepo,
     MakeTreeType,
     MockCallStatusType,
     MockFuncType,
@@ -39,30 +35,15 @@ MOCK_PACKAGE = "package"
 original_setuptools_find_packages = setuptools.find_packages
 
 
-@pytest.fixture(name="app_files")
-def fixture_app_files(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
-) -> AppFiles:
-    """App files for testing.
-
-    :param tmp_path: Create and return temporary directory.
-    :param monkeypatch: Mock patch environment and attributes.
-    :return: Instantiated ``AppFiles`` object.
-    """
-    monkeypatch.setenv("HOME", str(tmp_path))
-    monkeypatch.setenv("XDG_CONFIG_HOME", str(tmp_path / ".config"))
-    return AppFiles()
-
-
 @pytest.fixture(name="mock_environment", autouse=True)
 def fixture_mock_environment(
-    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, app_files: AppFiles
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch, mock_repo: FixtureMockRepo
 ) -> None:
     """Mock imports to reflect the temporary testing environment.
 
     :param tmp_path: Create and return temporary directory.
     :param monkeypatch: Mock patch environment and attributes.
-    :param app_files: App file locations object.
+    :param mock_repo: Mock ``git.Repo`` class.
     """
     # set environment variables
     # =========================
@@ -117,20 +98,6 @@ def fixture_mock_environment(
     # =====================
     git.init(file=os.devnull)
 
-    # prepare default config
-    # ======================
-    # override log file path to point to test repository
-    # loglevel to DEBUG
-    default_config: t.Dict[str, t.Any] = copy.deepcopy(pc.DEFAULT_CONFIG)
-    default_config[LOGGING]["root"]["level"] = DEBUG
-    monkeypatch.setattr("pyaud._config.DEFAULT_CONFIG", default_config)
-    logfile = Path(
-        tmp_path / ".cache" / pyaud.__name__ / "log" / f"{pyaud.__name__}.log"
-    )
-    default_config[LOGGING]["handlers"]["default"]["filename"] = str(logfile)
-    default_config[LOGGING]["root"]["level"] = DEBUG
-    logfile.parent.mkdir(parents=True)
-
     # create ~/.gitconfig
     # ===================
     config = ConfigParser(default_section="")
@@ -143,8 +110,7 @@ def fixture_mock_environment(
     with open(Path.home() / ".gitconfig", "w", encoding="utf-8") as fout:
         config.write(fout)
 
-    monkeypatch.setattr("pyaud._utils.git.status", lambda *_, **__: True)
-    monkeypatch.setattr("pyaud._utils.git.rev_parse", lambda *_, **__: None)
+    mock_repo(rev_parse=lambda _: None, status=lambda _: None)
     monkeypatch.setattr(
         "pyaud._cache.HashMapping.match_file", lambda *_: False
     )
@@ -153,16 +119,13 @@ def fixture_mock_environment(
         "pyaud.plugins._plugins", copy.deepcopy(pyaud.plugins._plugins)
     )
     monkeypatch.setattr("pyaud.plugins.load", lambda: None)
-    monkeypatch.setattr("pyaud._main._register_default_plugins", lambda: None)
+    monkeypatch.setattr("pyaud._core._register_builtin_plugins", lambda: None)
 
     # setup singletons
     # ================
     pyaud.files.clear()
     pc.toml.clear()
     pyaud.files.populate()
-    pc.configure_global(app_files)
-    pc.load_config(app_files)
-    pc.configure_logging()
 
 
 @pytest.fixture(name="nocolorcapsys")
@@ -185,10 +148,10 @@ def fixture_main(monkeypatch: pytest.MonkeyPatch) -> MockMainType:
     :return: Function for using this fixture.
     """
 
-    def _main(*args: str) -> None:
+    def _main(*args: str) -> int:
         """Run main with custom args."""
         monkeypatch.setattr("sys.argv", [pyaud.__name__, *args])
-        main()
+        return main()
 
     return _main
 
@@ -305,3 +268,22 @@ def fixture_unpatch_setuptools_find_packages(
     monkeypatch.setattr(
         "setuptools.find_packages", original_setuptools_find_packages
     )
+
+
+@pytest.fixture(name="mock_repo")
+def fixture_mock_repo(monkeypatch: pytest.MonkeyPatch) -> FixtureMockRepo:
+    """Mock ``git.Repo`` class.
+
+    :param monkeypatch: Mock patch environment and attributes.
+    :return: Function for using this fixture.
+    """
+
+    def _mock_repo(**kwargs: t.Callable[..., str]) -> None:
+        repo = type("Repo", (), {})
+        repo.git = type("git", (), {})  # type: ignore
+        for key, value in kwargs.items():
+            setattr(repo.git, key, value)  # type: ignore
+
+        monkeypatch.setattr("pyaud._cache._git.Repo", lambda _: repo)
+
+    return _mock_repo

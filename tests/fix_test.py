@@ -13,7 +13,6 @@ from pyaud_plugins import environ as ppe
 from . import (
     FILE,
     FLAG_FIX,
-    FLAG_SUPPRESS,
     FORMAT,
     FORMAT_DOCS,
     FORMAT_STR,
@@ -43,7 +42,7 @@ def test_isort_and_black_fix(
     path = Path.cwd() / FILE
     pyaud.files.append(path)
     path.write_text(templates.BEFORE_ISORT, ppe.ENCODING)
-    main(IMPORTS, FLAG_SUPPRESS, FLAG_FIX)
+    main(IMPORTS, FLAG_FIX)
     assert f"Fixed {FILE}" in nocolorcapsys.stdout()
 
 
