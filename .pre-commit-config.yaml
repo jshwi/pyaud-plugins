@@ -9,6 +9,7 @@ ci:
     - tests
     - toc
     - commit-policy
+    - deptry
 default_language_version:
   python: python3.8
 default_stages:
@@ -75,6 +76,15 @@ repos:
         name: update docs toctree
         language: system
         entry: poetry run pyaud toc --fix
+        pass_filenames: false
+      - id: deptry
+        name: deptry
+        description: |
+          deptry is a command line tool to check for issues with dependencies
+          in a Python project, such as obsolete or missing dependencies.
+        entry: deptry .
+        language: system
+        always_run: true
         pass_filenames: false
       # update commit policy
       - id: commit-policy
