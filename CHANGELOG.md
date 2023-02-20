@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased](https://github.com/jshwi/pyaud-plugins/compare/v0.12.0...HEAD)
 ------------------------------------------------------------------------
+### Changed
+- Update `Imports` to `CheckFix` subclass
 
 [0.12.0](https://github.com/jshwi/pyaud-plugins/releases/tag/v0.12.0) - 2023-02-05
 ------------------------------------------------------------------------

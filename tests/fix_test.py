@@ -43,7 +43,9 @@ def test_isort_and_black_fix(
     pyaud.files.append(path)
     path.write_text(templates.BEFORE_ISORT, ppe.ENCODING)
     main(IMPORTS, FLAG_FIX)
-    assert f"Fixed {FILE}" in nocolorcapsys.stdout()
+    out = nocolorcapsys.stdout()
+    assert "Fixing" in out
+    assert str(path) in out
 
 
 def test_make_format_fix(main: MockMainType) -> None:

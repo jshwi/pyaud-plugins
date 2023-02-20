@@ -97,3 +97,20 @@ class FormatDocs(CheckFix):
     @property
     def exe(self) -> t.List[str]:
         return [self.docformatter]
+
+
+@pyaud.plugins.register()
+class Imports(CheckFix):
+    """Audit code with `Black`."""
+
+    isort = "isort"
+    cache = True
+
+    @property
+    def exe(self) -> t.List[str]:
+        return [self.isort]
+
+    def fix(self, *args: str, **kwargs: bool) -> int:
+        return self.subprocess[self.isort].call(
+            *pyaud.files.args(), *args, **kwargs
+        )
