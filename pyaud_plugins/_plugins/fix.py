@@ -101,7 +101,7 @@ class FormatDocs(CheckFix):
 
 @pyaud.plugins.register()
 class Imports(CheckFix):
-    """Audit code with `Black`."""
+    """Audit imports with ``isort``."""
 
     isort = "isort"
     cache = True
