@@ -120,12 +120,12 @@ def fixture_mock_environment(
     )
     monkeypatch.setattr("pyaud.plugins.load", lambda: None)
     monkeypatch.setattr("pyaud._core._register_builtin_plugins", lambda: None)
+    monkeypatch.setattr("pyaud.files.populate", lambda _: None)
 
     # setup singletons
     # ================
     pyaud.files.clear()
     pc.toml.clear()
-    pyaud.files.populate()
 
 
 @pytest.fixture(name="nocolorcapsys")
