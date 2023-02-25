@@ -119,7 +119,7 @@ isort = "^5.10.1"
 mypy = ">=0.930,<1.1"
 object-colors = "^2.0.1"
 pipfile-requirements = "^0.3.0"
-pyaud = ">=4.0.2,<6.0.0"
+pyaud = "^5.0.1"
 pylint = "^2.12.2"
 pytest = "^7.2.0"
 pytest-cov = ">=3,<5"
@@ -150,6 +150,9 @@ restview = "^3.0.0"
 sphinx-toolbox = "^3.4.0"
 templatest = "^0.5.0"
 tomli-w = "^1.0.0"
+
+[tool.poetry.group.dev.dependencies]
+gitspy = "^0.3.0"
 
 [tool.pyaud]
 audit = [
