@@ -10,6 +10,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [0.13.3](https://github.com/jshwi/pyaud-plugins/releases/tag/v0.13.3) - 2023-02-26
 ------------------------------------------------------------------------
+### Fixed
+- Bump version constraints for `pyaud`
 
 [0.13.2](https://github.com/jshwi/pyaud-plugins/releases/tag/v0.13.2) - 2023-02-26
 ------------------------------------------------------------------------
