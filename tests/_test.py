@@ -250,7 +250,6 @@ def test_whitelist(
         "spall.Subprocess.stdout",
         lambda *_, **__: template.template.splitlines(),
     )
-    monkeypatch.setattr("pyaud._cache._get_commit_hash", lambda: "hash")
     main(WHITELIST)
 
     main(WHITELIST, FLAG_FIX)

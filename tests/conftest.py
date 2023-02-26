@@ -3,7 +3,6 @@ tests.conftest
 ==============
 """
 # pylint: disable=protected-access,no-member,too-many-statements
-import copy
 import os
 import typing as t
 from configparser import ConfigParser
@@ -12,6 +11,7 @@ from pathlib import Path
 import pyaud
 import pytest
 import setuptools
+from mypy_extensions import KwArg, VarArg
 
 # noinspection PyUnresolvedReferences,PyProtectedMember
 from pyaud import _objects as pc
@@ -115,9 +115,7 @@ def fixture_mock_environment(
         "pyaud._cache.HashMapping.match_file", lambda *_: False
     )
     # noinspection PyProtectedMember
-    monkeypatch.setattr(
-        "pyaud.plugins._plugins", copy.deepcopy(pyaud.plugins._plugins)
-    )
+    monkeypatch.setattr("pyaud.plugins._plugins", pyaud.plugins._plugins)
     monkeypatch.setattr("pyaud.plugins.load", lambda: None)
     monkeypatch.setattr("pyaud._core._register_builtin_plugins", lambda: None)
     monkeypatch.setattr("pyaud.files.populate", lambda _: None)
@@ -278,12 +276,20 @@ def fixture_mock_repo(monkeypatch: pytest.MonkeyPatch) -> FixtureMockRepo:
     :return: Function for using this fixture.
     """
 
-    def _mock_repo(**kwargs: t.Callable[..., str]) -> None:
-        repo = type("Repo", (), {})
-        repo.git = type("git", (), {})  # type: ignore
-        for key, value in kwargs.items():
-            setattr(repo.git, key, value)  # type: ignore
+    def _mock_repo(
+        **kwargs: t.Callable[[VarArg(t.Any), KwArg(t.Any)], None]
+    ) -> None:
+        default_kwargs = {
+            "rev_parse": lambda *_, **__: None,
+            "status": lambda *_, **__: None,
+            "rev_list": lambda *_, **__: "",
+        }
+        default_kwargs.update(kwargs)
+        git_repo = type("Repo", (), {})
+        git_repo.git = type("git", (), {})  # type: ignore
+        for key, value in default_kwargs.items():
+            setattr(git_repo.git, key, value)  # type: ignore
 
-        monkeypatch.setattr("pyaud._cache._git.Repo", lambda _: repo)
+        monkeypatch.setattr("git.Repo", lambda _: git_repo)
 
     return _mock_repo
