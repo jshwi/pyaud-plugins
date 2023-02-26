@@ -1619,14 +1619,14 @@ files = [
 
 [[package]]
 name = "pyaud"
-version = "5.0.1"
+version = "6.0.1"
 description = "Framework for writing Python package audits"
 category = "main"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pyaud-5.0.1-py3-none-any.whl", hash = "sha256:caa6dce30ae2895e70ead10af66dd65bc3e8d49c30cf4cfacd2a189654c77d27"},
-    {file = "pyaud-5.0.1.tar.gz", hash = "sha256:288b600d2377fdd5667ec86bb9f16d211d9af111a1bb21b2058512e4ae646183"},
+    {file = "pyaud-6.0.1-py3-none-any.whl", hash = "sha256:9f39a28ca41eeacffeff247720c06356b66680031d3aa04ba0159ee38ff51844"},
+    {file = "pyaud-6.0.1.tar.gz", hash = "sha256:b0d190b427174da329c3fb1e2287ed29cd779d817adb7589e41b7c93636c411e"},
 ]
 
 [package.dependencies]
