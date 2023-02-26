@@ -171,7 +171,10 @@ def test_pytest_is_tests(
     :param relpath: Relative path to file.
     :param expected: Expected stdout.
     """
-    pyaud.files.append(Path.cwd() / relpath)
+    path = Path.cwd() / relpath
+    path.parent.mkdir(exist_ok=True)
+    path.touch()
+    pyaud.files.append(path)
     monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda _: None)
     patch_sp_print_called()
     main(TESTS)
@@ -283,7 +286,9 @@ def test_download_missing_stubs(
     :param monkeypatch: Mock patch environment and attributes.
     :param main: Patch package entry point.
     """
-    pyaud.files.append(Path.cwd() / FILE)
+    path = Path.cwd() / FILE
+    path.touch()
+    pyaud.files.append(path)
     monkeypatch.setattr(SP_CALL, lambda *_, **__: 1)
     stdout = ["error: Library stubs not installed for"]
     monkeypatch.setattr(SP_STDOUT, lambda _: stdout)
@@ -298,7 +303,9 @@ def test_typecheck_re_raise_err(
     :param monkeypatch: Mock patch environment and attributes.
     :param main: Patch package entry point.
     """
-    pyaud.files.append(Path.cwd() / FILE)
+    path = Path.cwd() / FILE
+    path.touch()
+    pyaud.files.append(path)
     monkeypatch.setattr(SP_CALL, lambda *_, **__: 1)
     monkeypatch.setattr(SP_STDOUT, lambda _: [])
     main(TYPECHECK)
@@ -409,6 +416,7 @@ def test_call_sort_pyproject(
         Path.cwd() / ppe.PYPROJECT,
     )
     path = Path.cwd() / FILE
+    path.touch()
     pyaud.files.append(path)
     test_obj = {TOOL: {"b_package": {"key1": "value1"}}}
     with open(ppe.PYPROJECT, "wb") as fout:
@@ -456,7 +464,9 @@ def test_action(
     :param module: Name of module to call.
     :param expected: Expected result.
     """
-    pyaud.files.append(Path.cwd() / FILE)
+    path = Path.cwd() / FILE
+    path.touch()
+    pyaud.files.append(path)
     patch_sp_print_called()
     main(module)
     assert expected in nocolorcapsys.stdout()
