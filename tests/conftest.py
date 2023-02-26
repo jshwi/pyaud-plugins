@@ -112,7 +112,7 @@ def fixture_mock_environment(
 
     mock_repo(rev_parse=lambda _: None, status=lambda _: None)
     monkeypatch.setattr(
-        "pyaud._cache.HashMapping.match_file", lambda *_: False
+        "pyaud.plugins._HashMapping.match_file", lambda *_: False
     )
     # noinspection PyProtectedMember
     monkeypatch.setattr("pyaud.plugins._plugins", pyaud.plugins._plugins)
