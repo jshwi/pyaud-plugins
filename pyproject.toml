@@ -139,6 +139,7 @@ vulture = "^2.3"
 [tool.poetry.dev-dependencies]
 bump2version = "^1.0.1"
 deptry = "^0.8.0"
+gitspy = "^0.3.0"
 ipython = "^8.4.0"
 pre-commit = "^3.1.0"
 pylint = "2.15.9"
@@ -150,9 +151,6 @@ restview = "^3.0.0"
 sphinx-toolbox = "^3.4.0"
 templatest = "^0.5.0"
 tomli-w = "^1.0.0"
-
-[tool.poetry.group.dev.dependencies]
-gitspy = "^0.3.0"
 
 [tool.pyaud]
 audit = [
