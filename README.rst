@@ -6,8 +6,8 @@ pyaud-plugins
 .. image:: https://img.shields.io/pypi/v/pyaud-plugins
     :target: https://pypi.org/project/pyaud-plugins/
     :alt: PyPI
-.. image:: https://github.com/jshwi/pyaud-plugins/actions/workflows/ci.yml/badge.svg
-    :target: https://github.com/jshwi/pyaud-plugins/actions/workflows/ci.yml
+.. image:: https://github.com/jshwi/pyaud-plugins/actions/workflows/build.yaml/badge.svg
+    :target: https://github.com/jshwi/pyaud-plugins/actions/workflows/build.yaml
     :alt: CI
 .. image:: https://results.pre-commit.ci/badge/github/jshwi/pyaud-plugins/master.svg
    :target: https://results.pre-commit.ci/latest/github/jshwi/pyaud-plugins/master
