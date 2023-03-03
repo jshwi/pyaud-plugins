@@ -1,6 +1,7 @@
 ci:
   skip:
     - pylint
+    - deptry
     - doctest-package
     - doctest-readme
     - mypy
@@ -8,8 +9,8 @@ ci:
     - vulture
     - tests
     - toc
+    - about-tests
     - commit-policy
-    - deptry
 default_language_version:
   python: python3.8
 default_stages:
@@ -22,7 +23,9 @@ exclude: |
     | \.bumpversion\.cfg
     | whitelist\.py
     | \.idea\/.*
+    | tests\/TESTS\.md
     | \.github\/COMMIT_POLICY\.md
+    | docs\/conf\.py
   )$
 repos:
   - repo: local
@@ -69,7 +72,7 @@ repos:
       - id: tests
         name: test source code
         language: system
-        entry: poetry run pyaud coverage
+        entry: poetry run pyaud test
         pass_filenames: false
       # script written for specific format
       - id: toc
@@ -77,6 +80,7 @@ repos:
         language: system
         entry: poetry run pyaud toc --fix
         pass_filenames: false
+      # check imports against dependencies
       - id: deptry
         name: deptry
         description: |
@@ -86,7 +90,13 @@ repos:
         language: system
         always_run: true
         pass_filenames: false
-      # update commit policy
+      # check tests/TESTS.md is up-to-date
+      - id: about-tests
+        name: about tests
+        language: system
+        entry: poetry run pyaud about-tests
+        pass_filenames: false
+      # check .github/COMMIT_POLICY.md is up-to-date
       - id: commit-policy
         name: commit policy
         language: system
