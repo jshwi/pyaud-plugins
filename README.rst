@@ -43,8 +43,8 @@ pyaud-plugins
     :target: https://snyk.io/test/github/jshwi/pyaud-plugins/badge.svg
     :alt: Known Vulnerabilities
 .. image:: https://snyk.io/advisor/python/pyaud-plugins/badge.svg
-   :target: https://snyk.io/advisor/python/pyaud-plugins
-   :alt: pyaud-plugins
+    :target: https://snyk.io/advisor/python/pyaud-plugins
+    :alt: pyaud-plugins
 
 Plugin package for Pyaud
 ------------------------
