@@ -73,47 +73,79 @@ html_sidebars = {"**": ["globaltoc.html", "searchbox.html"]}
 # so a file named "default.css" will overwrite the builtin "default.css".
 # html_static_path = ["_static"]
 
+# material theme options
 html_theme_options = {
     "icon": {
         "repo": "fontawesome/brands/github",
         "edit": "material/file-edit-outline",
     },
-    "site_url": "https://pyaud-plugins.readthedocs.io/",
-    "repo_url": "https://github.com/jshwi/pyaud-plugins/",
-    "repo_name": "pyaud-plugins",
+    "site_url": "https://pyaud_plugins.readthedocs.io/",
+    "repo_url": "https://github.com/jshwi/pyaud_plugins/",
+    "repo_name": "pyaud_plugins",
     "repo_type": "github",
     "edit_uri": "blob/master/docs",
     "globaltoc_collapse": True,
     "features": [
         "navigation.expand",
+        # "navigation.tabs",
+        # "toc.integrate",
         "navigation.sections",
+        # "navigation.instant",
+        # "header.autohide",
         "navigation.top",
+        # "navigation.tracking",
+        # "search.highlight",
         "search.share",
         "toc.follow",
         "toc.sticky",
         "content.tabs.link",
         "announce.dismiss",
     ],
-    "palette": {
-        "scheme": "slate",
-        "primary": "deep-orange",
-        "accent": "lime",
-        "toggle": {
-            "icon": "material/lightbulb",
-            "name": "Switch to light mode",
-        },
-    },
+    "palette": [
+        # {
+        #     "media": "(prefers-color-scheme: light)",
+        #     "scheme": "default",
+        #     "primary": "light-green",
+        #     "accent": "light-blue",
+        #     "toggle": {
+        #         "icon": "material/lightbulb-outline",
+        #         "name": "Switch to dark mode",
+        #     },
+        # },
+        {
+            # "media": "(prefers-color-scheme: dark)",
+            "scheme": "slate",
+            "primary": "deep-orange",
+            "accent": "lime",
+            # "toggle": {
+            #     "icon": "material/lightbulb",
+            #     "name": "Switch to light mode",
+            # },
+        }
+    ],
     "version_dropdown": True,
+    # "version_info": [
+    #     {
+    #         "version": "pyaud_plugins.readthedocs.io",
+    #         "title": "ReadTheDocs",
+    #         "aliases": [],
+    #     },
+    #     {
+    #         "version": "https://jshwi.github.io/pyaud_plugins",
+    #         "title": "Github Pages",
+    #         "aliases": [],
+    #     },
+    # ],
     "toc_title_is_page_title": True,
     "social": [
         {
             "icon": "fontawesome/brands/github",
-            "link": "https://github.com/jshwi/pyaud-plugins/",
+            "link": "https://github.com/jshwi/pyaud_plugins/",
             "name": "Source on github.com",
         },
         {
             "icon": "fontawesome/brands/python",
-            "link": "https://pypi.org/project/pyaud-plugins/",
+            "link": "https://pypi.org/project/pyaud_plugins/",
         },
     ],
 }
