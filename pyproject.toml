@@ -154,6 +154,7 @@ tomli-w = "^1.0.0"
 [tool.pyaud]
 audit = [
   "about-tests",
+  "commit-policy",
   "const",
   "docs",
   "files",
@@ -173,32 +174,6 @@ exclude = '''
     | whitelist\.py
   )$
 '''
-
-[tool.pyaud.logging]
-disable_existing_loggers = true
-version = 1
-
-[tool.pyaud.logging.formatters.standard]
-format = "%(asctime)s %(levelname)s %(name)s %(message)s"
-
-[tool.pyaud.logging.handlers.default]
-backupCount = 60
-class = "logging.handlers.TimedRotatingFileHandler"
-filename = "~/.cache/pyaud/log/pyaud.log"
-formatter = "standard"
-when = "d"
-
-[tool.pyaud.logging.root]
-handlers = [
-  "default"
-]
-level = "DEBUG"
-propagate = false
-
-[tool.pyaud.packages]
-exclude = [
-  "tests"
-]
 
 [tool.pytest.ini_options]
 addopts = [
