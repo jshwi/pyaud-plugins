@@ -132,7 +132,7 @@ sphinx-markdown-builder = "^0.5.5"
 sphinxcontrib-fulltoc = "^1.2.0"
 sphinxcontrib-programoutput = "^0.17"
 toml = "^0.10.2"
-toml-sort = ">=0.20,<0.23"
+toml-sort = ">=0.20,<0.24"
 tomli = "^2.0.1"
 vulture = "^2.3"
 
