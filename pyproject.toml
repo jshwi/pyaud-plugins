@@ -43,7 +43,6 @@ omit = [
 [tool.deptry]
 ignore_obsolete = [
   "Sphinx",
-  "appdirs",
   "black",
   "constcheck",
   "coverage",
@@ -52,16 +51,12 @@ ignore_obsolete = [
   "flynt",
   "isort",
   "mypy",
-  "pipfile-requirements",
   "pylint",
   "pytest",
   "pytest-cov",
-  "python-dotenv",
-  "readmetester",
   "sphinx-markdown-builder",
   "sphinxcontrib-fulltoc",
   "sphinxcontrib-programoutput",
-  "toml",
   "toml-sort",
   "vulture"
 ]
@@ -104,7 +99,6 @@ version = "0.14.0"
 
 [tool.poetry.dependencies]
 Sphinx = ">=4.3.2,<7.0.0"
-appdirs = "^1.4.4"
 black = ">=21.12,<24.0"
 constcheck = "^0"
 coverage = ">=6.2,<8.0"
@@ -116,20 +110,16 @@ gitpython = "^3.1.30"
 isort = "^5.10.1"
 mypy = ">=0.930,<1.3"
 object-colors = "^2.0.1"
-pipfile-requirements = "^0.3.0"
 pyaud = ">=5.0.1,<7.0.0"
 pylint = "^2.12.2"
 pytest = "^7.2.0"
 pytest-cov = ">=3,<5"
 python = "^3.8"
-python-dotenv = ">=0.19.2,<1.1.0"
 pyyaml = "^6.0"
-readmetester = ">=1.0.1,<3.0.0"
 setuptools = "^67.2.0"
 sphinx-markdown-builder = "^0.5.5"
 sphinxcontrib-fulltoc = "^1.2.0"
 sphinxcontrib-programoutput = "^0.17"
-toml = "^0.10.2"
 toml-sort = ">=0.20,<0.24"
 tomli = "^2.0.1"
 vulture = "^2.3"

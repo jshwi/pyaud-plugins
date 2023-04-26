@@ -16,7 +16,7 @@ files = [
 name = "apeye"
 version = "1.3.0"
 description = "Handy tools for working with URLs and APIs."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6.1"
 files = [
@@ -38,7 +38,7 @@ limiter = ["cachecontrol[filecache] (>=0.12.6)", "lockfile (>=0.12.2)"]
 name = "apeye-core"
 version = "1.1.2"
 description = "Core (offline) functionality for the apeye library."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6.1"
 files = [
@@ -54,7 +54,7 @@ idna = ">=2.5"
 name = "appdirs"
 version = "1.4.4"
 description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -139,25 +139,6 @@ six = "*"
 
 [package.extras]
 test = ["astroid", "pytest"]
-
-[[package]]
-name = "attrs"
-version = "23.1.0"
-description = "Classes Without Boilerplate"
-category = "main"
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "attrs-23.1.0-py3-none-any.whl", hash = "sha256:1f28b4522cdc2fb4256ac1a020c78acf9cba2c6b461ccd2c126f3aa8e8335d04"},
-    {file = "attrs-23.1.0.tar.gz", hash = "sha256:6279836d581513a26f1bf235f9acd333bc9115683f14f7e8fae46c98fc50e015"},
-]
-
-[package.extras]
-cov = ["attrs[tests]", "coverage[toml] (>=5.3)"]
-dev = ["attrs[docs,tests]", "pre-commit"]
-docs = ["furo", "myst-parser", "sphinx", "sphinx-notfound-page", "sphinxcontrib-towncrier", "towncrier", "zope-interface"]
-tests = ["attrs[tests-no-zope]", "zope-interface"]
-tests-no-zope = ["cloudpickle", "hypothesis", "mypy (>=1.1.1)", "pympler", "pytest (>=4.3.0)", "pytest-mypy-plugins", "pytest-xdist[psutil]"]
 
 [[package]]
 name = "autodocsumm"
@@ -632,23 +613,6 @@ files = [
 graph = ["objgraph (>=1.7.2)"]
 
 [[package]]
-name = "dist-meta"
-version = "0.8.0"
-description = "Parse and create Python distribution metadata."
-category = "main"
-optional = false
-python-versions = ">=3.6.1"
-files = [
-    {file = "dist-meta-0.8.0.tar.gz", hash = "sha256:541d51f75b7f580c80d8d7b23112d0b4bf3edbc9442e425a7c4fcd75f4138551"},
-    {file = "dist_meta-0.8.0-py3-none-any.whl", hash = "sha256:a01eba9a9a0737e8293d3a7f6750fb7395fc47e96bec59a918912535347360ad"},
-]
-
-[package.dependencies]
-domdf-python-tools = ">=3.1.0"
-handy-archives = ">=0.1.0"
-packaging = ">=20.9"
-
-[[package]]
 name = "distlib"
 version = "0.3.6"
 description = "Distribution utilities"
@@ -706,26 +670,10 @@ files = [
 ]
 
 [[package]]
-name = "dom-toml"
-version = "0.6.1"
-description = "Dom's tools for Tom's Obvious, Minimal Language."
-category = "main"
-optional = false
-python-versions = ">=3.6.1"
-files = [
-    {file = "dom_toml-0.6.1-py3-none-any.whl", hash = "sha256:ebdd69c571268dfa5a56b5085b5311583d8a8d2dc1811349e796160c9f36d501"},
-    {file = "dom_toml-0.6.1.tar.gz", hash = "sha256:a0bfc204ae32c72ed36e526dce56108a3b20741ac3c055207206ce3b2f302868"},
-]
-
-[package.dependencies]
-domdf-python-tools = ">=2.8.0"
-toml = ">=0.10.2"
-
-[[package]]
 name = "domdf-python-tools"
 version = "3.6.1"
 description = "Helpful functions for Python 🐍 🛠️"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -888,22 +836,6 @@ files = [
 
 [package.dependencies]
 spall = ">=0,<1"
-
-[[package]]
-name = "handy-archives"
-version = "0.1.4"
-description = "Some handy archive helpers for Python."
-category = "main"
-optional = false
-python-versions = ">=3.6.1"
-files = [
-    {file = "handy-archives-0.1.4.tar.gz", hash = "sha256:c951e9a3370ce678591c797457240dbf86b77923f8c8a61a60bdb7f6c52c9110"},
-    {file = "handy_archives-0.1.4-py3-none-any.whl", hash = "sha256:0c5db273e338a197e7cb00cf4f652d2c06c7a545751a791a0f33a584f2c3eaef"},
-]
-
-[package.extras]
-all = ["coincidence (>=0.2.0)", "pytest (>=6.0.0)"]
-testing = ["coincidence (>=0.2.0)", "pytest (>=6.0.0)"]
 
 [[package]]
 name = "html2text"
@@ -1435,7 +1367,7 @@ files = [
 name = "natsort"
 version = "8.3.1"
 description = "Simple yet flexible natural sorting in Python."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -1543,22 +1475,6 @@ files = [
     {file = "pickleshare-0.7.5-py2.py3-none-any.whl", hash = "sha256:9649af414d74d4df115d5d718f82acb59c9d418196b7b4290ed47a12ce62df56"},
     {file = "pickleshare-0.7.5.tar.gz", hash = "sha256:87683d47965c1da65cdacaf31c8441d12b8044cdec9aca500cd78fc2c683afca"},
 ]
-
-[[package]]
-name = "pipfile-requirements"
-version = "0.3.0"
-description = "A CLI tool to covert Pipfile/Pipfile.lock to requirments.txt"
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "pipfile-requirements-0.3.0.tar.gz", hash = "sha256:d47591d46d8bfecf9257967992feae31fa83aff7ab6417373c7de5ea92ab849f"},
-    {file = "pipfile_requirements-0.3.0-py2.py3-none-any.whl", hash = "sha256:dc2ff7515ce35f8b37a500e87e7b9cd39f0f5c18eb6024543366eb6d4226869b"},
-]
-
-[package.dependencies]
-packaging = "*"
-toml = "*"
 
 [[package]]
 name = "platformdirs"
@@ -1790,34 +1706,6 @@ spelling = ["pyenchant (>=3.2,<4.0)"]
 testutils = ["gitpython (>3)"]
 
 [[package]]
-name = "pyproject-parser"
-version = "0.7.0"
-description = "Parser for 'pyproject.toml'"
-category = "main"
-optional = false
-python-versions = ">=3.6.1"
-files = [
-    {file = "pyproject-parser-0.7.0.tar.gz", hash = "sha256:78a8716965783486620efb0b2cc43fba7ac8eb3e71c953233faf82e75259ff73"},
-    {file = "pyproject_parser-0.7.0-py3-none-any.whl", hash = "sha256:a0aac7930f5429737b44f2bd7825980a46f312c7352e2a7a99d7196721665c2c"},
-]
-
-[package.dependencies]
-apeye-core = ">=1.0.0"
-attrs = ">=20.3.0"
-dom-toml = ">=0.4.0"
-domdf-python-tools = ">=2.8.0"
-natsort = ">=7.1.1"
-packaging = ">=20.9"
-shippinglabel = ">=1.0.0"
-toml = ">=0.10.2"
-typing-extensions = ">=3.7.4.3"
-
-[package.extras]
-all = ["click (>=7.1.2)", "consolekit (>=1.4.1)", "docutils (==0.16)", "readme-renderer[md] (>=27.0)", "sdjson (>=0.3.1)"]
-cli = ["click (>=7.1.2)", "consolekit (>=1.4.1)", "sdjson (>=0.3.1)"]
-readme = ["docutils (==0.16)", "readme-renderer[md] (>=27.0)"]
-
-[[package]]
 name = "pytest"
 version = "7.3.1"
 description = "pytest: simple powerful testing with Python"
@@ -2014,24 +1902,6 @@ Pygments = ">=2.5.1"
 md = ["cmarkgfm (>=0.8.0)"]
 
 [[package]]
-name = "readmetester"
-version = "2.4.1"
-description = "Parse, test, and assert RST code-blocks"
-category = "main"
-optional = false
-python-versions = ">=3.8,<4.0"
-files = [
-    {file = "readmetester-2.4.1-py3-none-any.whl", hash = "sha256:f471b3180056171dd496e70ef64a63194b341c5eb33ee85c2d9121b885b80ea1"},
-    {file = "readmetester-2.4.1.tar.gz", hash = "sha256:10851e41908a4e1a28c2d1f09a74f8bc2e079529c506d5a5683bb9a189449382"},
-]
-
-[package.dependencies]
-object-colors = ">=2.0.0,<3.0.0"
-Pygments = ">=2.8.1,<3.0.0"
-pyproject-parser = ">=0.4.3,<0.8.0"
-restructuredtext-lint = ">=1.4.0,<2.0.0"
-
-[[package]]
 name = "requests"
 version = "2.28.2"
 description = "Python HTTP for Humans."
@@ -2052,20 +1922,6 @@ urllib3 = ">=1.21.1,<1.27"
 [package.extras]
 socks = ["PySocks (>=1.5.6,!=1.5.7)"]
 use-chardet-on-py3 = ["chardet (>=3.0.2,<6)"]
-
-[[package]]
-name = "restructuredtext-lint"
-version = "1.4.0"
-description = "reStructuredText linter"
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "restructuredtext_lint-1.4.0.tar.gz", hash = "sha256:1b235c0c922341ab6c530390892eb9e92f90b9b75046063e047cacfb0f050c45"},
-]
-
-[package.dependencies]
-docutils = ">=0.11,<1.0"
 
 [[package]]
 name = "restview"
@@ -2163,27 +2019,6 @@ files = [
 docs = ["furo", "jaraco.packaging (>=9)", "jaraco.tidelift (>=1.4)", "pygments-github-lexers (==0.0.5)", "rst.linker (>=1.9)", "sphinx (>=3.5)", "sphinx-favicon", "sphinx-hoverxref (<2)", "sphinx-inline-tabs", "sphinx-lint", "sphinx-notfound-page (==0.8.3)", "sphinx-reredirects", "sphinxcontrib-towncrier"]
 testing = ["build[virtualenv]", "filelock (>=3.4.0)", "flake8 (<5)", "flake8-2020", "ini2toml[lite] (>=0.9)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "pip (>=19.1)", "pip-run (>=8.8)", "pytest (>=6)", "pytest-black (>=0.3.7)", "pytest-checkdocs (>=2.4)", "pytest-cov", "pytest-enabler (>=1.3)", "pytest-flake8", "pytest-mypy (>=0.9.1)", "pytest-perf", "pytest-timeout", "pytest-xdist", "tomli-w (>=1.0.0)", "virtualenv (>=13.0.0)", "wheel"]
 testing-integration = ["build[virtualenv]", "filelock (>=3.4.0)", "jaraco.envs (>=2.2)", "jaraco.path (>=3.2.0)", "pytest", "pytest-enabler", "pytest-xdist", "tomli", "virtualenv (>=13.0.0)", "wheel"]
-
-[[package]]
-name = "shippinglabel"
-version = "1.5.0"
-description = "Utilities for handling packages."
-category = "main"
-optional = false
-python-versions = ">=3.6.1"
-files = [
-    {file = "shippinglabel-1.5.0-py3-none-any.whl", hash = "sha256:5d4fed80499c00250d5e660296e7d6d0607ee4f2543b2d4bca72958f2b710241"},
-    {file = "shippinglabel-1.5.0.tar.gz", hash = "sha256:b2332bf29853e29f877dab21f17f2a8632fd2b48f5f32a6fa0b254a6fdd0a451"},
-]
-
-[package.dependencies]
-apeye = ">=1.0.0"
-dist-meta = ">=0.1.2"
-dom-toml = ">=0.2.2"
-domdf-python-tools = ">=3.1.0"
-packaging = ">=20.9"
-platformdirs = ">=2.3.0"
-typing-extensions = ">=3.7.4.3"
 
 [[package]]
 name = "six"
@@ -2929,4 +2764,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "a9af033aad71b1b62ee810a2677b277bcf6f4993f7e76e0b05991eabb11e3715"
+content-hash = "b82819becadde71ec91afe28d96da2b369ebd2982d20954e6f33e93871008838"
