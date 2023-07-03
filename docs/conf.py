@@ -82,7 +82,6 @@ html_theme_options = {
     "site_url": "https://pyaud_plugins.readthedocs.io/",
     "repo_url": "https://github.com/jshwi/pyaud_plugins/",
     "repo_name": "pyaud_plugins",
-    "repo_type": "github",
     "edit_uri": "blob/master/docs",
     "globaltoc_collapse": True,
     "features": [
