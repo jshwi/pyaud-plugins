@@ -815,17 +815,6 @@ files = [
 spall = ">=0,<1"
 
 [[package]]
-name = "html2text"
-version = "2020.1.16"
-description = "Turn HTML into equivalent Markdown-structured text."
-optional = false
-python-versions = ">=3.5"
-files = [
-    {file = "html2text-2020.1.16-py3-none-any.whl", hash = "sha256:c7c629882da0cf377d66f073329ccf34a12ed2adf0169b9285ae4e63ef54c82b"},
-    {file = "html2text-2020.1.16.tar.gz", hash = "sha256:e296318e16b059ddb97f7a8a1d6a5c1d7af4544049a01e261731d2d5cc277bbb"},
-]
-
-[[package]]
 name = "html5lib"
 version = "1.1"
 description = "HTML parser based on the WHATWG HTML specification"
@@ -1679,23 +1668,6 @@ pydantic = ">=2.0b3"
 all = ["phonenumbers (>=8,<9)", "pycountry (>=22,<23)"]
 
 [[package]]
-name = "pydash"
-version = "7.0.1"
-description = "The kitchen sink of Python utility libraries for doing \"stuff\" in a functional way. Based on the Lo-Dash Javascript library."
-optional = false
-python-versions = ">=3.7"
-files = [
-    {file = "pydash-7.0.1-py3-none-any.whl", hash = "sha256:bff1ac86758a8f78c3dfd1edb406e3a234fda9be2575eb060c25d5cc01d1c776"},
-    {file = "pydash-7.0.1.tar.gz", hash = "sha256:35a3d1e9508481ebeee5e134956d0ad382d3f2c51aba92ce24e133673b2e2898"},
-]
-
-[package.dependencies]
-typing-extensions = ">=3.10"
-
-[package.extras]
-dev = ["Sphinx", "black", "build", "coverage", "docformatter", "flake8", "flake8-black", "flake8-bugbear", "flake8-isort", "importlib-metadata (<5)", "invoke", "isort", "mypy", "pylint", "pytest", "pytest-cov", "pytest-mypy-testing", "sphinx-autodoc-typehints", "sphinx-rtd-theme", "tox", "twine", "wheel"]
-
-[[package]]
 name = "pygments"
 version = "2.15.1"
 description = "Pygments is a syntax highlighting package written in Python."
@@ -2194,21 +2166,22 @@ markupsafe = ">=1"
 
 [[package]]
 name = "sphinx-markdown-builder"
-version = "0.5.5"
-description = "sphinx builder that outputs markdown files"
+version = "0.6.3"
+description = "A Sphinx extension to add markdown generation support."
 optional = false
-python-versions = "*"
+python-versions = ">=3.7"
 files = [
-    {file = "sphinx-markdown-builder-0.5.5.tar.gz", hash = "sha256:6ead53c08d8835329e32418dcdbac4db710a1c4e5e8db687d23b9e88882d9d16"},
-    {file = "sphinx_markdown_builder-0.5.5-py2.py3-none-any.whl", hash = "sha256:3c8909579dfa83ce5a8fb48e2d01dc257fc0676931170cb92cd528f9fceee76f"},
+    {file = "sphinx-markdown-builder-0.6.3.tar.gz", hash = "sha256:f374b17f739fdcae61150d8c4da8820d81b195962e57c6c9b48e69c17200386e"},
+    {file = "sphinx_markdown_builder-0.6.3-py3-none-any.whl", hash = "sha256:e4e1b4eb3ec1909bea35f7a8b2f42f147870f9bfd3a3b70781f25f76bb5c61b7"},
 ]
 
 [package.dependencies]
-html2text = "*"
-pydash = "*"
-sphinx = "*"
-unify = "*"
-yapf = "*"
+docutils = "*"
+sphinx = ">=2.2.0"
+tabulate = "*"
+
+[package.extras]
+dev = ["black", "bumpver", "coveralls", "flake8", "isort", "pip-tools", "pylint", "pytest", "pytest-cov"]
 
 [[package]]
 name = "sphinx-prompt"
@@ -2535,19 +2508,6 @@ files = [
 ]
 
 [[package]]
-name = "unify"
-version = "0.5"
-description = "Modifies strings to all use the same (single/double) quote where possible."
-optional = false
-python-versions = "*"
-files = [
-    {file = "unify-0.5.tar.gz", hash = "sha256:8ddce812b2457212b7598fe574c9e6eb3ad69710f445391338270c7f8a71723c"},
-]
-
-[package.dependencies]
-untokenize = "*"
-
-[[package]]
 name = "untokenize"
 version = "0.1.1"
 description = "Transforms tokens into original source code (while preserving whitespace)."
@@ -2714,20 +2674,6 @@ files = [
 ]
 
 [[package]]
-name = "yapf"
-version = "0.33.0"
-description = "A formatter for Python code."
-optional = false
-python-versions = "*"
-files = [
-    {file = "yapf-0.33.0-py2.py3-none-any.whl", hash = "sha256:4c2b59bd5ffe46f3a7da48df87596877189148226ce267c16e8b44240e51578d"},
-    {file = "yapf-0.33.0.tar.gz", hash = "sha256:da62bdfea3df3673553351e6246abed26d9fe6780e548a5af9e70f6d2b4f5b9a"},
-]
-
-[package.dependencies]
-tomli = ">=2.0.1"
-
-[[package]]
 name = "zipp"
 version = "3.15.0"
 description = "Backport of pathlib-compatible object wrapper for zip files"
@@ -2745,4 +2691,4 @@ testing = ["big-O", "flake8 (<5)", "jaraco.functools", "jaraco.itertools", "more
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "5622c151aeaed33fbcf71c8ed1ea3f38818980c038038630c0bb022c0d269e3e"
+content-hash = "9550f1c4ac2d786530eec289f2ebb570522667273920c911091492b529aff503"
