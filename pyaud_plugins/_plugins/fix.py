@@ -98,6 +98,15 @@ class FormatDocs(CheckFix):
     def exe(self) -> t.List[str]:
         return [self.docformatter]
 
+    def fix(self, *args: str, **kwargs: bool) -> int:
+        returncode = super().fix(*args, suppress=True, **kwargs)
+        if returncode == 3:
+            # in place for docformatter now returns 3, so this will
+            # always fail without bringing back to 0
+            returncode = 0
+
+        return returncode
+
 
 @pyaud.plugins.register()
 class Imports(CheckFix):
