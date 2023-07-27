@@ -2,6 +2,8 @@
 pyaud_plugins._plugins.write
 ============================
 """
+from __future__ import annotations
+
 import os
 import re
 import tempfile
@@ -159,6 +161,18 @@ class SortPyproject(pyaud.plugins.Fix):
         )
 
 
+#: ensure this file is always removed
+class _TestsRst:
+    def __init__(self, prefix: Path) -> None:
+        self._tests_rst = prefix / "tests.rst"
+
+    def __enter__(self) -> Path:
+        return self._tests_rst
+
+    def __exit__(self, exc_type: t.Any, exc_val: t.Any, exc_tb: t.Any):
+        self._tests_rst.unlink()
+
+
 @pyaud.plugins.register()
 class AboutTests(pyaud.plugins.Fix):
     """Check tests README is up-to-date.
@@ -191,27 +205,33 @@ tests
         self._content = BANNER
         docs = Path.cwd() / "docs"
         builddir = docs / "_build"
-        tests_rst = docs / "tests.rst"
-        unformatted_md = builddir / "markdown" / "tests.md"
-        tests_rst.write_text(self.TEST_RST)
-        self.subprocess[self.sphinx_build].call(
-            "-M", "markdown", docs, builddir, file=os.devnull, *args, **kwargs
-        )
-        tests_rst.unlink()
-        lines = unformatted_md.read_text(encoding="utf-8").splitlines()
-        skip_lines = False
-        for line in lines:
-            match = re.match(r"(.*)tests\._test\.test_(.*)\((.*)", line)
-            if match:
-                skip_lines = False
-                self._content += "{}{}\n\n".format(
-                    match.group(1),
-                    match.group(2).capitalize().replace("_", " "),
-                )
-            elif line.startswith("* **"):
-                skip_lines = True
-            elif not skip_lines:
-                self._content += f"{line}\n"
+        with _TestsRst(docs) as tests_rst:
+            unformatted_md = builddir / "markdown" / "tests.md"
+            tests_rst.write_text(self.TEST_RST)
+            self.subprocess[self.sphinx_build].call(
+                "-M",
+                "markdown",
+                docs,
+                builddir,
+                file=os.devnull,
+                *args,
+                **kwargs,
+            )
+
+            lines = unformatted_md.read_text(encoding="utf-8").splitlines()
+            skip_lines = False
+            for line in lines:
+                match = re.match(r"(.*)tests\._test\.test_(.*)\((.*)", line)
+                if match:
+                    skip_lines = False
+                    self._content += "{}{}\n\n".format(
+                        match.group(1),
+                        match.group(2).capitalize().replace("_", " "),
+                    )
+                elif line.startswith("* **"):
+                    skip_lines = True
+                elif not skip_lines:
+                    self._content += f"{line}\n"
 
         if self.cache_file.is_file():
             return int(
