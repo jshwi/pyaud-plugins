@@ -197,8 +197,8 @@ def test_toc(
     :param monkeypatch: Mock patch environment and attributes.
     :param main: Patch package entry point.
     :param make_tree: Create directory tree from dict mapping.
-    :param patch_sp_call_null: Mock ``Subprocess.call``to do nothing and
-        return returncode.
+    :param patch_sp_call_null: Mock ``Subprocess.call`` to do nothing
+        and return returncode.
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
     """
