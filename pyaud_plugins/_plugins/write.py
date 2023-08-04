@@ -6,9 +6,11 @@ from __future__ import annotations
 
 import os
 import re
+import shutil
 import tempfile
 import typing as t
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import pyaud
 import yaml
@@ -161,18 +163,6 @@ class SortPyproject(pyaud.plugins.Fix):
         )
 
 
-#: ensure this file is always removed
-class _TestsRst:
-    def __init__(self, prefix: Path) -> None:
-        self._tests_rst = prefix / "tests.rst"
-
-    def __enter__(self) -> Path:
-        return self._tests_rst
-
-    def __exit__(self, exc_type: t.Any, exc_val: t.Any, exc_tb: t.Any):
-        self._tests_rst.unlink()
-
-
 @pyaud.plugins.register()
 class AboutTests(pyaud.plugins.Fix):
     """Check tests README is up-to-date.
@@ -204,20 +194,23 @@ tests
     def audit(self, *args: str, **kwargs: bool) -> int:
         self._content = BANNER
         docs = Path.cwd() / "docs"
-        builddir = docs / "_build"
-        with _TestsRst(docs) as tests_rst:
+        with TemporaryDirectory() as tmpdir:
+            tmp_docs = Path(tmpdir) / "docs"
+            shutil.copytree(docs, tmp_docs)
+            shutil.copy(Path.cwd() / "README.rst", tmp_docs.parent)
+            builddir = tmp_docs / "_build"
             unformatted_md = builddir / "markdown" / "tests.md"
+            tests_rst = tmp_docs / "tests.rst"
             tests_rst.write_text(self.TEST_RST)
             self.subprocess[self.sphinx_build].call(
                 "-M",
                 "markdown",
-                docs,
+                tmp_docs,
                 builddir,
                 file=os.devnull,
                 *args,
                 **kwargs,
             )
-
             lines = unformatted_md.read_text(encoding="utf-8").splitlines()
             skip_lines = False
             for line in lines:

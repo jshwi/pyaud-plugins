@@ -45,6 +45,7 @@ from . import (
     TOOL,
     TYPECHECK,
     WHITELIST,
+    FixtureMockTemporaryDirectory,
     MakeTreeType,
     MockCallStatusType,
     MockMainType,
@@ -529,22 +530,33 @@ def test_readme_replace() -> None:
 
 
 def test_about_tests(
+    tmp_path: Path,
     monkeypatch: pytest.MonkeyPatch,
     main: MockMainType,
     make_tree: MakeTreeType,
     nocolorcapsys: NoColorCapsys,
+    mock_temporary_directory: FixtureMockTemporaryDirectory,
 ) -> None:
     """Test test README is formatted correctly.
 
+    :param tmp_path: Create and return temporary directory.
     :param monkeypatch: Mock patch environment and attributes.
     :param main: Patch package entry point.
     :param make_tree: Create directory tree from dict mapping.
     :param nocolorcapsys: Capture system output while stripping ANSI
         color codes.
+    :param mock_temporary_directory: Mock
+        ``tempfile.TemporaryDirectory``.
     """
+    tempdir = tmp_path / "tmp"
     about_tests = "about-tests"
-    path = Path.cwd() / ppe.ABOUT_TESTS
-    markdown_file = Path.cwd() / ppe.DOCS / "_build" / "markdown" / "tests.md"
+    path = tempdir / ppe.ABOUT_TESTS
+
+    # this will get run three times, when the audit fails and then when
+    # it passes (not sure why there's a third...)
+    mock_temporary_directory(tempdir, tempdir, tempdir)
+    markdown_file = tempdir / "docs" / "_build" / "markdown" / "tests.md"
+    (Path.cwd() / "README.rst").touch()
     monkeypatch.setattr(
         "pyaud_plugins._plugins.write.AboutTests.cache_file", path
     )

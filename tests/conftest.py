@@ -19,6 +19,7 @@ from pyaud.__main__ import main
 
 from . import (
     FixtureMockRepo,
+    FixtureMockTemporaryDirectory,
     MakeTreeType,
     MockCallStatusType,
     MockFuncType,
@@ -26,6 +27,7 @@ from . import (
     MockSPCallNullType,
     MockSPCallType,
     MockSPPrintCalledType,
+    MockTemporaryDirectory,
     NoColorCapsys,
     git,
 )
@@ -293,3 +295,22 @@ def fixture_mock_repo(monkeypatch: pytest.MonkeyPatch) -> FixtureMockRepo:
         monkeypatch.setattr("git.Repo", lambda _: git_repo)
 
     return _mock_repo
+
+
+@pytest.fixture(name="mock_temporary_directory")
+def fixture_mock_temporary_dir(
+    monkeypatch: pytest.MonkeyPatch,
+) -> FixtureMockTemporaryDirectory:
+    """Patch ``TemporaryDirectory`` to return test /tmp/<unique> dir.
+
+    :param monkeypatch: Mock patch environment and attributes.
+    :return: Function for using this fixture.
+    """
+
+    def _mock_temporary_dir(*temp_dirs: Path) -> None:
+        monkeypatch.setattr(
+            "pyaud_plugins._plugins.write.TemporaryDirectory",
+            MockTemporaryDirectory(*temp_dirs).open,
+        )
+
+    return _mock_temporary_dir

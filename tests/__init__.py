@@ -4,7 +4,9 @@ tests
 
 Test package for ``pyaud-plugins``.
 """
+import contextlib
 import re
+import shutil
 import typing as t
 from pathlib import Path
 
@@ -18,6 +20,7 @@ MockCallStatusType = t.Callable[[str, int], MockFuncType]
 MakeTreeType = t.Callable[[Path, t.Dict[str, t.Any]], None]
 MockSPPrintCalledType = t.Callable[[], None]
 MockSPCallNullType = t.Callable[[], None]
+FixtureMockTemporaryDirectory = t.Callable[..., None]
 
 
 class MockSPCallType(t.Protocol):  # pylint: disable=too-few-public-methods
@@ -118,3 +121,25 @@ class NoColorCapsys:
         :return: Stdout.
         """
         return self.readouterr()[0]
+
+
+class MockTemporaryDirectory:  # pylint: disable=too-few-public-methods
+    """Mock ``tempfile.TemporaryDirectory``.
+
+    :param temp_dirs: Paths to mock ``tempfile.TemporaryDirectory``
+        with.
+    """
+
+    def __init__(self, *temp_dirs: Path) -> None:
+        self._temp_dirs = list(temp_dirs)
+
+    @contextlib.contextmanager
+    def open(self) -> t.Generator[str, None, None]:
+        """Mock dir returned from ``TemporaryDirectory`` constructor.
+
+        :return: Generator yielding self.
+        """
+        temp_dir = self._temp_dirs.pop(0)
+        temp_dir.mkdir()
+        yield str(temp_dir)
+        shutil.rmtree(temp_dir)
