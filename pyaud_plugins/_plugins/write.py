@@ -194,10 +194,13 @@ tests
     def audit(self, *args: str, **kwargs: bool) -> int:
         self._content = BANNER
         docs = Path.cwd() / "docs"
+        readme = Path.cwd() / "README.rst"
         with TemporaryDirectory() as tmpdir:
             tmp_docs = Path(tmpdir) / "docs"
             shutil.copytree(docs, tmp_docs)
-            shutil.copy(Path.cwd() / "README.rst", tmp_docs.parent)
+            if readme.is_file():
+                shutil.copy(readme, tmp_docs.parent)
+
             builddir = tmp_docs / "_build"
             unformatted_md = builddir / "markdown" / "tests.md"
             tests_rst = tmp_docs / "tests.rst"

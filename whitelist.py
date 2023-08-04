@@ -1,6 +1,6 @@
 AboutTests  # unused class (pyaud_plugins/_plugins/write.py:166)
 ChangeLogged  # unused class (pyaud_plugins/_plugins/action.py:138)
-CommitPolicy  # unused class (pyaud_plugins/_plugins/write.py:243)
+CommitPolicy  # unused class (pyaud_plugins/_plugins/write.py:246)
 Const  # unused class (pyaud_plugins/_plugins/audit.py:94)
 DEBUG  # unused variable (tests/__init__.py:38)
 Docs  # unused class (pyaud_plugins/_plugins/action.py:74)
