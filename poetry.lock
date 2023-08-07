@@ -635,13 +635,13 @@ tomli = ["tomli (>=2.0.0,<3.0.0)"]
 
 [[package]]
 name = "docsig"
-version = "0.34.0"
+version = "0.34.1"
 description = "Check signature params for proper documentation"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "docsig-0.34.0-py3-none-any.whl", hash = "sha256:09b20b1a7a331d1fd86f155c2dbfce610f99e574669e6f1dcc03aa41253cb36e"},
-    {file = "docsig-0.34.0.tar.gz", hash = "sha256:447205037ec9e3c19c10b12206ac1db67579f9db0cf1a67d61bd6aeeabfb6623"},
+    {file = "docsig-0.34.1-py3-none-any.whl", hash = "sha256:a8d0b1a0bd881b9ae4662764600fd7cc97b59eaccaa633a0e8602fe1dc87af79"},
+    {file = "docsig-0.34.1.tar.gz", hash = "sha256:b7fa523269a10489d6375e7007e51f381a93a39af966061f3f0f49430330d1d8"},
 ]
 
 [package.dependencies]
@@ -649,7 +649,7 @@ arcon = ">=0,<1"
 astroid = ">=2.11.6,<3.0.0"
 object-colors = ">=2.1.0,<3.0.0"
 Pygments = ">=2.13.0,<3.0.0"
-Sphinx = ">=4.3.2,<5.0.0"
+Sphinx = ">=4.3.2,<7.0.0"
 
 [[package]]
 name = "docutils"
