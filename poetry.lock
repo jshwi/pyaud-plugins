@@ -635,13 +635,13 @@ tomli = ["tomli (>=2.0.0,<3.0.0)"]
 
 [[package]]
 name = "docsig"
-version = "0.34.2"
+version = "0.35.0"
 description = "Check signature params for proper documentation"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "docsig-0.34.2-py3-none-any.whl", hash = "sha256:c75f27a837e85da3677ebb7e9e33b798ad31cbf0a56d70de55d8b9df2d9bd5d3"},
-    {file = "docsig-0.34.2.tar.gz", hash = "sha256:2cbd0e217b3cb356ffabe3c08e3d05619ad52963295564d558379061beb1e971"},
+    {file = "docsig-0.35.0-py3-none-any.whl", hash = "sha256:a23128ed3e7da1cbd01bb26b0fbe326794bfa22116965205bd0f4a7a81b6a094"},
+    {file = "docsig-0.35.0.tar.gz", hash = "sha256:b541e47dcc19d67bf4bde617446278f6ead74486bd1bff0df8789e75832e134c"},
 ]
 
 [package.dependencies]
