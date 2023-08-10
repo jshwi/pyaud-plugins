@@ -7,6 +7,7 @@ from __future__ import annotations
 import os
 import re
 import shutil
+import subprocess
 import tempfile
 import typing as t
 from pathlib import Path
@@ -16,6 +17,7 @@ import pyaud
 import yaml
 
 from pyaud_plugins._environ import environ as e
+from pyaud_plugins._utils import print_diff
 
 BANNER = """\
 <!--
@@ -302,3 +304,96 @@ class CommitPolicy(pyaud.plugins.Fix):
         return int(
             self.cache_file.read_text(encoding="utf-8") != self._content
         )
+
+
+@pyaud.plugins.register()
+class ReadmeHelp(pyaud.plugins.Fix):
+    """Test help documented in README is up to date.
+
+    :param name: Name of this plugin.
+    """
+
+    cache_file = Path("README.rst")
+    tab = "    "
+
+    def __init__(self, name: str) -> None:
+        super().__init__(name)
+        self.readme_content = ""
+        self.current_help = ""
+        self.readme_help = ""
+
+    def _get_help_in_readme(self) -> tuple[int, int, str]:
+        self.readme_content = self.cache_file.read_text(encoding="utf-8")
+        argparse_tokens = [
+            "usage",
+            "[-h]",
+            "optional arguments:",
+            "-h, --help",
+            "show this help message and exit",
+        ]
+        in_code_block = False
+        lines: list[str] = []
+        dedent = False
+        start = 0
+        for count, line in enumerate(self.readme_content.splitlines()):
+            if ".. code-block:: console" in line:
+                start = count
+                dedent = False
+                in_code_block = True
+
+            if in_code_block:
+                lines.append(line)
+                if line == "":
+                    dedent = True
+
+                elif dedent:
+                    if line.startswith(self.tab):
+                        dedent = False
+                    else:
+                        string = "\n".join(lines)
+                        if all(i in string for i in argparse_tokens):
+                            return start, count - 1, string
+
+                        lines = []
+                        dedent = False
+                        in_code_block = False
+
+        return 0, 0, ""
+
+    def audit(self, *args: str, **kwargs: bool) -> int:
+        if self.cache_file.is_file():
+            os.environ.update({"COLUMNS": "100", "LINES": "24"})
+            start, end, string = self._get_help_in_readme()
+            if not string:
+                return 0
+
+            executable = string.splitlines()[2].split()[1]
+            ansi_escape = re.compile(r"\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])")
+            self.current_help = ansi_escape.sub(
+                "",
+                "\n".join(
+                    f"{self.tab}{i}" if i != "" else ""
+                    for i in subprocess.run(
+                        [executable, "--help"], capture_output=True, check=True
+                    )
+                    .stdout.decode()
+                    .splitlines()
+                ),
+            )
+            start = start + 2
+            self.readme_help = "\n".join(
+                self.readme_content.splitlines()[start:end]
+            )
+            returncode = int(self.current_help != self.readme_help)
+            if returncode:
+                print_diff(self.current_help, self.readme_help)
+                return returncode
+
+        return 0
+
+    def fix(self, *args: str, **kwargs: bool) -> int:
+        self.cache_file.write_text(
+            self.readme_content.replace(self.readme_help, self.current_help),
+            encoding="utf-8",
+        )
+        return 0

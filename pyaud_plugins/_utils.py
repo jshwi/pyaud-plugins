@@ -4,11 +4,17 @@ pyaud_plugins._utils
 """
 from __future__ import annotations
 
+import difflib
 from pathlib import Path as _Path
 
 import setuptools as _setuptools
 import tomli
 from object_colors import Color as _Color
+from pygments import highlight
+from pygments.formatters.terminal256 import Terminal256Formatter
+
+# noinspection PyUnresolvedReferences
+from pygments.lexers.diff import DiffLexer
 
 colors = _Color()
 
@@ -76,3 +82,18 @@ def package() -> str | None:
         return repo
 
     return None
+
+
+def print_diff(str1: str, str2: str) -> None:
+    """Print diff with syntax highlighting.
+
+    :param str1: String one.
+    :param str2: String two.
+    """
+    differ = difflib.Differ()
+    diff = differ.compare(str1.splitlines(), str2.splitlines())
+    print(
+        highlight(
+            "\n".join(diff), DiffLexer(), Terminal256Formatter(style="monokai")
+        )
+    )

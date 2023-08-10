@@ -71,6 +71,8 @@ TOOL = "tool"
 INIT = "__init__.py"
 REPO = "package"
 GIT = "git"
+README_HELP_CACHE_FILE = "pyaud_plugins._plugins.write.ReadmeHelp.cache_file"
+README_HELP = "readme-help"
 
 
 git = Git()

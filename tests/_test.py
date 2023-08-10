@@ -2,6 +2,8 @@
 tests._test
 ===========
 """
+import subprocess
+
 # pylint: disable=too-many-lines,too-many-arguments,cell-var-from-loop
 # pylint: disable=too-few-public-methods,protected-access,no-member
 import typing as t
@@ -34,6 +36,8 @@ from . import (
     PYAUD_FILES_POPULATE,
     PYAUD_PLUGINS_PLUGINS,
     README,
+    README_HELP,
+    README_HELP_CACHE_FILE,
     REPO,
     SP_CALL,
     SP_OPEN_PROC,
@@ -739,3 +743,71 @@ def test_change_logged_fail(
     _git.Repo = _Repo  # type: ignore
     monkeypatch.setattr("pyaud_plugins._plugins.action.git", _git)
     main(change_logged)
+
+
+def test_readme_help(
+    monkeypatch: pytest.MonkeyPatch,
+    main: MockMainType,
+    make_tree: MakeTreeType,
+    nocolorcapsys: NoColorCapsys,
+) -> None:
+    """Test commit policy generation from .conform.yaml.
+
+    :param monkeypatch: Mock patch environment and attributes.
+    :param main: Patch package entry point.
+    :param make_tree: Create directory tree from dict mapping.
+    :param nocolorcapsys: Capture system output while stripping ANSI
+        color codes.
+    """
+    make_tree(Path.cwd(), {ppe.README_RST: None})
+    path = Path.cwd() / ppe.README_RST
+    executable = Path.cwd() / "docsig"
+    monkeypatch.setattr(README_HELP_CACHE_FILE, path)
+    template = templatest.templates.registered.getbyname("test-readme-help")
+
+    path.write_text(template.template)
+    executable.write_text(templates.EXECUTABLE)
+    run = subprocess.run
+    monkeypatch.setattr(
+        "subprocess.run",
+        lambda *_, **__: run(
+            ["python3", executable, "--help"], capture_output=True, check=True
+        ),
+    )
+    main(README_HELP)
+    main(README_HELP, FLAG_FIX)
+    assert NO_ISSUES in nocolorcapsys.stdout()
+    assert path.read_text(ppe.ENCODING) == template.expected
+    main(README_HELP, FLAG_FIX)
+    assert NO_ISSUES in nocolorcapsys.stdout()
+
+
+def test_readme_help_no_commandline(
+    monkeypatch: pytest.MonkeyPatch,
+    main: MockMainType,
+    make_tree: MakeTreeType,
+) -> None:
+    """Test commit policy generation from .conform.yaml.
+
+    :param monkeypatch: Mock patch environment and attributes.
+    :param main: Patch package entry point.
+    :param make_tree: Create directory tree from dict mapping.
+    """
+    make_tree(Path.cwd(), {ppe.README_RST: None})
+    path = Path.cwd() / ppe.README_RST
+    monkeypatch.setattr(README_HELP_CACHE_FILE, path)
+    path.write_text(templates.README_NO_COMMANDLINE_HELP)
+    assert main(README_HELP) == 0
+
+
+def test_readme_help_no_readme_rst(
+    monkeypatch: pytest.MonkeyPatch, main: MockMainType
+) -> None:
+    """Test commit policy generation from .conform.yaml.
+
+    :param monkeypatch: Mock patch environment and attributes.
+    :param main: Patch package entry point.
+    """
+    path = Path.cwd() / ppe.README_RST
+    monkeypatch.setattr(README_HELP_CACHE_FILE, path)
+    assert main(README_HELP) == 0

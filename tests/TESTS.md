@@ -99,6 +99,21 @@ Test that `pytest` is not called if:
 > * no tests at all within tests dir.
 
 
+### Readme help
+
+Test commit policy generation from .conform.yaml.
+
+
+### Readme help no commandline
+
+Test commit policy generation from .conform.yaml.
+
+
+### Readme help no readme rst
+
+Test commit policy generation from .conform.yaml.
+
+
 ### Readme replace
 
 Test that `LineSwitch` properly edits a file.
