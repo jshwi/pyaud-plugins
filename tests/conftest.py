@@ -3,6 +3,8 @@ tests.conftest
 ==============
 """
 # pylint: disable=protected-access,no-member,too-many-statements
+from __future__ import annotations
+
 import os
 import typing as t
 from configparser import ConfigParser
@@ -204,9 +206,9 @@ def fixture_make_tree() -> MakeTreeType:
     :return: Function for using this fixture.
     """
 
-    def _make_tree(root: Path, obj: t.Dict[str, t.Any]) -> None:
+    def _make_tree(root: str | Path, obj: t.Dict[str | Path, t.Any]) -> None:
         for key, value in obj.items():
-            fullpath = root / key
+            fullpath = Path(root) / key
             if isinstance(value, dict):
                 fullpath.mkdir(exist_ok=True)
                 _make_tree(fullpath, value)

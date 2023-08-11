@@ -17,7 +17,9 @@ from templatest.utils import VarSeq
 MockMainType = t.Callable[..., int]
 MockFuncType = t.Callable[..., int]
 MockCallStatusType = t.Callable[[str, int], MockFuncType]
-MakeTreeType = t.Callable[[Path, t.Dict[str, t.Any]], None]
+MakeTreeType = t.Callable[
+    [t.Union[str, Path], t.Dict[t.Union[str, Path], t.Any]], None
+]
 MockSPPrintCalledType = t.Callable[[], None]
 MockSPCallNullType = t.Callable[[], None]
 FixtureMockTemporaryDirectory = t.Callable[..., None]
