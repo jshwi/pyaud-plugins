@@ -379,6 +379,13 @@ class ReadmeHelp(pyaud.plugins.Fix):
                     .stdout.decode()
                     .splitlines()
                 ),
+            ).replace(
+                # in 3.10 `argparse.ArgumentParser` changes
+                # `optional arguments` to simply `options`, which will
+                # yield inconsistent results in programs built for
+                # multiple versions without this
+                "options:",
+                "optional arguments:",
             )
             start = start + 2
             self.readme_help = "\n".join(
