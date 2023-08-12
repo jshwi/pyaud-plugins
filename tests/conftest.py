@@ -65,6 +65,7 @@ def fixture_mock_environment(
     # ensure no real .env file interferes with tests
     # patch ``setuptools.find_package`` to return package as existing
     monkeypatch.setattr("os.getcwd", lambda: str(tmp_path / MOCK_PACKAGE))
+    monkeypatch.setattr("pathlib.Path.cwd", lambda: tmp_path / MOCK_PACKAGE)
     monkeypatch.setattr(
         "setuptools.find_packages", lambda *_, **__: [MOCK_PACKAGE]
     )
