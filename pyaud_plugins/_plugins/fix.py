@@ -4,7 +4,6 @@ pyaud_plugins._plugins.fix
 """
 from __future__ import annotations
 
-import os
 import typing as t
 
 import pyaud
@@ -96,10 +95,7 @@ class FormatDocs(pyaud.plugins.FixAll):
     docformatter = "docformatter"
     cache = True
 
-    @property
-    def args(self) -> t.Tuple[str | os.PathLike, ...]:
-        """Args to pass to methods."""
-        return "--recursive", "--wrap-summaries", "72"
+    args = "--recursive", "--wrap-summaries", "72"
 
     @property
     def exe(self) -> t.List[str]:
