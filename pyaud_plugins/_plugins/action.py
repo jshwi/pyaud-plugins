@@ -5,7 +5,7 @@ pyaud_plugins._plugins.action
 from __future__ import annotations
 
 import shutil
-import typing as t
+import subprocess
 from pathlib import Path
 from subprocess import CalledProcessError
 
@@ -21,13 +21,8 @@ from pyaud_plugins._utils import colors
 class Tests(pyaud.plugins.Action):
     """Run the package unit-tests with ``pytest``."""
 
-    pytest = "pytest"
     cache = True
     cache_all = True
-
-    @property
-    def exe(self) -> t.List[str]:
-        return [self.pytest]
 
     @property
     def is_tests(self) -> bool:
@@ -41,7 +36,7 @@ class Tests(pyaud.plugins.Action):
 
     def action(self, *args: str, **kwargs: bool) -> int:
         if self.is_tests:
-            return self.subprocess[self.pytest].call(*args, **kwargs)
+            return subprocess.run(["pytest", *args], check=True).returncode
 
         print("No tests found")
         return 0
@@ -51,19 +46,12 @@ class Tests(pyaud.plugins.Action):
 class Coverage(Tests):
     """Run package unit-tests with ``pytest`` and ``coverage``."""
 
-    coverage = "coverage"
-
-    @property
-    def exe(self) -> t.List[str]:
-        return [self.pytest, self.coverage]
-
     def action(self, *args: str, **kwargs: bool) -> int:
         returncode = super().action(
             *[f"--cov={i}" for i in pyaud.files.reduce()], **kwargs
         )
         if self.is_tests and not returncode:
-            kwargs["suppress"] = True
-            return self.subprocess[self.coverage].call("xml", *args, **kwargs)
+            return subprocess.run(["coverage", "xml"], check=False).returncode
 
         print("No coverage to report")
         return returncode
@@ -80,12 +68,6 @@ class Docs(pyaud.plugins.Action):
     to what it originally was.
     """
 
-    sphinx_build = "sphinx-build"
-
-    @property
-    def exe(self) -> t.List[str]:
-        return [self.sphinx_build]
-
     def action(self, *args: str, **kwargs: bool) -> int:
         returncode = 0
         pyaud.plugins.get("toc")(*args, **kwargs)
@@ -95,9 +77,18 @@ class Docs(pyaud.plugins.Action):
                 e.README_RST,
                 {0: e.README_RST.stem, 1: len(e.README_RST.stem) * "="},
             ):
-                returncode = self.subprocess[self.sphinx_build].call(
-                    "-M", "html", e.DOCS, e.BUILDDIR, "-W", *args, **kwargs
-                )
+                returncode = subprocess.run(
+                    [
+                        "sphinx-build",
+                        "-M",
+                        "html",
+                        e.DOCS,
+                        e.BUILDDIR,
+                        "-W",
+                        *args,
+                    ],
+                    check=True,
+                ).returncode
 
         return returncode
 
@@ -106,16 +97,10 @@ class Docs(pyaud.plugins.Action):
 class DoctestReadme(pyaud.plugins.Action):
     """Run ``doctest`` on Python code-blocks in README."""
 
-    python = "python"
-
-    @property
-    def exe(self) -> t.List[str]:
-        return [self.python]
-
     def action(self, *args: str, **kwargs: bool) -> int:
-        returncode = self.subprocess[self.python].call(
-            "-m", "doctest", e.README_RST
-        )
+        returncode = subprocess.run(
+            ["python", "-m", "doctest", e.README_RST], check=True
+        ).returncode
         if not returncode:
             colors.green.bold.print(
                 "Success: No issues found in {}".format(
@@ -131,16 +116,12 @@ class DoctestPackage(pyaud.plugins.Action):
     """Run ``doctest`` on package."""
 
     cache = True
-    sphinx_build = "sphinx-build"
-
-    @property
-    def exe(self) -> t.List[str]:
-        return [self.sphinx_build]
 
     def action(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.sphinx_build].call(
-            "-M", "doctest", e.DOCS, e.BUILDDIR, *args, **kwargs
-        )
+        return subprocess.run(
+            ["sphinx-build", "-M", "doctest", e.DOCS, e.BUILDDIR, *args],
+            check=True,
+        ).returncode
 
 
 @pyaud.plugins.register()

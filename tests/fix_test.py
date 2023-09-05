@@ -27,7 +27,7 @@ from . import (
 
 
 def test_isort_and_black_fix(
-    main: MockMainType, capsys: pytest.CaptureFixture
+    main: MockMainType, capfd: pytest.CaptureFixture
 ) -> None:
     """Test file is correctly fixed  for failed check.
 
@@ -35,13 +35,13 @@ def test_isort_and_black_fix(
     ``Black`` ensure no errors are raised, and output is as expected.
 
     :param main: Patch package entry point.
-    :param capsys: Capture sys out.
+    :param capfd: Capture file descriptor.
     """
     path = Path.cwd() / FILE
     pyaud.files.append(path)
     path.write_text(templates.BEFORE_ISORT, ppe.ENCODING)
     main(IMPORTS, FLAG_FIX)
-    std = capsys.readouterr()
+    std = capfd.readouterr()
     assert "Fixing" in std.out
     assert str(path) in std.out
 
@@ -62,13 +62,13 @@ def test_make_format_fix(main: MockMainType) -> None:
 def test_make_unused_fix(
     monkeypatch: pytest.MonkeyPatch,
     main: MockMainType,
-    capsys: pytest.CaptureFixture,
+    capfd: pytest.CaptureFixture,
 ) -> None:
     """Test ``pyaud unused`` when ``-f/--fix`` is provided.
 
     :param monkeypatch: Mock patch environment and attributes.
     :param main: Patch package entry point.
-    :param capsys: Capture sys out.
+    :param capfd: Capture file descriptor.
     """
     monkeypatch.setattr(
         "pyaud_plugins._plugins.write.Whitelist.cache_file",
@@ -80,7 +80,7 @@ def test_make_unused_fix(
     pyaud.files.append(path)
     path.write_text(template.template, ppe.ENCODING)
     main(UNUSED, FLAG_FIX)
-    std = capsys.readouterr()
+    std = capfd.readouterr()
     unused_function = "reformat_this"
     assert unused_function in std.out
     assert "Success: no issues found in 1 source files" in std.out

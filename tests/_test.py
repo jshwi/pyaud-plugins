@@ -39,10 +39,9 @@ from . import (
     README_HELP,
     README_HELP_CACHE_FILE,
     REPO,
+    RESULT,
     SP_CALL,
-    SP_OPEN_PROC,
     SP_REPR_PYTEST,
-    SP_STDOUT,
     TEST,
     TESTS,
     TOC,
@@ -109,10 +108,12 @@ def test_docs(
     :param call_status: Patch function to return specific exit-code.
     :param make_tree: Create directory tree from dict mapping.
     """
+    result = type(RESULT, (), {})
+    result.returncode = 0  # type: ignore
 
-    def _call(*_: str, **__: bool) -> int:
+    def _call(*_: str, **__: bool) -> result:  # type: ignore
         ppe.BUILDDIR.mkdir(parents=True)
-        return 0
+        return result
 
     mocked_plugins = pyaud.plugins.mapping()
     mocked_plugins[TOC] = call_status(TOC)  # type: ignore
@@ -253,10 +254,9 @@ def test_whitelist(
     monkeypatch.setattr(
         "pyaud_plugins._plugins.write.Whitelist.cache_file", path
     )
-    monkeypatch.setattr(
-        "spall.Subprocess.stdout",
-        lambda *_, **__: template.template.splitlines(),
-    )
+    result = type(RESULT, (), {})
+    result.stdout = template.template  # type: ignore
+    monkeypatch.setattr("subprocess.run", lambda *_, **__: result)
     main(WHITELIST)
 
     main(WHITELIST, FLAG_FIX)
@@ -270,18 +270,18 @@ def test_whitelist(
 
 
 def test_pycharm_hosted(
-    main: MockMainType, capsys: pytest.CaptureFixture
+    main: MockMainType, capfd: pytest.CaptureFixture
 ) -> None:
     """Test that color codes are produced with ``PYCHARM_HOSTED``.
 
     :param main: Patch package entry point.
-    :param capsys: Capture sys output.
+    :param capfd: Capture file descriptor.
     """
     path = Path.cwd() / FILE
     pyaud.files.append(path)
     path.write_text("import this_package_does_not_exist", ppe.ENCODING)
     main("lint")
-    std = capsys.readouterr()
+    std = capfd.readouterr()
     assert "\x1b[0m" in std.out
 
 
@@ -296,9 +296,10 @@ def test_download_missing_stubs(
     path = Path.cwd() / FILE
     path.touch()
     pyaud.files.append(path)
-    monkeypatch.setattr(SP_CALL, lambda *_, **__: 1)
-    stdout = ["error: Library stubs not installed for"]
-    monkeypatch.setattr(SP_STDOUT, lambda _: stdout)
+    result = type(RESULT, (), {})
+    result.returncode = 1  # type: ignore
+    result.stdout = "error: Library stubs not installed for"  # type: ignore
+    monkeypatch.setattr(SP_CALL, lambda *_, **__: result)
     main(TYPECHECK)
 
 
@@ -313,8 +314,10 @@ def test_typecheck_re_raise_err(
     path = Path.cwd() / FILE
     path.touch()
     pyaud.files.append(path)
-    monkeypatch.setattr(SP_CALL, lambda *_, **__: 1)
-    monkeypatch.setattr(SP_STDOUT, lambda _: [])
+    result = type(RESULT, (), {})
+    result.returncode = 1  # type: ignore
+    result.stdout = ""  # type: ignore
+    monkeypatch.setattr(SP_CALL, lambda *_, **__: result)
     main(TYPECHECK)
 
 
@@ -396,12 +399,16 @@ def test_call_doctest_readme(
     :param capsys: Capture sys out.
     """
     stdout = "Success: No issues found in README.rst"
-    monkeypatch.setattr(SP_OPEN_PROC, lambda *_, **__: 0)
+    result = type(RESULT, (), {})
+    result.returncode = 0  # type: ignore
+    monkeypatch.setattr(SP_CALL, lambda *_, **__: result)
     monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda _: None)
     assert main(DOCTEST_README) == 0
     std = capsys.readouterr()
     assert stdout in std.out
-    monkeypatch.setattr(SP_OPEN_PROC, lambda *_, **__: 1)
+    result = type(RESULT, (), {})
+    result.returncode = 1  # type: ignore
+    monkeypatch.setattr(SP_CALL, lambda *_, **__: result)
     monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda _: None)
     assert main(DOCTEST_README) == 1
 
@@ -448,11 +455,11 @@ def test_call_sort_pyproject(
 @pytest.mark.parametrize(
     "module,expected",
     [
-        (DOCTEST_PACKAGE, "<Subprocess (sphinx-build)> -M doctest"),
-        (CONST, "<Subprocess (constcheck)>"),
-        (TYPECHECK, "<Subprocess (mypy)> --ignore-missing-imports"),
-        (FORMAT, "<Subprocess (black)>"),
-        ("params", "<Subprocess (docsig)>"),
+        (DOCTEST_PACKAGE, "sphinx-build"),
+        (CONST, "constcheck"),
+        (TYPECHECK, "mypy"),
+        (FORMAT, "black"),
+        ("params", "docsig"),
     ],
 )
 def test_action(

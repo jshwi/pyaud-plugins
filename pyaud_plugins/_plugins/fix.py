@@ -4,7 +4,7 @@ pyaud_plugins._plugins.fix
 """
 from __future__ import annotations
 
-import typing as t
+import subprocess
 
 import pyaud
 
@@ -17,22 +17,17 @@ CHECK = "--check"
 class Format(pyaud.plugins.FixAll):
     """Audit code with `Black`."""
 
-    black = "black"
     cache = True
 
-    @property
-    def exe(self) -> t.List[str]:
-        return [self.black]
-
     def audit(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.exe[0]].call(
-            CHECK, *pyaud.files.args(), *args, **kwargs
-        )
+        return subprocess.run(
+            ["black", CHECK, *pyaud.files.args(), *args], check=True
+        ).returncode
 
     def fix(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.black].call(
-            *args, *pyaud.files.args(), **kwargs
-        )
+        return subprocess.run(
+            ["black", *args, *pyaud.files.args()], check=True
+        ).returncode
 
 
 @pyaud.plugins.register()
@@ -42,18 +37,12 @@ class Unused(pyaud.plugins.FixAll):
     Create whitelist first with --fix.
     """
 
-    vulture = "vulture"
-
-    @property
-    def exe(self) -> t.List[str]:
-        return [self.vulture]
-
     def audit(self, *args: str, **kwargs: bool) -> int:
         args = tuple([*pyaud.files.args(reduce=True), *args])
         if e.WHITELIST.is_file():
             args = str(e.WHITELIST), *args
 
-        return self.subprocess[self.vulture].call(*args, **kwargs)
+        return subprocess.run(["vulture", *args], check=True).returncode
 
     def fix(self, *args: str, **kwargs: bool) -> int:
         pyaud.plugins.get("whitelist")(*args, **kwargs)
@@ -64,57 +53,53 @@ class Unused(pyaud.plugins.FixAll):
 class FormatStr(pyaud.plugins.FixAll):
     """Format f-strings with ``flynt``."""
 
-    flynt = "flynt"
     args = "--line-length", "79", "--transform-concats"
     cache = True
 
-    @property
-    def exe(self) -> t.List[str]:
-        return [self.flynt]
-
     def audit(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.flynt].call(
-            "--dry-run",
-            "--fail-on-change",
-            *pyaud.files.args(),
-            *self.args,
-            *args,
-            **kwargs,
-        )
+        return subprocess.run(
+            [
+                "flynt",
+                "--dry-run",
+                "--fail-on-change",
+                *pyaud.files.args(),
+                *self.args,
+                *args,
+            ],
+            check=True,
+        ).returncode
 
     def fix(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.flynt].call(
-            *self.args, *pyaud.files.args(), *args, **kwargs
-        )
+        return subprocess.run(
+            ["flynt", *self.args, *pyaud.files.args(), *args], check=True
+        ).returncode
 
 
 @pyaud.plugins.register()
 class FormatDocs(pyaud.plugins.FixAll):
     """Format docstrings with ``docformatter``."""
 
-    docformatter = "docformatter"
     cache = True
 
     args = "--recursive", "--wrap-summaries", "72"
 
-    @property
-    def exe(self) -> t.List[str]:
-        return [self.docformatter]
-
     def audit(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.exe[0]].call(
-            CHECK, *pyaud.files.args(), *self.args, *args, **kwargs
-        )
+        return subprocess.run(
+            ["docformatter", CHECK, *pyaud.files.args(), *self.args, *args],
+            check=True,
+        ).returncode
 
     def fix(self, *args: str, **kwargs: bool) -> int:
-        returncode = self.subprocess[self.exe[0]].call(
-            "--in-place",
-            *pyaud.files.args(),
-            *self.args,
-            *args,
-            **kwargs,
-            suppress=True,
-        )
+        returncode = subprocess.run(
+            [
+                "docformatter",
+                "--in-place",
+                *pyaud.files.args(),
+                *self.args,
+                *args,
+            ],
+            check=False,
+        ).returncode
         if returncode == 3:
             # in place for docformatter now returns 3, so this will
             # always fail without bringing back to 0
@@ -127,19 +112,14 @@ class FormatDocs(pyaud.plugins.FixAll):
 class Imports(pyaud.plugins.FixAll):
     """Audit imports with ``isort``."""
 
-    isort = "isort"
     cache = True
 
-    @property
-    def exe(self) -> t.List[str]:
-        return [self.isort]
-
     def audit(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.exe[0]].call(
-            CHECK, *pyaud.files.args(), *args, **kwargs
-        )
+        return subprocess.run(
+            ["isort", CHECK, *pyaud.files.args(), *args], check=True
+        ).returncode
 
     def fix(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.isort].call(
-            *pyaud.files.args(), *args, **kwargs
-        )
+        return subprocess.run(
+            ["isort", *pyaud.files.args(), *args], check=True
+        ).returncode

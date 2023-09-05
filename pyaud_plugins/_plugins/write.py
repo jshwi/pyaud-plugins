@@ -33,16 +33,11 @@ class Toc(pyaud.plugins.Fix):
     :param name: Name of plugin.
     """
 
-    sphinx_apidoc = "sphinx-apidoc"
     cache_file = e.PACKAGE_TOC
 
     def __init__(self, name: str) -> None:
         super().__init__(name)
         self._content = ""
-
-    @property
-    def exe(self) -> t.List[str]:
-        return [self.sphinx_apidoc]
 
     def _read_temp(self, tempdir: Path) -> None:
         # dynamically populate a list of unwanted, overly nested files
@@ -76,14 +71,9 @@ class Toc(pyaud.plugins.Fix):
         # write original file's contents to temporary file
         with tempfile.TemporaryDirectory() as tmp:
             tempdir = Path(tmp)
-            self.subprocess[self.sphinx_apidoc].call(
-                "-o",
-                tempdir,
-                e.PACKAGE,
-                "-f",
-                *args,
-                file=os.devnull,
-                **kwargs,
+            subprocess.run(
+                ["sphinx-apidoc", "-o", tempdir, e.PACKAGE, "-f", *args],
+                check=True,
             )
             self._read_temp(tempdir)
 
@@ -107,30 +97,28 @@ class Whitelist(pyaud.plugins.Fix):
     :param name: Name of plugin.
     """
 
-    vulture = "vulture"
     cache_file = e.WHITELIST
 
     def __init__(self, name: str) -> None:
         super().__init__(name)
         self._content = ""
 
-    @property
-    def exe(self) -> t.List[str]:
-        return [self.vulture]
-
     def audit(self, *args: str, **kwargs: bool) -> int:
         # append whitelist exceptions for each individual module
-        kwargs["suppress"] = True
-        self.subprocess[self.vulture].call(
-            *pyaud.files.args(reduce=True),
-            "--make-whitelist",
-            *args,
-            capture=True,
-            **kwargs,
+        result = subprocess.run(
+            [
+                "vulture",
+                *pyaud.files.args(reduce=True),
+                "--make-whitelist",
+                *args,
+            ],
+            capture_output=True,
+            text=True,
+            check=False,
         )
-        stdout = self.subprocess[self.vulture].stdout()
         stdout = sorted(
-            i.replace(str(Path.cwd()) + os.sep, "") for i in stdout
+            i.replace(str(Path.cwd()) + os.sep, "")
+            for i in result.stdout.splitlines()
         )
         self._content = "\n".join(stdout) + "\n"
         if self.cache_file.is_file():
@@ -147,22 +135,18 @@ class Whitelist(pyaud.plugins.Fix):
 class SortPyproject(pyaud.plugins.Fix):
     """Sort pyproject.toml file with ``toml-sort``."""
 
-    toml_sort = "toml-sort"
     cache_file = e.PYPROJECT
 
-    @property
-    def exe(self) -> t.List[str]:
-        return [self.toml_sort]
-
     def audit(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.toml_sort].call(
-            e.PYPROJECT, "--check", *args, **kwargs
-        )
+        return subprocess.run(
+            ["toml-sort", e.PYPROJECT, "--check", *args], check=True
+        ).returncode
 
     def fix(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.toml_sort].call(
-            e.PYPROJECT, "--in-place", "--all", *args, **kwargs
-        )
+        return subprocess.run(
+            ["toml-sort", e.PYPROJECT, "--in-place", "--all", *args],
+            check=True,
+        ).returncode
 
 
 @pyaud.plugins.register()
@@ -182,18 +166,14 @@ tests
     :show-inheritance:
 """
 
-    sphinx_build = "sphinx-build"
     cache_file = Path("tests") / "TESTS.md"
 
     def __init__(self, name: str) -> None:
         super().__init__(name)
         self._content = ""
 
-    @property
-    def exe(self) -> t.List[str]:
-        return [self.sphinx_build]
-
     def audit(self, *args: str, **kwargs: bool) -> int:
+        sphinx_build = "sphinx-build"
         self._content = BANNER
         docs = Path.cwd() / "docs"
         readme = Path.cwd() / "README.rst"
@@ -207,14 +187,9 @@ tests
             unformatted_md = builddir / "markdown" / "tests.md"
             tests_rst = tmp_docs / "tests.rst"
             tests_rst.write_text(self.TEST_RST)
-            self.subprocess[self.sphinx_build].call(
-                "-M",
-                "markdown",
-                tmp_docs,
-                builddir,
-                file=os.devnull,
-                *args,
-                **kwargs,
+            subprocess.run(
+                [sphinx_build, "-M", "markdown", tmp_docs, builddir, *args],
+                check=True,
             )
             lines = unformatted_md.read_text(encoding="utf-8").splitlines()
             skip_lines = False

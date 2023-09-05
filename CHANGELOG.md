@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased](https://github.com/jshwi/pyaud-plugins/compare/v0.16.1...HEAD)
 ------------------------------------------------------------------------
+### Changed
+- remove `pyaud.Plugin.subprocess` for `subprocess.run`
 
 [0.16.1](https://github.com/jshwi/pyaud-plugins/releases/tag/v0.16.1) - 2023-08-12
 ------------------------------------------------------------------------

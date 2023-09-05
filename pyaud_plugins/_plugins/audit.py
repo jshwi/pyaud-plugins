@@ -2,6 +2,7 @@
 pyaud_plugins._plugins.audit
 ============================
 """
+import subprocess
 import typing as t
 
 import pyaud
@@ -13,17 +14,22 @@ from pyaud_plugins._abc import ColorAudit
 class Lint(ColorAudit):
     """Lint code with ``pylint``."""
 
-    pylint = "pylint"
     cache = True
 
     @property
     def exe(self) -> t.List[str]:
-        return [self.pylint]
+        return []
 
     def audit(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.pylint].call(
-            "--output-format=colorized", *args, *pyaud.files.args(), **kwargs
-        )
+        return subprocess.run(
+            [
+                "pylint",
+                "--output-format=colorized",
+                *args,
+                *pyaud.files.args(),
+            ],
+            check=True,
+        ).returncode
 
 
 @pyaud.plugins.register()
@@ -33,91 +39,82 @@ class Typecheck(pyaud.plugins.Audit):
     Check there are no errors between the files and their stub-files.
     """
 
-    mypy = "mypy"
     cache = True
 
-    @property
-    def exe(self) -> t.List[str]:
-        return [self.mypy]
-
     def audit(self, *args: str, **kwargs: bool) -> int:
-        # save the value of ``suppress`` if it exists: default to False
-        suppress = kwargs.get("suppress", False)
-
+        mypy = "mypy"
+        check = not kwargs.get("suppress", False)
         # ignore the first error that might occur
         # capture output to analyse for missing stub libraries
-        kwargs["suppress"] = True
-        returncode = self.subprocess[self.mypy].call(
-            "--ignore-missing-imports",
-            *pyaud.files.args(),
-            *args,
-            capture=True,
-            **kwargs,
+        result = subprocess.run(
+            [mypy, "--ignore-missing-imports", *pyaud.files.args(), *args],
+            text=True,
+            capture_output=True,
+            check=False,
         )
-
-        # restore value of ``suppress``
-        kwargs["suppress"] = suppress
-        stdout = self.subprocess[self.mypy].stdout()
 
         # if no error occurred, continue on to print message and return
         # value
-        if returncode:
+        if result.returncode:
             # if error occurred it might be because the stub library is
             # not installed: automatically download and install stub
             # library if the below message occurred
-            if any(
-                "error: Library stubs not installed for" in i for i in stdout
-            ):
-                self.subprocess[self.mypy].call(
-                    "--non-interactive", "--install-types"
+            if "error: Library stubs not installed for" in result.stdout:
+                subprocess.run(
+                    [mypy, "--non-interactive", "--install-types"], check=check
                 )
 
                 # continue on to run the first command again, which will
                 # not, by default, ignore any consecutive errors
                 # do not capture output again
-                return self.subprocess[self.mypy].call(
-                    "--ignore-missing-imports",
-                    *pyaud.files.args(),
-                    *args,
-                    **kwargs,
-                )
+                return subprocess.run(
+                    [
+                        mypy,
+                        "--ignore-missing-imports",
+                        *pyaud.files.args(),
+                        *args,
+                    ],
+                    check=check,
+                ).returncode
 
             # if any error occurred that wasn't because of a missing
             # stub library
-            print("\n".join(stdout))
+            print(result.stdout)
             return 1
 
-        print("\n".join(stdout))
-        return returncode
+        print(result.stdout)
+        return result.returncode
 
 
 @pyaud.plugins.register()
 class Const(ColorAudit):
     """Check code for repeat use of strings."""
 
-    constcheck = "constcheck"
     cache = True
     cache_all = True
 
     @property
     def exe(self) -> t.List[str]:
-        return [self.constcheck]
+        return []
 
     def audit(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.constcheck].call(*pyaud.files.args())
+        return subprocess.run(
+            ["constcheck", *pyaud.files.args()], check=True
+        ).returncode
 
 
 @pyaud.plugins.register()
 class Params(ColorAudit):
     """Check docstring params match function signatures."""
 
-    docsig = "docsig"
     cache = True
     cache_all = True
 
     @property
     def exe(self) -> t.List[str]:
-        return [self.docsig]
+        return []
 
     def audit(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.docsig].call(*pyaud.files.args())
+        return subprocess.run(
+            ["docsig", *pyaud.files.args()], check=True
+        ).returncode

@@ -20,6 +20,7 @@ from pyaud import _objects as pc
 from pyaud.__main__ import main
 
 from . import (
+    RESULT,
     FixtureMockRepo,
     FixtureMockTemporaryDirectory,
     MakeTreeType,
@@ -175,14 +176,17 @@ def fixture_patch_sp_call(monkeypatch: pytest.MonkeyPatch) -> MockSPCallType:
     :param monkeypatch: Mock patch environment and attributes.
     :return: Function for using this fixture.
     """
+    result = type(RESULT, (), {})
 
     def _patch_sp_call(func: MockFuncType, returncode: int = 0) -> None:
-        def call(*args: str, **kwargs: bool) -> int:
+        def call(*args: str, **kwargs: bool) -> result:  # type: ignore
             func(*args, **kwargs)
 
-            return returncode
+            result.returncode = returncode  # type: ignore
+            result.stdout = ""  # type: ignore
+            return result
 
-        monkeypatch.setattr("spall.Subprocess.call", call)
+        monkeypatch.setattr("subprocess.run", call)
 
     return _patch_sp_call
 
@@ -218,8 +222,8 @@ def fixture_patch_sp_print_called(
     """
 
     def _patch_sp_print_called() -> None:
-        def _call(self, *args: str, **_: bool) -> int:
-            print(f"{self} {' '.join(str(i) for i in args)}")
+        def _call(*args: str, **_: bool) -> int:
+            print(f"{' '.join(str(i) for i in args)}")
             return 0
 
         patch_sp_call(_call)
