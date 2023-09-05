@@ -30,7 +30,6 @@ from . import (
     MockSPCallType,
     MockSPPrintCalledType,
     MockTemporaryDirectory,
-    NoColorCapsys,
     git,
 )
 
@@ -129,18 +128,6 @@ def fixture_mock_environment(
     # ================
     pyaud.files.clear()
     pc.toml.clear()
-
-
-@pytest.fixture(name="nocolorcapsys")
-def fixture_nocolorcapsys(capsys: pytest.CaptureFixture) -> NoColorCapsys:
-    """Instantiate capsys with the regex method.
-
-    :param capsys: Capture ``sys`` stdout and stderr..
-    :return: Instantiated ``NoColorCapsys`` object for capturing output
-        stream and sanitizing the string if it contains ANSI escape
-        codes.
-    """
-    return NoColorCapsys(capsys)
 
 
 @pytest.fixture(name="main")

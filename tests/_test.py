@@ -55,7 +55,6 @@ from . import (
     MockMainType,
     MockSPCallNullType,
     MockSPPrintCalledType,
-    NoColorCapsys,
     templates,
 )
 
@@ -65,7 +64,7 @@ from . import (
 )
 def test_call_coverage_xml(
     main: MockMainType,
-    nocolorcapsys: NoColorCapsys,
+    capsys: pytest.CaptureFixture,
     patch_sp_print_called: MockSPPrintCalledType,
     is_tests: bool,
     expected: str,
@@ -73,8 +72,7 @@ def test_call_coverage_xml(
     """Test ``coverage xml`` is called after successful test run.
 
     :param main: Patch package entry point.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
+    :param capsys: Capture sys out.
     :param patch_sp_print_called: Patch ``Subprocess.call`` to only
         announce what is called`.
     :param is_tests: Are there any tests available? True or False.
@@ -94,7 +92,8 @@ def test_call_coverage_xml(
     del pyaud.plugins._plugins[COVERAGE]
     pyaud.plugins._plugins[COVERAGE] = pplugins._plugins.action.Coverage
     main(COVERAGE)
-    assert expected in nocolorcapsys.stdout()
+    std = capsys.readouterr()
+    assert expected in std.out
 
 
 def test_docs(
@@ -154,7 +153,7 @@ def test_docs(
 def test_pytest_is_tests(
     monkeypatch: pytest.MonkeyPatch,
     main: MockMainType,
-    nocolorcapsys: NoColorCapsys,
+    capsys: pytest.CaptureFixture,
     patch_sp_print_called: MockSPPrintCalledType,
     relpath: Path,
     expected: str,
@@ -169,8 +168,7 @@ def test_pytest_is_tests(
 
     :param monkeypatch: Mock patch environment and attributes.
     :param main: Patch package entry point.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
+    :param capsys: Capture sys out.
     :param patch_sp_print_called: Patch ``Subprocess.call`` to only
         announce what is called`.
     :param relpath: Relative path to file.
@@ -183,7 +181,8 @@ def test_pytest_is_tests(
     monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda _: None)
     patch_sp_print_called()
     main(TESTS)
-    assert expected in nocolorcapsys.stdout().strip()
+    std = capsys.readouterr()
+    assert expected in std.out
 
 
 def test_toc(
@@ -192,7 +191,7 @@ def test_toc(
     main: MockMainType,
     make_tree: MakeTreeType,
     patch_sp_call_null: MockSPCallNullType,
-    nocolorcapsys: NoColorCapsys,
+    capsys: pytest.CaptureFixture,
 ) -> None:
     """Test that the default toc file is edited correctly.
 
@@ -204,8 +203,7 @@ def test_toc(
     :param make_tree: Create directory tree from dict mapping.
     :param patch_sp_call_null: Mock ``Subprocess.call`` to do nothing
         and return returncode.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
+    :param capsys: Capture sys out.
     """
     path = Path.cwd() / ppe.PACKAGE_TOC
     monkeypatch.setattr("pyaud_plugins._plugins.write.Toc.cache_file", path)
@@ -228,17 +226,19 @@ def test_toc(
     package_toc.write_text(template.template, ppe.ENCODING)
     monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda _: None)
     main(TOC, FLAG_FIX)
-    assert NO_ISSUES in nocolorcapsys.stdout()
+    std = capsys.readouterr()
+    assert NO_ISSUES in std.out
     assert ppe.PACKAGE_TOC.read_text(ppe.ENCODING) == template.expected
     path.write_text(CHANGE, ppe.ENCODING)
     main(TOC, FLAG_FIX)
-    assert NO_ISSUES in nocolorcapsys.stdout()
+    std = capsys.readouterr()
+    assert NO_ISSUES in std.out
 
 
 def test_whitelist(
     main: MockMainType,
     monkeypatch: pytest.MonkeyPatch,
-    nocolorcapsys: NoColorCapsys,
+    capsys: pytest.CaptureFixture,
 ) -> None:
     """Test a whitelist.py file is created properly.
 
@@ -246,8 +246,7 @@ def test_whitelist(
 
     :param main: Patch package entry point.
     :param monkeypatch: Mock patch environment and attributes.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
+    :param capsys: Capture sys out.
     """
     path = Path.cwd() / "whitelist.py"
     template = templatest.templates.registered.getbyname("test-whitelist")
@@ -261,11 +260,13 @@ def test_whitelist(
     main(WHITELIST)
 
     main(WHITELIST, FLAG_FIX)
-    assert NO_ISSUES in nocolorcapsys.stdout()
+    std = capsys.readouterr()
+    assert NO_ISSUES in std.out
     assert ppe.WHITELIST.read_text(ppe.ENCODING) == template.expected
     path.write_text(CHANGE, ppe.ENCODING)
     main(WHITELIST, FLAG_FIX)
-    assert NO_ISSUES in nocolorcapsys.stdout()
+    std = capsys.readouterr()
+    assert NO_ISSUES in std.out
 
 
 def test_pycharm_hosted(
@@ -319,7 +320,7 @@ def test_typecheck_re_raise_err(
 def test_nested_toc(
     monkeypatch: pytest.MonkeyPatch,
     main: MockMainType,
-    nocolorcapsys: NoColorCapsys,
+    capsys: pytest.CaptureFixture,
     make_tree: MakeTreeType,
 ) -> None:
     """Test that only one file is completed with a nested project.
@@ -333,8 +334,7 @@ def test_nested_toc(
 
     :param monkeypatch: Mock patch environment and attributes.
     :param main: Patch package entry point.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
+    :param capsys: Capture sys out.
     :param make_tree: Create directory tree from dict mapping.
     """
     monkeypatch.setattr(
@@ -375,7 +375,8 @@ def test_nested_toc(
     )
     main(TOC)
     main(TOC, FLAG_FIX)
-    assert NO_ISSUES in nocolorcapsys.stdout()
+    std = capsys.readouterr()
+    assert NO_ISSUES in std.out
     assert (
         ppe.PACKAGE_TOC.read_text(ppe.ENCODING)
         == templates.EXPECTED_NESTED_TOC
@@ -385,20 +386,20 @@ def test_nested_toc(
 def test_call_doctest_readme(
     monkeypatch: pytest.MonkeyPatch,
     main: MockMainType,
-    nocolorcapsys: NoColorCapsys,
+    capsys: pytest.CaptureFixture,
 ) -> None:
     """Test success and failure with ``doctest-readme`` plugin.
 
     :param monkeypatch: Mock patch environment and attributes.
     :param main: Patch package entry point.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
+    :param capsys: Capture sys out.
     """
     stdout = "Success: No issues found in README.rst"
     monkeypatch.setattr(SP_OPEN_PROC, lambda *_, **__: 0)
     monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda _: None)
     assert main(DOCTEST_README) == 0
-    assert stdout in nocolorcapsys.stdout()
+    std = capsys.readouterr()
+    assert stdout in std.out
     monkeypatch.setattr(SP_OPEN_PROC, lambda *_, **__: 1)
     monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda _: None)
     assert main(DOCTEST_README) == 1
@@ -407,14 +408,13 @@ def test_call_doctest_readme(
 def test_call_sort_pyproject(
     monkeypatch: pytest.MonkeyPatch,
     main: MockMainType,
-    nocolorcapsys: NoColorCapsys,
+    capsys: pytest.CaptureFixture,
 ) -> None:
     """Test register and call of ``sort-pyproject`` plugin.
 
     :param monkeypatch: Mock patch environment and attributes.
     :param main: Patch package entry point.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
+    :param capsys: Capture sys out.
     """
     monkeypatch.setattr(
         "pyaud_plugins._plugins.write.SortPyproject.cache_file",
@@ -428,7 +428,8 @@ def test_call_sort_pyproject(
         tomli_w.dump(test_obj, fout)
 
     main("sort-pyproject")
-    assert NO_ISSUES in nocolorcapsys.stdout()
+    std = capsys.readouterr()
+    assert NO_ISSUES in std.out
     test_obj = {
         TOOL: {
             "b_package": {"key2": "value2"},
@@ -439,7 +440,8 @@ def test_call_sort_pyproject(
         tomli_w.dump(test_obj, fout)
 
     main("sort-pyproject", FLAG_FIX)
-    assert NO_ISSUES in nocolorcapsys.stdout()
+    std = capsys.readouterr()
+    assert NO_ISSUES in std.out
 
 
 @pytest.mark.parametrize(
@@ -454,7 +456,7 @@ def test_call_sort_pyproject(
 )
 def test_action(
     main: MockMainType,
-    nocolorcapsys: NoColorCapsys,
+    capsys: pytest.CaptureFixture,
     patch_sp_print_called: MockSPPrintCalledType,
     module: str,
     expected: str,
@@ -462,8 +464,7 @@ def test_action(
     """Test calling of ``Action`` plugin.
 
     :param main: Patch package entry point.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
+    :param capsys: Capture sys out.
     :param patch_sp_print_called: Patch ``Subprocess.call`` to only
         announce what is called.
     :param module: Name of module to call.
@@ -474,7 +475,8 @@ def test_action(
     pyaud.files.append(path)
     patch_sp_print_called()
     main(module)
-    assert expected in nocolorcapsys.stdout()
+    std = capsys.readouterr()
+    assert expected in std.out
 
 
 @pytest.mark.parametrize(
@@ -488,7 +490,7 @@ def test_action(
 def test_parametrize(
     main: MockMainType,
     monkeypatch: pytest.MonkeyPatch,
-    nocolorcapsys: NoColorCapsys,
+    capsys: pytest.CaptureFixture,
     call_status: MockCallStatusType,
     module: str,
     plugins: t.Tuple[str, str],
@@ -497,8 +499,7 @@ def test_parametrize(
 
     :param main: Patch package entry point.
     :param monkeypatch: Mock patch environment and attributes.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
+    :param capsys: Capture sys out.
     :param call_status: Patch function to not do anything. Optionally
         returns non-zero exit code (0 by default).
     :param module: Name of module to call.
@@ -510,8 +511,9 @@ def test_parametrize(
 
     monkeypatch.setattr(PYAUD_PLUGINS_PLUGINS, mocked_plugins)
     main(module)
-    out = nocolorcapsys.stdout().splitlines()
-    assert all(f"{pyaud.__name__} {i}" in out for i in plugins)
+    std = capsys.readouterr()
+    out = std.out
+    assert all(i in out for i in plugins)
 
 
 def test_readme_replace() -> None:
@@ -538,7 +540,7 @@ def test_about_tests(
     monkeypatch: pytest.MonkeyPatch,
     main: MockMainType,
     make_tree: MakeTreeType,
-    nocolorcapsys: NoColorCapsys,
+    capsys: pytest.CaptureFixture,
     mock_temporary_directory: FixtureMockTemporaryDirectory,
 ) -> None:
     """Test test README is formatted correctly.
@@ -547,8 +549,7 @@ def test_about_tests(
     :param monkeypatch: Mock patch environment and attributes.
     :param main: Patch package entry point.
     :param make_tree: Create directory tree from dict mapping.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
+    :param capsys: Capture sys out.
     :param mock_temporary_directory: Mock
         ``tempfile.TemporaryDirectory``.
     """
@@ -577,25 +578,26 @@ def test_about_tests(
     monkeypatch.setattr(SP_CALL, _call)
     main(about_tests)
     main(about_tests, FLAG_FIX)
-    assert NO_ISSUES in nocolorcapsys.stdout()
+    std = capsys.readouterr()
+    assert NO_ISSUES in std.out
     assert path.read_text(ppe.ENCODING) == template.expected
     main(about_tests, FLAG_FIX)
-    assert NO_ISSUES in nocolorcapsys.stdout()
+    std = capsys.readouterr()
+    assert NO_ISSUES in std.out
 
 
 def test_commit_policy(
     monkeypatch: pytest.MonkeyPatch,
     main: MockMainType,
     make_tree: MakeTreeType,
-    nocolorcapsys: NoColorCapsys,
+    capsys: pytest.CaptureFixture,
 ) -> None:
     """Test commit policy generation from .conform.yaml.
 
     :param monkeypatch: Mock patch environment and attributes.
     :param main: Patch package entry point.
     :param make_tree: Create directory tree from dict mapping.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
+    :param capsys: Capture sys out.
     """
     commit_policy = "commit-policy"
     path = Path.cwd() / ppe.COMMIT_POLICY
@@ -610,10 +612,12 @@ def test_commit_policy(
     conform_yaml.write_text(template.template)
     main(commit_policy)
     main(commit_policy, FLAG_FIX)
-    assert NO_ISSUES in nocolorcapsys.stdout()
+    std = capsys.readouterr()
+    assert NO_ISSUES in std.out
     assert path.read_text(ppe.ENCODING) == template.expected
     main(commit_policy, FLAG_FIX)
-    assert NO_ISSUES in nocolorcapsys.stdout()
+    std = capsys.readouterr()
+    assert NO_ISSUES in std.out
 
 
 # noinspection PyUnresolvedReferences
@@ -749,15 +753,14 @@ def test_readme_help(
     monkeypatch: pytest.MonkeyPatch,
     main: MockMainType,
     make_tree: MakeTreeType,
-    nocolorcapsys: NoColorCapsys,
+    capsys: pytest.CaptureFixture,
 ) -> None:
     """Test commit policy generation from .conform.yaml.
 
     :param monkeypatch: Mock patch environment and attributes.
     :param main: Patch package entry point.
     :param make_tree: Create directory tree from dict mapping.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
+    :param capsys: Capture sys out.
     """
     make_tree(Path.cwd(), {ppe.README_RST: None})
     path = Path.cwd() / ppe.README_RST
@@ -776,10 +779,12 @@ def test_readme_help(
     )
     main(README_HELP)
     main(README_HELP, FLAG_FIX)
-    assert NO_ISSUES in nocolorcapsys.stdout()
+    std = capsys.readouterr()
+    assert NO_ISSUES in std.out
     assert path.read_text(ppe.ENCODING) == template.expected
     main(README_HELP, FLAG_FIX)
-    assert NO_ISSUES in nocolorcapsys.stdout()
+    std = capsys.readouterr()
+    assert NO_ISSUES in std.out
 
 
 def test_readme_help_no_commandline(

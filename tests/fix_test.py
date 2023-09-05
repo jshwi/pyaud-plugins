@@ -22,13 +22,12 @@ from . import (
     TEST_FORMAT,
     UNUSED,
     MockMainType,
-    NoColorCapsys,
     templates,
 )
 
 
 def test_isort_and_black_fix(
-    main: MockMainType, nocolorcapsys: NoColorCapsys
+    main: MockMainType, capsys: pytest.CaptureFixture
 ) -> None:
     """Test file is correctly fixed  for failed check.
 
@@ -36,16 +35,15 @@ def test_isort_and_black_fix(
     ``Black`` ensure no errors are raised, and output is as expected.
 
     :param main: Patch package entry point.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
+    :param capsys: Capture sys out.
     """
     path = Path.cwd() / FILE
     pyaud.files.append(path)
     path.write_text(templates.BEFORE_ISORT, ppe.ENCODING)
     main(IMPORTS, FLAG_FIX)
-    out = nocolorcapsys.stdout()
-    assert "Fixing" in out
-    assert str(path) in out
+    std = capsys.readouterr()
+    assert "Fixing" in std.out
+    assert str(path) in std.out
 
 
 def test_make_format_fix(main: MockMainType) -> None:
@@ -64,14 +62,13 @@ def test_make_format_fix(main: MockMainType) -> None:
 def test_make_unused_fix(
     monkeypatch: pytest.MonkeyPatch,
     main: MockMainType,
-    nocolorcapsys: NoColorCapsys,
+    capsys: pytest.CaptureFixture,
 ) -> None:
     """Test ``pyaud unused`` when ``-f/--fix`` is provided.
 
     :param monkeypatch: Mock patch environment and attributes.
     :param main: Patch package entry point.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
+    :param capsys: Capture sys out.
     """
     monkeypatch.setattr(
         "pyaud_plugins._plugins.write.Whitelist.cache_file",
@@ -83,45 +80,44 @@ def test_make_unused_fix(
     pyaud.files.append(path)
     path.write_text(template.template, ppe.ENCODING)
     main(UNUSED, FLAG_FIX)
-    out = nocolorcapsys.stdout()
+    std = capsys.readouterr()
     unused_function = "reformat_this"
-    assert unused_function in out
-    assert "Success: no issues found in 1 source files" in out
-    assert NO_ISSUES in out
+    assert unused_function in std.out
+    assert "Success: no issues found in 1 source files" in std.out
+    assert NO_ISSUES in std.out
     assert unused_function in ppe.WHITELIST.read_text(ppe.ENCODING)
 
 
 def test_make_format_docs_fix(
-    main: MockMainType, nocolorcapsys: NoColorCapsys
+    main: MockMainType, capsys: pytest.CaptureFixture
 ) -> None:
     """Test ``pyaud format`` when running with ``-f/--fix``.
 
     Ensure process fixes checked failure.
 
     :param main: Patch package entry point.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
+    :param capsys: Capture sys out.
     """
     path = Path.cwd() / FILE
     pyaud.files.append(path)
     path.write_text(templates.DOCFORMATTER_EXAMPLE, ppe.ENCODING)
     main(FORMAT_DOCS, FLAG_FIX)
-    assert NO_ISSUES_ALL in nocolorcapsys.stdout()
+    std = capsys.readouterr()
+    assert NO_ISSUES_ALL in std.out
 
 
 def test_format_str_fix(
-    main: MockMainType, nocolorcapsys: NoColorCapsys
+    main: MockMainType, capsys: pytest.CaptureFixture
 ) -> None:
     """Test fix audit when f-strings can be created with ``flynt``.
 
     :param main: Patch package entry point.
-    :param nocolorcapsys: Capture system output while stripping ANSI
-        color codes.
+    :param capsys: Capture sys out.
     """
     template = templatest.templates.registered.getbyname("test-format-str")
     path = Path.cwd() / FILE
     pyaud.files.append(path)
     path.write_text(template.template, ppe.ENCODING)
     main(FORMAT_STR, FLAG_FIX)
-    nocolorcapsys.readouterr()
+    capsys.readouterr()
     assert template.expected in path.read_text(ppe.ENCODING)
