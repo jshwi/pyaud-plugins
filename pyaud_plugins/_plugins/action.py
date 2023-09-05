@@ -4,7 +4,6 @@ pyaud_plugins._plugins.action
 """
 from __future__ import annotations
 
-import os
 import shutil
 import typing as t
 from pathlib import Path
@@ -13,7 +12,6 @@ from subprocess import CalledProcessError
 import git
 import pyaud
 
-from pyaud_plugins._abc import SphinxBuild
 from pyaud_plugins._environ import environ as e
 from pyaud_plugins._parsers import LineSwitch
 from pyaud_plugins._utils import colors
@@ -72,7 +70,7 @@ class Coverage(Tests):
 
 
 @pyaud.plugins.register()
-class Docs(SphinxBuild):
+class Docs(pyaud.plugins.Action):
     """Compile package documentation with ``Sphinx``.
 
     This is so the hyperlink isn't exactly the same as the package
@@ -82,9 +80,11 @@ class Docs(SphinxBuild):
     to what it originally was.
     """
 
+    sphinx_build = "sphinx-build"
+
     @property
-    def args(self) -> t.Tuple[str | os.PathLike, ...]:
-        return "-M", "html", e.DOCS, e.BUILDDIR, "-W"
+    def exe(self) -> t.List[str]:
+        return [self.sphinx_build]
 
     def action(self, *args: str, **kwargs: bool) -> int:
         returncode = 0
@@ -95,7 +95,9 @@ class Docs(SphinxBuild):
                 e.README_RST,
                 {0: e.README_RST.stem, 1: len(e.README_RST.stem) * "="},
             ):
-                returncode = self.sphinx_build(*args, **kwargs)
+                returncode = self.subprocess[self.sphinx_build].call(
+                    "-M", "html", e.DOCS, e.BUILDDIR, "-W", *args, **kwargs
+                )
 
         return returncode
 
@@ -125,14 +127,20 @@ class DoctestReadme(pyaud.plugins.Action):
 
 
 @pyaud.plugins.register()
-class DoctestPackage(SphinxBuild):
+class DoctestPackage(pyaud.plugins.Action):
     """Run ``doctest`` on package."""
 
     cache = True
+    sphinx_build = "sphinx-build"
 
     @property
-    def args(self) -> t.Tuple[str | os.PathLike, ...]:
-        return "-M", "doctest", e.DOCS, e.BUILDDIR
+    def exe(self) -> t.List[str]:
+        return [self.sphinx_build]
+
+    def action(self, *args: str, **kwargs: bool) -> int:
+        return self.subprocess[self.sphinx_build].call(
+            "-M", "doctest", e.DOCS, e.BUILDDIR, *args, **kwargs
+        )
 
 
 @pyaud.plugins.register()

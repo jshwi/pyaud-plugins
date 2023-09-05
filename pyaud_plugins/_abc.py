@@ -4,36 +4,10 @@ pyaud_plugins._abc
 """
 from __future__ import annotations
 
-import os as _os
 import typing as _t
 from abc import abstractmethod as _abstractmethod
 
 import pyaud as _pyaud
-
-
-class SphinxBuild(_pyaud.plugins.Action):
-    """Subclass for ``Action`` classes using ``sphinx-build``."""
-
-    @property
-    def exe(self) -> _t.List[str]:
-        return ["sphinx-build"]
-
-    def sphinx_build(self, *args: str, **kwargs: bool) -> int:
-        """``sphinx-build`` executable ready to go.
-
-        :param args: Args to pass to subprocess.
-        :param kwargs: Kwargs to pass to subprocess.
-        :return: Returncode.
-        """
-        return self.subprocess[self.exe[0]].call(*self.args, *args, **kwargs)
-
-    @property
-    @_abstractmethod
-    def args(self) -> _t.Tuple[str | _os.PathLike, ...]:
-        """Args for ``sphinx-build``."""
-
-    def action(self, *args: str, **kwargs: bool) -> int:
-        return self.sphinx_build(*args, **kwargs)
 
 
 class ColorAudit(_pyaud.plugins.Audit):
