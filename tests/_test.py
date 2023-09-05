@@ -281,7 +281,8 @@ def test_pycharm_hosted(
     pyaud.files.append(path)
     path.write_text("import this_package_does_not_exist", ppe.ENCODING)
     main("lint")
-    assert "\x1b[0m" in capsys.readouterr()[0]
+    std = capsys.readouterr()
+    assert "\x1b[0m" in std.out
 
 
 def test_download_missing_stubs(
