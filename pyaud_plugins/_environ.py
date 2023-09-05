@@ -43,12 +43,6 @@ class _Environ(_Env):
             )
 
     @property
-    def ENCODING(self) -> str:
-        """Default encoding."""
-        with self.prefixed(self.PREFIX):
-            return self.str("ENCODING", default="utf-8")
-
-    @property
     def PACKAGE_TOC(self):
         """Location of the user's <PACKAGENAME>.toc."""
         with self.prefixed(self.PREFIX):

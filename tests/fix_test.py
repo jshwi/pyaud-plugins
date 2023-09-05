@@ -39,7 +39,7 @@ def test_isort_and_black_fix(
     """
     path = Path.cwd() / FILE
     pyaud.files.append(path)
-    path.write_text(templates.BEFORE_ISORT, ppe.ENCODING)
+    path.write_text(templates.BEFORE_ISORT, "utf-8")
     main(IMPORTS, FLAG_FIX)
     std = capfd.readouterr()
     assert "Fixing" in std.out
@@ -54,9 +54,9 @@ def test_make_format_fix(main: MockMainType) -> None:
     template = templatest.templates.registered.getbyname(TEST_FORMAT)
     path = Path.cwd() / FILE
     pyaud.files.append(path)
-    path.write_text(template.template, ppe.ENCODING)
+    path.write_text(template.template, "utf-8")
     main(FORMAT, FLAG_FIX)
-    assert path.read_text(ppe.ENCODING) == template.expected
+    assert path.read_text("utf-8") == template.expected
 
 
 def test_make_unused_fix(
@@ -78,14 +78,14 @@ def test_make_unused_fix(
     path = Path.cwd() / ppe.PACKAGE_NAME / FILE
     path.parent.mkdir()
     pyaud.files.append(path)
-    path.write_text(template.template, ppe.ENCODING)
+    path.write_text(template.template, "utf-8")
     main(UNUSED, FLAG_FIX)
     std = capfd.readouterr()
     unused_function = "reformat_this"
     assert unused_function in std.out
     assert "Success: no issues found in 1 source files" in std.out
     assert NO_ISSUES in std.out
-    assert unused_function in ppe.WHITELIST.read_text(ppe.ENCODING)
+    assert unused_function in ppe.WHITELIST.read_text("utf-8")
 
 
 def test_make_format_docs_fix(
@@ -100,7 +100,7 @@ def test_make_format_docs_fix(
     """
     path = Path.cwd() / FILE
     pyaud.files.append(path)
-    path.write_text(templates.DOCFORMATTER_EXAMPLE, ppe.ENCODING)
+    path.write_text(templates.DOCFORMATTER_EXAMPLE, "utf-8")
     main(FORMAT_DOCS, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES_ALL in std.out
@@ -117,7 +117,7 @@ def test_format_str_fix(
     template = templatest.templates.registered.getbyname("test-format-str")
     path = Path.cwd() / FILE
     pyaud.files.append(path)
-    path.write_text(template.template, ppe.ENCODING)
+    path.write_text(template.template, "utf-8")
     main(FORMAT_STR, FLAG_FIX)
     capsys.readouterr()
-    assert template.expected in path.read_text(ppe.ENCODING)
+    assert template.expected in path.read_text("utf-8")

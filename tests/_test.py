@@ -224,13 +224,13 @@ def test_toc(
         "pyaud_plugins._plugins.write.tempfile.TemporaryDirectory", _TempDir
     )
     package_toc = tmp_path / ppe.PACKAGE_TOC.name
-    package_toc.write_text(template.template, ppe.ENCODING)
+    package_toc.write_text(template.template, "utf-8")
     monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda _: None)
     main(TOC, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
-    assert ppe.PACKAGE_TOC.read_text(ppe.ENCODING) == template.expected
-    path.write_text(CHANGE, ppe.ENCODING)
+    assert ppe.PACKAGE_TOC.read_text("utf-8") == template.expected
+    path.write_text(CHANGE, "utf-8")
     main(TOC, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
@@ -262,8 +262,8 @@ def test_whitelist(
     main(WHITELIST, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
-    assert ppe.WHITELIST.read_text(ppe.ENCODING) == template.expected
-    path.write_text(CHANGE, ppe.ENCODING)
+    assert ppe.WHITELIST.read_text("utf-8") == template.expected
+    path.write_text(CHANGE, "utf-8")
     main(WHITELIST, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
@@ -279,7 +279,7 @@ def test_pycharm_hosted(
     """
     path = Path.cwd() / FILE
     pyaud.files.append(path)
-    path.write_text("import this_package_does_not_exist", ppe.ENCODING)
+    path.write_text("import this_package_does_not_exist", "utf-8")
     main("lint")
     std = capfd.readouterr()
     assert "\x1b[0m" in std.out
@@ -381,10 +381,7 @@ def test_nested_toc(
     main(TOC, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
-    assert (
-        ppe.PACKAGE_TOC.read_text(ppe.ENCODING)
-        == templates.EXPECTED_NESTED_TOC
-    )
+    assert ppe.PACKAGE_TOC.read_text("utf-8") == templates.EXPECTED_NESTED_TOC
 
 
 def test_call_doctest_readme(
@@ -534,13 +531,13 @@ def test_readme_replace() -> None:
     readme = "README"
     repo_underline = len(repo) * "="
     readme_underline = len(readme) * "="
-    path.write_text(f"{repo}\n{repo_underline}\n", ppe.ENCODING)
-    assert f"{repo}\n{repo_underline}" in path.read_text(ppe.ENCODING)
+    path.write_text(f"{repo}\n{repo_underline}\n", "utf-8")
+    assert f"{repo}\n{repo_underline}" in path.read_text("utf-8")
     # noinspection PyUnresolvedReferences
     with pplugins._parsers.LineSwitch(path, {0: readme, 1: readme_underline}):
-        assert f"{readme}\n{readme_underline}" in path.read_text(ppe.ENCODING)
+        assert f"{readme}\n{readme_underline}" in path.read_text("utf-8")
 
-    assert f"{repo}\n{repo_underline}" in path.read_text(ppe.ENCODING)
+    assert f"{repo}\n{repo_underline}" in path.read_text("utf-8")
 
 
 def test_about_tests(
@@ -588,7 +585,7 @@ def test_about_tests(
     main(about_tests, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
-    assert path.read_text(ppe.ENCODING) == template.expected
+    assert path.read_text("utf-8") == template.expected
     main(about_tests, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
@@ -622,7 +619,7 @@ def test_commit_policy(
     main(commit_policy, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
-    assert path.read_text(ppe.ENCODING) == template.expected
+    assert path.read_text("utf-8") == template.expected
     main(commit_policy, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
@@ -789,7 +786,7 @@ def test_readme_help(
     main(README_HELP, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
-    assert path.read_text(ppe.ENCODING) == template.expected
+    assert path.read_text("utf-8") == template.expected
     main(README_HELP, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out

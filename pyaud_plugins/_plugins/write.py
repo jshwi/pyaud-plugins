@@ -45,7 +45,7 @@ class Toc(pyaud.plugins.Fix):
         contents: t.List[str] = []
         tmpfile = tempdir / e.PACKAGE_TOC.name
         if tmpfile.is_file():
-            contents.extend(tmpfile.read_text(e.ENCODING).splitlines())
+            contents.extend(tmpfile.read_text("utf-8").splitlines())
 
         nested = [
             tempdir / f
@@ -54,7 +54,7 @@ class Toc(pyaud.plugins.Fix):
         ]
         for file in nested:
             # extract the data from the nested toc
-            contents.extend(file.read_text(e.ENCODING).splitlines())
+            contents.extend(file.read_text("utf-8").splitlines())
 
         contents = sorted(
             i for i in contents if i.startswith(".. automodule::")
@@ -78,13 +78,13 @@ class Toc(pyaud.plugins.Fix):
             self._read_temp(tempdir)
 
         if self.cache_file.is_file():
-            return int(self.cache_file.read_text(e.ENCODING) != self._content)
+            return int(self.cache_file.read_text("utf-8") != self._content)
 
         return 1
 
     def fix(self, *args: str, **kwargs: bool) -> int:
-        self.cache_file.write_text(self._content, e.ENCODING)
-        return int(self.cache_file.read_text(e.ENCODING) != self._content)
+        self.cache_file.write_text(self._content, "utf-8")
+        return int(self.cache_file.read_text("utf-8") != self._content)
 
 
 @pyaud.plugins.register()
@@ -122,13 +122,13 @@ class Whitelist(pyaud.plugins.Fix):
         )
         self._content = "\n".join(stdout) + "\n"
         if self.cache_file.is_file():
-            return int(self.cache_file.read_text(e.ENCODING) != self._content)
+            return int(self.cache_file.read_text("utf-8") != self._content)
 
         return 1
 
     def fix(self, *args: str, **kwargs: bool) -> int:
-        self.cache_file.write_text(self._content, e.ENCODING)
-        return int(self.cache_file.read_text(e.ENCODING) != self._content)
+        self.cache_file.write_text(self._content, "utf-8")
+        return int(self.cache_file.read_text("utf-8") != self._content)
 
 
 @pyaud.plugins.register()
