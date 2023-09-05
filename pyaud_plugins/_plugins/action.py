@@ -11,10 +11,10 @@ from subprocess import CalledProcessError
 
 import git
 import pyaud
+import rich
 
 from pyaud_plugins._environ import environ as e
 from pyaud_plugins._parsers import LineSwitch
-from pyaud_plugins._utils import colors
 
 
 @pyaud.plugins.register()
@@ -94,10 +94,10 @@ class DoctestReadme(pyaud.plugins.Action):
             ["python", "-m", "doctest", e.README_RST], check=True
         ).returncode
         if not returncode:
-            colors.green.bold.print(
-                "Success: No issues found in {}".format(
-                    e.README_RST.relative_to(Path.cwd())
-                )
+            rich.print(
+                (
+                    "[bold green]Success: No issues found in {}[/bold green]"
+                ).format(e.README_RST.relative_to(Path.cwd()))
             )
 
         return returncode

@@ -9,16 +9,11 @@ from pathlib import Path as _Path
 
 import setuptools as _setuptools
 import tomli
-from object_colors import Color as _Color
 from pygments import highlight
 from pygments.formatters.terminal256 import Terminal256Formatter
 
 # noinspection PyUnresolvedReferences
 from pygments.lexers.diff import DiffLexer
-
-colors = _Color()
-
-colors.populate_colors()
 
 
 def get_packages() -> list[str]:
