@@ -72,8 +72,7 @@ class Toc(pyaud.plugins.Fix):
         with tempfile.TemporaryDirectory() as tmp:
             tempdir = Path(tmp)
             subprocess.run(
-                ["sphinx-apidoc", "-o", tempdir, e.PACKAGE, "-f", *args],
-                check=True,
+                ["sphinx-apidoc", "-o", tempdir, e.PACKAGE, "-f"], check=True
             )
             self._read_temp(tempdir)
 
@@ -106,12 +105,7 @@ class Whitelist(pyaud.plugins.Fix):
     def audit(self, *args: str, **kwargs: bool) -> int:
         # append whitelist exceptions for each individual module
         result = subprocess.run(
-            [
-                "vulture",
-                *pyaud.files.args(reduce=True),
-                "--make-whitelist",
-                *args,
-            ],
+            ["vulture", *pyaud.files.args(reduce=True), "--make-whitelist"],
             capture_output=True,
             text=True,
             check=False,
@@ -139,13 +133,12 @@ class SortPyproject(pyaud.plugins.Fix):
 
     def audit(self, *args: str, **kwargs: bool) -> int:
         return subprocess.run(
-            ["toml-sort", e.PYPROJECT, "--check", *args], check=True
+            ["toml-sort", e.PYPROJECT, "--check"], check=True
         ).returncode
 
     def fix(self, *args: str, **kwargs: bool) -> int:
         return subprocess.run(
-            ["toml-sort", e.PYPROJECT, "--in-place", "--all", *args],
-            check=True,
+            ["toml-sort", e.PYPROJECT, "--in-place", "--all"], check=True
         ).returncode
 
 
@@ -188,7 +181,7 @@ tests
             tests_rst = tmp_docs / "tests.rst"
             tests_rst.write_text(self.TEST_RST)
             subprocess.run(
-                [sphinx_build, "-M", "markdown", tmp_docs, builddir, *args],
+                [sphinx_build, "-M", "markdown", tmp_docs, builddir],
                 check=True,
             )
             lines = unformatted_md.read_text(encoding="utf-8").splitlines()

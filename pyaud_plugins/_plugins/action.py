@@ -78,15 +78,7 @@ class Docs(pyaud.plugins.Action):
                 {0: e.README_RST.stem, 1: len(e.README_RST.stem) * "="},
             ):
                 returncode = subprocess.run(
-                    [
-                        "sphinx-build",
-                        "-M",
-                        "html",
-                        e.DOCS,
-                        e.BUILDDIR,
-                        "-W",
-                        *args,
-                    ],
+                    ["sphinx-build", "-M", "html", e.DOCS, e.BUILDDIR, "-W"],
                     check=True,
                 ).returncode
 
@@ -119,8 +111,7 @@ class DoctestPackage(pyaud.plugins.Action):
 
     def action(self, *args: str, **kwargs: bool) -> int:
         return subprocess.run(
-            ["sphinx-build", "-M", "doctest", e.DOCS, e.BUILDDIR, *args],
-            check=True,
+            ["sphinx-build", "-M", "doctest", e.DOCS, e.BUILDDIR], check=True
         ).returncode
 
 

@@ -15,12 +15,7 @@ class Lint(pyaud.plugins.Audit):
 
     def audit(self, *args: str, **kwargs: bool) -> int:
         return subprocess.run(
-            [
-                "pylint",
-                "--output-format=colorized",
-                *args,
-                *pyaud.files.args(),
-            ],
+            ["pylint", "--output-format=colorized", *pyaud.files.args()],
             check=True,
         ).returncode
 
@@ -40,7 +35,7 @@ class Typecheck(pyaud.plugins.Audit):
         # ignore the first error that might occur
         # capture output to analyse for missing stub libraries
         result = subprocess.run(
-            [mypy, "--ignore-missing-imports", *pyaud.files.args(), *args],
+            [mypy, "--ignore-missing-imports", *pyaud.files.args()],
             text=True,
             capture_output=True,
             check=False,
