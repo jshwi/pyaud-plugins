@@ -9,12 +9,13 @@ import typing as t
 
 import pyaud
 
-from pyaud_plugins._abc import CheckFix
 from pyaud_plugins._environ import environ as e
+
+CHECK = "--check"
 
 
 @pyaud.plugins.register()
-class Format(CheckFix):
+class Format(pyaud.plugins.FixAll):
     """Audit code with `Black`."""
 
     black = "black"
@@ -23,6 +24,11 @@ class Format(CheckFix):
     @property
     def exe(self) -> t.List[str]:
         return [self.black]
+
+    def audit(self, *args: str, **kwargs: bool) -> int:
+        return self.subprocess[self.exe[0]].call(
+            CHECK, *pyaud.files.args(), *args, **kwargs
+        )
 
     def fix(self, *args: str, **kwargs: bool) -> int:
         return self.subprocess[self.black].call(
@@ -71,8 +77,8 @@ class FormatStr(pyaud.plugins.FixAll):
         return self.subprocess[self.flynt].call(
             "--dry-run",
             "--fail-on-change",
-            *self.args,
             *pyaud.files.args(),
+            *self.args,
             *args,
             **kwargs,
         )
@@ -84,7 +90,7 @@ class FormatStr(pyaud.plugins.FixAll):
 
 
 @pyaud.plugins.register()
-class FormatDocs(CheckFix):
+class FormatDocs(pyaud.plugins.FixAll):
     """Format docstrings with ``docformatter``."""
 
     docformatter = "docformatter"
@@ -92,14 +98,27 @@ class FormatDocs(CheckFix):
 
     @property
     def args(self) -> t.Tuple[str | os.PathLike, ...]:
+        """Args to pass to methods."""
         return "--recursive", "--wrap-summaries", "72"
 
     @property
     def exe(self) -> t.List[str]:
         return [self.docformatter]
 
+    def audit(self, *args: str, **kwargs: bool) -> int:
+        return self.subprocess[self.exe[0]].call(
+            CHECK, *pyaud.files.args(), *self.args, *args, **kwargs
+        )
+
     def fix(self, *args: str, **kwargs: bool) -> int:
-        returncode = super().fix(*args, suppress=True, **kwargs)
+        returncode = self.subprocess[self.exe[0]].call(
+            "--in-place",
+            *pyaud.files.args(),
+            *self.args,
+            *args,
+            **kwargs,
+            suppress=True,
+        )
         if returncode == 3:
             # in place for docformatter now returns 3, so this will
             # always fail without bringing back to 0
@@ -109,7 +128,7 @@ class FormatDocs(CheckFix):
 
 
 @pyaud.plugins.register()
-class Imports(CheckFix):
+class Imports(pyaud.plugins.FixAll):
     """Audit imports with ``isort``."""
 
     isort = "isort"
@@ -118,6 +137,11 @@ class Imports(CheckFix):
     @property
     def exe(self) -> t.List[str]:
         return [self.isort]
+
+    def audit(self, *args: str, **kwargs: bool) -> int:
+        return self.subprocess[self.exe[0]].call(
+            CHECK, *pyaud.files.args(), *args, **kwargs
+        )
 
     def fix(self, *args: str, **kwargs: bool) -> int:
         return self.subprocess[self.isort].call(

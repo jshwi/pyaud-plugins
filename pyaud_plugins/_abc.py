@@ -11,31 +11,6 @@ from abc import abstractmethod as _abstractmethod
 import pyaud as _pyaud
 
 
-class CheckFix(_pyaud.plugins.FixAll):
-    """Subclass for ``Fix`` plugins that check files and edit in place.
-
-    Utilize the ``--check`` and ``--in-place`` flags.
-    """
-
-    check = "--check"
-    in_place = "--in-place"
-
-    @property
-    def args(self) -> _t.Tuple[str | _os.PathLike, ...]:
-        """Default args to include with subclass."""
-        return ()
-
-    def audit(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.exe[0]].call(
-            self.check, *_pyaud.files.args(), *self.args, *args, **kwargs
-        )
-
-    def fix(self, *args: str, **kwargs: bool) -> int:
-        return self.subprocess[self.exe[0]].call(
-            self.in_place, *_pyaud.files.args(), *self.args, *args, **kwargs
-        )
-
-
 class SphinxBuild(_pyaud.plugins.Action):
     """Subclass for ``Action`` classes using ``sphinx-build``."""
 
