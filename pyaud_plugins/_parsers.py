@@ -4,8 +4,8 @@ pyaud.parsers
 """
 from __future__ import annotations
 
-import typing as _t
 from pathlib import Path as _Path
+from types import TracebackType as _TracebackType
 
 
 class LineSwitch:
@@ -19,7 +19,7 @@ class LineSwitch:
         strings as values.
     """
 
-    def __init__(self, path: _Path, obj: _t.Dict[int, str]) -> None:
+    def __init__(self, path: _Path, obj: dict[int, str]) -> None:
         self._path = path
         self.read = path.read_text(encoding="utf-8")
         edit = self.read.splitlines()
@@ -33,6 +33,10 @@ class LineSwitch:
         return self
 
     def __exit__(
-        self, exc_type: _t.Any, exc_val: _t.Any, exc_tb: _t.Any
-    ) -> None:
+        self,
+        exc_type: type[BaseException] | None = None,
+        exc_val: BaseException | None = None,
+        exc_tb: _TracebackType | None = None,
+    ) -> bool:
         self._path.write_text(self.read, encoding="utf-8")
+        return True

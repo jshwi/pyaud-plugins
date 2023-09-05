@@ -2,7 +2,7 @@
 pyaud_plugins._plugins.parametrize
 ==================================
 """
-import typing as t
+from __future__ import annotations
 
 import pyaud
 
@@ -11,7 +11,7 @@ import pyaud
 class Doctest(pyaud.plugins.Parametrize):
     """Run ``doctest`` on all code examples."""
 
-    def plugins(self) -> t.List[str]:
+    def plugins(self) -> list[str]:
         return ["doctest-package", "doctest-readme"]
 
 
@@ -24,7 +24,7 @@ class Files(pyaud.plugins.Parametrize):
     if nothing needs to be done.
     """
 
-    def plugins(self) -> t.List[str]:
+    def plugins(self) -> list[str]:
         return ["toc", "whitelist"]
 
 
@@ -32,5 +32,5 @@ class Files(pyaud.plugins.Parametrize):
 class Test(pyaud.plugins.Parametrize):
     """Run all tests."""
 
-    def plugins(self) -> t.List[str]:
+    def plugins(self) -> list[str]:
         return ["doctest", "coverage"]

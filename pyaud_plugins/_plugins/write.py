@@ -9,7 +9,6 @@ import re
 import shutil
 import subprocess
 import tempfile
-import typing as t
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
@@ -42,7 +41,7 @@ class Toc(pyaud.plugins.Fix):
     def _read_temp(self, tempdir: Path) -> None:
         # dynamically populate a list of unwanted, overly nested files
         # nesting the file in the docs/<NAME>.rst file is preferred
-        contents: t.List[str] = []
+        contents: list[str] = []
         tmpfile = tempdir / e.PACKAGE_TOC.name
         if tmpfile.is_file():
             contents.extend(tmpfile.read_text("utf-8").splitlines())
