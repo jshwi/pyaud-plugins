@@ -3,22 +3,15 @@ pyaud_plugins._plugins.audit
 ============================
 """
 import subprocess
-import typing as t
 
 import pyaud
 
-from pyaud_plugins._abc import ColorAudit
-
 
 @pyaud.plugins.register()
-class Lint(ColorAudit):
+class Lint(pyaud.plugins.Audit):
     """Lint code with ``pylint``."""
 
     cache = True
-
-    @property
-    def exe(self) -> t.List[str]:
-        return []
 
     def audit(self, *args: str, **kwargs: bool) -> int:
         return subprocess.run(
@@ -87,15 +80,11 @@ class Typecheck(pyaud.plugins.Audit):
 
 
 @pyaud.plugins.register()
-class Const(ColorAudit):
+class Const(pyaud.plugins.Audit):
     """Check code for repeat use of strings."""
 
     cache = True
     cache_all = True
-
-    @property
-    def exe(self) -> t.List[str]:
-        return []
 
     def audit(self, *args: str, **kwargs: bool) -> int:
         return subprocess.run(
@@ -104,15 +93,11 @@ class Const(ColorAudit):
 
 
 @pyaud.plugins.register()
-class Params(ColorAudit):
+class Params(pyaud.plugins.Audit):
     """Check docstring params match function signatures."""
 
     cache = True
     cache_all = True
-
-    @property
-    def exe(self) -> t.List[str]:
-        return []
 
     def audit(self, *args: str, **kwargs: bool) -> int:
         return subprocess.run(
