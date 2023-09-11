@@ -89,7 +89,9 @@ def test_call_coverage_xml(
     patch_sp_print_called()
     pplugins._plugins.action.Coverage.__bases__ = (_Tests,)
     del pyaud.plugins._plugins[COVERAGE]
-    pyaud.plugins._plugins[COVERAGE] = pplugins._plugins.action.Coverage
+    pyaud.plugins._plugins[COVERAGE] = pplugins._plugins.action.Coverage(
+        "coverage"
+    )
     main(COVERAGE)
     std = capsys.readouterr()
     assert expected in std.out

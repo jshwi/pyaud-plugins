@@ -14,9 +14,6 @@ import pyaud
 import pytest
 import setuptools
 from mypy_extensions import KwArg, VarArg
-
-# noinspection PyUnresolvedReferences,PyProtectedMember
-from pyaud import _objects as pc
 from pyaud.__main__ import main
 
 from . import (
@@ -115,7 +112,7 @@ def fixture_mock_environment(
     with open(Path.home() / ".gitconfig", "w", encoding="utf-8") as fout:
         config.write(fout)
 
-    mock_repo(rev_parse=lambda _: None, status=lambda _: None)
+    mock_repo(rev_parse=lambda *_, **__: None, status=lambda *_, **__: None)
     monkeypatch.setattr(
         "pyaud.plugins._HashMapping.match_file", lambda *_: False
     )
@@ -128,7 +125,6 @@ def fixture_mock_environment(
     # setup singletons
     # ================
     pyaud.files.clear()
-    pc.toml.clear()
 
 
 @pytest.fixture(name="main")

@@ -1537,22 +1537,22 @@ tests = ["pytest"]
 
 [[package]]
 name = "pyaud"
-version = "6.2.2"
+version = "7.2.0"
 description = "Framework for writing Python package audits"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pyaud-6.2.2-py3-none-any.whl", hash = "sha256:df7db9ae4d7e40a18be804037329fe4a154771fc14285473e272f5f4a34da932"},
-    {file = "pyaud-6.2.2.tar.gz", hash = "sha256:dec60a822cc90098543b3745cabd8d5f3b83677e7bfb6853ddd28b82d152af36"},
+    {file = "pyaud-7.2.0-py3-none-any.whl", hash = "sha256:8e4cda20359e948df5117252cff2aa76b4aee39b19e2a4603c1f0df76e80dfdb"},
+    {file = "pyaud-7.2.0.tar.gz", hash = "sha256:28962fa6f15329fb15e008c5e4e1c20d92a15295d43cb204cddfb401941bd5a1"},
 ]
 
 [package.dependencies]
-arcon = ">=0.2.1,<0.3.0"
+arcon = ">=0,<1"
 gitpython = ">=3.1.30,<4.0.0"
 lsfiles = ">=0.5"
 object-colors = ">=2.0.1,<3.0.0"
 pyaud-plugins = ">=0.14.0"
-spall = ">=0,<1"
+rich = ">=13.5.2,<14.0.0"
 
 [[package]]
 name = "pydantic"
