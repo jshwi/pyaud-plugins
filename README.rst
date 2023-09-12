@@ -83,7 +83,6 @@ This package contains the following plugins on running `pyaud modules`
     about-tests     -- Check tests README is up-to-date
     audit           -- Read from [audit] key in config
     change-logged   -- Check commits with loggable tags are added to CHANGELOG
-    clean           -- Remove all unversioned package files recursively
     commit-policy   -- Test commit policy is up to date
     const           -- Check code for repeat use of strings
     coverage        -- Run package unit-tests with `pytest` and `coverage`
@@ -95,10 +94,11 @@ This package contains the following plugins on running `pyaud modules`
     format          -- Audit code with `Black`
     format-docs     -- Format docstrings with `docformatter`
     format-str      -- Format f-strings with `flynt`
-    generate-rcfile -- Print rcfile to stdout
     imports         -- Audit imports with `isort`
     lint            -- Lint code with `pylint`
+    modules         -- Display all available plugins and their documentation
     params          -- Check docstring params match function signatures
+    readme-help     -- Test help documented in README is up to date
     sort-pyproject  -- Sort pyproject.toml file with `toml-sort`
     test            -- Run all tests
     tests           -- Run the package unit-tests with `pytest`
