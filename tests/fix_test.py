@@ -54,9 +54,9 @@ def test_make_format_fix(main: MockMainType) -> None:
     template = templatest.templates.registered.getbyname(TEST_FORMAT)
     path = Path.cwd() / FILE
     pyaud.files.append(path)
-    path.write_text(template.template, "utf-8")
+    path.write_text(template.template, "utf-8")  # type: ignore
     main(FORMAT, FLAG_FIX)
-    assert path.read_text("utf-8") == template.expected
+    assert path.read_text("utf-8") == template.expected  # type: ignore
 
 
 def test_make_unused_fix(
@@ -78,7 +78,7 @@ def test_make_unused_fix(
     path = Path.cwd() / ppe.PACKAGE_NAME / FILE
     path.parent.mkdir()
     pyaud.files.append(path)
-    path.write_text(template.template, "utf-8")
+    path.write_text(template.template, "utf-8")  # type: ignore
     main(UNUSED, FLAG_FIX)
     std = capfd.readouterr()
     unused_function = "reformat_this"
@@ -117,7 +117,7 @@ def test_format_str_fix(
     template = templatest.templates.registered.getbyname("test-format-str")
     path = Path.cwd() / FILE
     pyaud.files.append(path)
-    path.write_text(template.template, "utf-8")
+    path.write_text(template.template, "utf-8")  # type: ignore
     main(FORMAT_STR, FLAG_FIX)
     capsys.readouterr()
-    assert template.expected in path.read_text("utf-8")
+    assert template.expected in path.read_text("utf-8")  # type: ignore

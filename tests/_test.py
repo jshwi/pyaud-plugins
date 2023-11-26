@@ -226,12 +226,14 @@ def test_toc(
         "pyaud_plugins._plugins.write.tempfile.TemporaryDirectory", _TempDir
     )
     package_toc = tmp_path / ppe.PACKAGE_TOC.name
-    package_toc.write_text(template.template, "utf-8")
+    package_toc.write_text(template.template, "utf-8")  # type: ignore
     monkeypatch.setattr(PYAUD_FILES_POPULATE, lambda _: None)
     main(TOC, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
-    assert ppe.PACKAGE_TOC.read_text("utf-8") == template.expected
+    assert (
+        ppe.PACKAGE_TOC.read_text("utf-8") == template.expected  # type: ignore
+    )
     path.write_text(CHANGE, "utf-8")
     main(TOC, FLAG_FIX)
     std = capsys.readouterr()
@@ -264,7 +266,9 @@ def test_whitelist(
     main(WHITELIST, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
-    assert ppe.WHITELIST.read_text("utf-8") == template.expected
+    assert (
+        ppe.WHITELIST.read_text("utf-8") == template.expected  # type: ignore
+    )
     path.write_text(CHANGE, "utf-8")
     main(WHITELIST, FLAG_FIX)
     std = capsys.readouterr()
@@ -580,14 +584,14 @@ def test_about_tests(
 
     def _call(*_: t.Any, **__: t.Any) -> None:
         markdown_file.parent.mkdir(exist_ok=True, parents=True)
-        markdown_file.write_text(template.template)
+        markdown_file.write_text(template.template)  # type: ignore
 
     monkeypatch.setattr(SP_CALL, _call)
     main(about_tests)
     main(about_tests, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
-    assert path.read_text("utf-8") == template.expected
+    assert path.read_text("utf-8") == template.expected  # type: ignore
     main(about_tests, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
@@ -616,12 +620,12 @@ def test_commit_policy(
     make_tree(Path.cwd(), {".github": {}})
 
     main(commit_policy, FLAG_FIX)
-    conform_yaml.write_text(template.template)
+    conform_yaml.write_text(template.template)  # type: ignore
     main(commit_policy)
     main(commit_policy, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
-    assert path.read_text("utf-8") == template.expected
+    assert path.read_text("utf-8") == template.expected  # type: ignore
     main(commit_policy, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
@@ -775,7 +779,7 @@ def test_readme_help(
     monkeypatch.setattr(README_HELP_CACHE_FILE, path)
     template = templatest.templates.registered.getbyname("test-readme-help")
 
-    path.write_text(template.template)
+    path.write_text(template.template)  # type: ignore
     executable.write_text(templates.EXECUTABLE)
     run = subprocess.run
     monkeypatch.setattr(
@@ -788,7 +792,7 @@ def test_readme_help(
     main(README_HELP, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
-    assert path.read_text("utf-8") == template.expected
+    assert path.read_text("utf-8") == template.expected  # type: ignore
     main(README_HELP, FLAG_FIX)
     std = capsys.readouterr()
     assert NO_ISSUES in std.out
