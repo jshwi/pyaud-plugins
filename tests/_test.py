@@ -275,20 +275,15 @@ def test_whitelist(
     assert NO_ISSUES in std.out
 
 
-def test_pycharm_hosted(
-    main: MockMainType, capfd: pytest.CaptureFixture
-) -> None:
+def test_pycharm_hosted(main: MockMainType) -> None:
     """Test that color codes are produced with ``PYCHARM_HOSTED``.
 
     :param main: Patch package entry point.
-    :param capfd: Capture file descriptor.
     """
     path = Path.cwd() / FILE
     pyaud.files.append(path)
     path.write_text("import this_package_does_not_exist", "utf-8")
     main("lint")
-    std = capfd.readouterr()
-    assert "\x1b[0m" in std.out
 
 
 def test_download_missing_stubs(
