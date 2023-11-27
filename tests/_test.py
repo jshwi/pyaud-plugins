@@ -579,7 +579,9 @@ def test_about_tests(
 
     def _call(*_: t.Any, **__: t.Any) -> None:
         markdown_file.parent.mkdir(exist_ok=True, parents=True)
-        markdown_file.write_text(template.template)  # type: ignore
+        markdown_file.write_text(
+            template.template, encoding="utf-8"  # type: ignore
+        )
 
     monkeypatch.setattr(SP_CALL, _call)
     main(about_tests)
@@ -774,7 +776,7 @@ def test_readme_help(
     monkeypatch.setattr(README_HELP_CACHE_FILE, path)
     template = templatest.templates.registered.getbyname("test-readme-help")
 
-    path.write_text(template.template)  # type: ignore
+    path.write_text(template.template, encoding="utf-8")  # type: ignore
     executable.write_text(templates.EXECUTABLE)
     run = subprocess.run
     monkeypatch.setattr(
