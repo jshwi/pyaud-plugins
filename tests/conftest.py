@@ -5,11 +5,11 @@ tests.conftest
 # pylint: disable=protected-access,no-member,too-many-statements
 from __future__ import annotations
 
-import os
 import typing as t
 from configparser import ConfigParser
 from pathlib import Path
 
+import git
 import pyaud
 import pytest
 import setuptools
@@ -28,7 +28,6 @@ from . import (
     MockSPCallType,
     MockSPPrintCalledType,
     MockTemporaryDirectory,
-    git,
 )
 
 MOCK_PACKAGE = "package"
@@ -98,7 +97,7 @@ def fixture_mock_environment(
 
     # initialize repository
     # =====================
-    git.init(file=os.devnull)
+    git.Repo.init(tmp_path / MOCK_PACKAGE)
 
     # create ~/.gitconfig
     # ===================

@@ -9,7 +9,6 @@ import shutil
 import typing as t
 from pathlib import Path
 
-from gitspy import Git
 from mypy_extensions import KwArg
 from templatest.utils import VarSeq
 
@@ -73,8 +72,6 @@ README_HELP_CACHE_FILE = "pyaud_plugins._plugins.write.ReadmeHelp.cache_file"
 README_HELP = "readme-help"
 RESULT = "result"
 
-
-git = Git()
 
 FixtureMockRepo = t.Callable[[KwArg(t.Callable[..., t.Any])], None]
 
