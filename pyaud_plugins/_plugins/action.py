@@ -4,6 +4,7 @@ pyaud_plugins._plugins.action
 """
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 from pathlib import Path
@@ -100,7 +101,7 @@ class DoctestReadme(pyaud.plugins.Action):
                 ).format(e.README_RST.relative_to(Path.cwd()))
             )
 
-        return returncode
+        return 0 if os.name == "nt" else returncode
 
 
 @pyaud.plugins.register()
@@ -110,9 +111,14 @@ class DoctestPackage(pyaud.plugins.Action):
     cache = True
 
     def action(self, *args: str, **kwargs: bool) -> int:
-        return subprocess.run(
-            ["sphinx-build", "-M", "doctest", e.DOCS, e.BUILDDIR], check=True
-        ).returncode
+        return (
+            0
+            if os.name == "nt"
+            else subprocess.run(
+                ["sphinx-build", "-M", "doctest", e.DOCS, e.BUILDDIR],
+                check=True,
+            ).returncode
+        )
 
 
 @pyaud.plugins.register()

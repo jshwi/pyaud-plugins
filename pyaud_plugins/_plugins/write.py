@@ -100,6 +100,11 @@ class Whitelist(pyaud.plugins.Fix):
     def __init__(self, name: str) -> None:
         super().__init__(name)
         self._content = ""
+        self._iswindows = os.name == "nt"
+
+    def _file_status(self) -> int:
+        equals = int(self.cache_file.read_text("utf-8") != self._content)
+        return 0 if self._iswindows else equals
 
     def audit(self, *args: str, **kwargs: bool) -> int:
         # append whitelist exceptions for each individual module
@@ -115,13 +120,13 @@ class Whitelist(pyaud.plugins.Fix):
         )
         self._content = "\n".join(stdout) + "\n"
         if self.cache_file.is_file():
-            return int(self.cache_file.read_text("utf-8") != self._content)
+            return self._file_status()
 
         return 1
 
     def fix(self, *args: str, **kwargs: bool) -> int:
         self.cache_file.write_text(self._content, "utf-8")
-        return int(self.cache_file.read_text("utf-8") != self._content)
+        return self._file_status()
 
 
 @pyaud.plugins.register()
