@@ -98,6 +98,7 @@ def fixture_mock_environment(
     # initialize repository
     # =====================
     git.Repo.init(tmp_path / MOCK_PACKAGE)
+    (tmp_path / MOCK_PACKAGE / "pyproject.toml").touch()
 
     # create ~/.gitconfig
     # ===================
