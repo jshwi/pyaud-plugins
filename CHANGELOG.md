@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 [Unreleased](https://github.com/jshwi/pyaud-plugins/compare/v0.17.2...HEAD)
 ------------------------------------------------------------------------
 ### Added
+- support for windows
 - skip checks on windows for which are not supported
 
 [0.17.2](https://github.com/jshwi/pyaud-plugins/releases/tag/v0.17.2) - 2023-11-26
