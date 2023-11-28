@@ -51,6 +51,11 @@ Test commit policy generation from .conform.yaml.
 Test `pyaud docs`.
 
 
+### Doctest readme
+
+Test plugin for doctest.
+
+
 ### Download missing stubs
 
 Test for coverage on missing stubs file.

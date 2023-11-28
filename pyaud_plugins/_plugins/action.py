@@ -92,7 +92,7 @@ class DoctestReadme(pyaud.plugins.Action):
 
     def action(self, *args: str, **kwargs: bool) -> int:
         returncode = subprocess.run(
-            ["python", "-m", "doctest", e.README_RST], check=True
+            ["python", "-m", "doctest", e.README_RST], check=False
         ).returncode
         if not returncode:
             rich.print(

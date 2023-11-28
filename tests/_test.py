@@ -57,6 +57,7 @@ from . import (
     MockSPPrintCalledType,
     templates,
 )
+from .templates import DOCSIG_README
 
 
 @pytest.mark.parametrize(
@@ -825,3 +826,15 @@ def test_readme_help_no_readme_rst(
     path = Path.cwd() / ppe.README_RST
     monkeypatch.setattr(README_HELP_CACHE_FILE, path)
     assert main(README_HELP) == 0
+
+
+def test_doctest_readme(monkeypatch, main) -> None:
+    """Test plugin for doctest.
+
+    :param monkeypatch: Mock patch environment and attributes.
+    :param main: Patch package entry point.
+    """
+    path = Path.cwd() / ppe.README_RST
+    monkeypatch.setattr(README_HELP_CACHE_FILE, path)
+    path.write_text(DOCSIG_README, encoding="utf-8")
+    assert main("doctest-readme") == 0
