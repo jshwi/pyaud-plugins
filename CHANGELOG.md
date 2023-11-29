@@ -5,7 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
-[Unreleased](https://github.com/jshwi/pyaud-plugins/compare/v0.18.1...HEAD)
+[Unreleased](https://github.com/jshwi/pyaud-plugins/compare/v0.18.2...HEAD)
+------------------------------------------------------------------------
+
+[0.18.2](https://github.com/jshwi/pyaud-plugins/releases/tag/v0.18.2) - 2023-11-29
 ------------------------------------------------------------------------
 ### Security
 - bump dependencies
