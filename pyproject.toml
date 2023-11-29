@@ -98,7 +98,7 @@ repository = "https://github.com/jshwi/pyaud-plugins"
 version = "0.18.1"
 
 [tool.poetry.dependencies]
-Sphinx = ">=4.3.2,<7.0.0"
+Sphinx = ">=4.3.2,<8.0.0"
 black = ">=21.12,<24.0"
 constcheck = "^0"
 coverage = ">=6.2,<8.0"
