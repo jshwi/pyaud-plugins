@@ -1735,7 +1735,8 @@ make_files  # unused function (pyaud/src/modules.py:205)
 
     @property
     def expected(self) -> str:
-        return "{}\n".format("\n".join(sorted(self.template.splitlines())))
+        expected_template = "\n".join(sorted(self.template.splitlines()))
+        return f"{expected_template}\n"
 
 
 @templates.register

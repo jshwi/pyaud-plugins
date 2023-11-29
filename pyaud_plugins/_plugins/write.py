@@ -60,9 +60,7 @@ class Toc(pyaud.plugins.Fix):
         )
 
         toc_attrs = "   :members:\n   :undoc-members:\n   :show-inheritance:"
-        self._content = "{}\n{}\n\n".format(
-            e.PACKAGE_NAME, len(e.PACKAGE_NAME) * "="
-        )
+        self._content = f"{e.PACKAGE_NAME}\n{len(e.PACKAGE_NAME) * '='}\n\n"
         for content in contents:
             self._content += f"{content}\n{toc_attrs}\n"
 
@@ -118,7 +116,8 @@ class Whitelist(pyaud.plugins.Fix):
             i.replace(str(Path.cwd()) + os.sep, "")
             for i in result.stdout.splitlines()
         )
-        self._content = "\n".join(stdout) + "\n"
+        self._content = "\n".join(stdout)
+        self._content += "\n"
         if self.cache_file.is_file():
             return self._file_status()
 
