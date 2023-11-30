@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased](https://github.com/jshwi/pyaud-plugins/compare/v0.18.2...HEAD)
 ------------------------------------------------------------------------
+### Changed
+- remove line numbers from whitelist
 
 [0.18.2](https://github.com/jshwi/pyaud-plugins/releases/tag/v0.18.2) - 2023-11-29
 ------------------------------------------------------------------------

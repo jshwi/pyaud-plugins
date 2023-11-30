@@ -104,6 +104,12 @@ class Whitelist(pyaud.plugins.Fix):
         equals = int(self.cache_file.read_text("utf-8") != self._content)
         return 0 if self._iswindows else equals
 
+    @staticmethod
+    def _do_format(i):
+        obj, comment = i.replace(str(Path.cwd()) + os.sep, "").split("#")
+        part1 = comment.split(":")[0].strip()
+        return f"{obj}# {part1})"
+
     def audit(self, *args: str, **kwargs: bool) -> int:
         # append whitelist exceptions for each individual module
         result = subprocess.run(
@@ -112,10 +118,7 @@ class Whitelist(pyaud.plugins.Fix):
             text=True,
             check=False,
         )
-        stdout = sorted(
-            i.replace(str(Path.cwd()) + os.sep, "")
-            for i in result.stdout.splitlines()
-        )
+        stdout = sorted(self._do_format(i) for i in result.stdout.splitlines())
         self._content = "\n".join(stdout)
         self._content += "\n"
         if self.cache_file.is_file():
