@@ -17,6 +17,7 @@
       <excludeFolder url="file://$MODULE_DIR$/.idea/sonarlint" />
       <excludeFolder url="file://$MODULE_DIR$/.venv" />
       <excludeFolder url="file://$MODULE_DIR$/.pyaud_cache" />
+      <excludeFolder url="file://$MODULE_DIR$/tests/.pyaud_cache" />
     </content>
     <orderEntry type="jdk" jdkName="Poetry (pyaud-plugins)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
@@ -26,6 +27,9 @@
   </component>
   <component name="ReSTService">
     <option name="DOC_DIR" value="$MODULE_DIR$/docs" />
+  </component>
+  <component name="SonarLintModuleSettings">
+    <option name="uniqueId" value="8741feac-b568-4137-99b9-9cc5d0c3f1df" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Jinja2" />
