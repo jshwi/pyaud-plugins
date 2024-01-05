@@ -128,6 +128,7 @@ vulture = "^2.3"
 [tool.poetry.dev-dependencies]
 bump2version = "^1.0.1"
 deptry = "^0.12.0"
+freezegun = "^1.4.0"
 ipython = "^8.12.2"
 pre-commit = "^3.4.0"
 pytest = "^7.2.0"

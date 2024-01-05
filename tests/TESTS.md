@@ -46,6 +46,11 @@ Test change-logged when passing.
 Test commit policy generation from .conform.yaml.
 
 
+### Copyright year
+
+Test copyright year update for licenses.
+
+
 ### Docs
 
 Test `pyaud docs`.

@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 [Unreleased](https://github.com/jshwi/pyaud-plugins/compare/v0.19.1...HEAD)
 ------------------------------------------------------------------------
+### Added
+- plugin for copyright year
 
 [0.19.1](https://github.com/jshwi/pyaud-plugins/releases/tag/v0.19.1) - 2023-11-30
 ------------------------------------------------------------------------

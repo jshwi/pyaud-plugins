@@ -9,7 +9,9 @@ import re
 import shutil
 import subprocess
 import tempfile
+from datetime import datetime
 from pathlib import Path
+from re import Match
 from tempfile import TemporaryDirectory
 
 import pyaud
@@ -378,3 +380,48 @@ class ReadmeHelp(pyaud.plugins.Fix):
             encoding="utf-8",
         )
         return 0
+
+
+@pyaud.plugins.register()
+class CopyrightYear(pyaud.plugins.Fix):
+    """Test copyright year is up to date.
+
+    :param name: Name of this plugin.
+    """
+
+    cache_file = Path("LICENSE")
+
+    def __init__(self, name: str) -> None:
+        super().__init__(name)
+        self._content = ""
+
+    @staticmethod
+    def _replace_year(match: Match) -> str:
+        current_year = datetime.now().year
+        copyright_text = match.group(0)
+        return f"{copyright_text[:-4]}{current_year}"
+
+    def audit(self, *args: str, **kwargs: bool) -> int:
+        for path in Path.cwd().iterdir():
+            search = re.search(r"(?i)LICEN[CS]E(\.txt)?", str(path))
+            if search is not None:
+                self.cache_file = Path(search.group())
+                break
+
+        if self.cache_file.is_file():
+            self._content = re.sub(
+                r"(?i)Copyright \(c\) (\d{4})",
+                self._replace_year,
+                self.cache_file.read_text(encoding="utf-8"),
+            )
+            return int(
+                self.cache_file.read_text(encoding="utf-8") != self._content
+            )
+
+        return 0
+
+    def fix(self, *args: str, **kwargs: bool) -> int:
+        self.cache_file.write_text(self._content, encoding="utf-8")
+        return int(
+            self.cache_file.read_text(encoding="utf-8") != self._content
+        )

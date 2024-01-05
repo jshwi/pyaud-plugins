@@ -4,12 +4,10 @@ tests._test
 """
 import os
 import subprocess
-
-# pylint: disable=too-many-lines,too-many-arguments,cell-var-from-loop
-# pylint: disable=too-few-public-methods,protected-access,no-member
 import typing as t
 from pathlib import Path
 
+import freezegun
 import pyaud
 import pytest
 import templatest
@@ -57,7 +55,11 @@ from . import (
     MockSPPrintCalledType,
     templates,
 )
-from .templates import DOCSIG_README
+from .templates import DOCSIG_README, LICENSE
+
+# pylint: disable=too-many-lines,too-many-arguments,cell-var-from-loop
+# pylint: disable=too-few-public-methods,protected-access,no-member
+# pylint: disable=too-many-locals
 
 
 @pytest.mark.parametrize(
@@ -838,3 +840,132 @@ def test_doctest_readme(monkeypatch, main) -> None:
     monkeypatch.setattr(README_HELP_CACHE_FILE, path)
     path.write_text(DOCSIG_README, encoding="utf-8")
     assert main("doctest-readme") == 0
+
+
+@freezegun.freeze_time("2024-01-04")
+@pytest.mark.parametrize(
+    "file,expected_year,condition1,condition2,condition3",
+    [
+        (
+            "LICENSE",
+            lambda _: "2024",
+            lambda x: NO_ISSUES not in x,
+            lambda x: NO_ISSUES in x,
+            lambda x: NO_ISSUES in x,
+        ),
+        (
+            "LICENCE",
+            lambda _: "2024",
+            lambda x: NO_ISSUES not in x,
+            lambda x: NO_ISSUES in x,
+            lambda x: NO_ISSUES in x,
+        ),
+        (
+            "license",
+            lambda _: "2024",
+            lambda x: NO_ISSUES not in x,
+            lambda x: NO_ISSUES in x,
+            lambda x: NO_ISSUES in x,
+        ),
+        (
+            "licence",
+            lambda _: "2024",
+            lambda x: NO_ISSUES not in x,
+            lambda x: NO_ISSUES in x,
+            lambda x: NO_ISSUES in x,
+        ),
+        (
+            "LICENSE.txt",
+            lambda _: "2024",
+            lambda x: NO_ISSUES not in x,
+            lambda x: NO_ISSUES in x,
+            lambda x: NO_ISSUES in x,
+        ),
+        (
+            "LICENCE.txt",
+            lambda _: "2024",
+            lambda x: NO_ISSUES not in x,
+            lambda x: NO_ISSUES in x,
+            lambda x: NO_ISSUES in x,
+        ),
+        (
+            "license.txt",
+            lambda _: "2024",
+            lambda x: NO_ISSUES not in x,
+            lambda x: NO_ISSUES in x,
+            lambda x: NO_ISSUES in x,
+        ),
+        (
+            "licence.txt",
+            lambda _: "2024",
+            lambda x: NO_ISSUES not in x,
+            lambda x: NO_ISSUES in x,
+            lambda x: NO_ISSUES in x,
+        ),
+        (
+            "LICE",
+            lambda x: x,
+            lambda x: NO_ISSUES in x,
+            lambda x: NO_ISSUES in x,
+            lambda x: NO_ISSUES in x,
+        ),
+    ],
+    ids=[
+        "LICENSE",
+        "LICENCE",
+        "license",
+        "licence",
+        "LICENSE.txt",
+        "LICENCE.txt",
+        "license.txt",
+        "licence.txt",
+        "LICE",
+    ],
+)
+@pytest.mark.parametrize("year", ["2022", "2023"])
+@pytest.mark.parametrize("_copyright", ["copyright (c)", "Copyright (C)"])
+def test_copyright_year(
+    tmp_path: Path,
+    monkeypatch: pytest.MonkeyPatch,
+    main: MockMainType,
+    capsys: pytest.CaptureFixture,
+    file: str,
+    expected_year: t.Callable[[str], str],
+    condition1: t.Callable[[str], bool],
+    condition2: t.Callable[[str], bool],
+    condition3: t.Callable[[str], bool],
+    year: str,
+    _copyright: str,
+) -> None:
+    """Test copyright year update for licenses.
+
+    :param tmp_path: Create and return temporary directory.
+    :param monkeypatch: Mock patch environment and attributes.
+    :param main: Patch package entry point.
+    :param capsys: Capture sys out.
+    :param file: License filename, spelt either way.
+    :param expected_year: Expected year after check.
+    :param condition1: First condition.
+    :param condition2: Second condition.
+    :param condition3: Third condition.
+    :param year: Year of license copyright.
+    :param _copyright: String spelling `copyright` or `Copyright`.
+    """
+    expected_input = f"{_copyright} {year})"
+    expected_output = f"{_copyright} {expected_year(year)})"
+    package = tmp_path / "package"
+    monkeypatch.chdir(package)
+    copyright_year = "copyright-year"
+    _license = package / file
+    _license.write_text(LICENSE.format(expected_input), encoding="utf-8")
+    main(copyright_year)
+    std = capsys.readouterr()
+    assert expected_input in _license.read_text(encoding="utf-8")
+    assert condition1(std.out)
+    main(copyright_year, FLAG_FIX)
+    std = capsys.readouterr()
+    assert expected_output in _license.read_text(encoding="utf-8")
+    assert condition2(std.out)
+    main(copyright_year)
+    std = capsys.readouterr()
+    assert condition3(std.out)
