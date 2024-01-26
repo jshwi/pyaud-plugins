@@ -2,6 +2,7 @@
 pyaud_plugins._plugins.parametrize
 ==================================
 """
+
 from __future__ import annotations
 
 import pyaud

@@ -2,6 +2,7 @@
 pyaud_plugins._utils
 ====================
 """
+
 from __future__ import annotations
 
 import difflib
