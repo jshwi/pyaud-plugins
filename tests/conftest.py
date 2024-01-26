@@ -2,6 +2,7 @@
 tests.conftest
 ==============
 """
+
 # pylint: disable=protected-access,no-member,too-many-statements
 from __future__ import annotations
 

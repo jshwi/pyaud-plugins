@@ -4,6 +4,7 @@ tests.files
 
 Content to write to mock files.
 """
+
 # pylint: disable=too-many-lines,line-too-long,too-few-public-methods
 from templatest import BaseTemplate, templates
 
