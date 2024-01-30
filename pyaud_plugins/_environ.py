@@ -4,6 +4,7 @@ pyaud.environ
 
 Set up the environment variables for the current project.
 """
+
 # pylint: disable=invalid-name,too-many-public-methods
 from __future__ import annotations
 

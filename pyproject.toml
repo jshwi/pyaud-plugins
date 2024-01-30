@@ -99,7 +99,7 @@ version = "0.20.0"
 
 [tool.poetry.dependencies]
 Sphinx = ">=4.3.2,<8.0.0"
-black = ">=21.12,<24.0"
+black = ">=21.12,<25.0"
 constcheck = "^0"
 coverage = ">=6.2,<8.0"
 docformatter = "1.7.5"
