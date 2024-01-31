@@ -1513,13 +1513,13 @@ tests = ["pytest"]
 
 [[package]]
 name = "pyaud"
-version = "7.3.1"
+version = "7.4.0"
 description = "Framework for writing Python package audits"
 optional = false
 python-versions = ">=3.8,<4.0"
 files = [
-    {file = "pyaud-7.3.1-py3-none-any.whl", hash = "sha256:483168b2b3392ef8e61783b850118cd7025f8a1588bb5497a2e6c67b01ce3a6c"},
-    {file = "pyaud-7.3.1.tar.gz", hash = "sha256:6aec533b51505c84618a047f77d93e9118ccc17191491c961bfd5551ed58f416"},
+    {file = "pyaud-7.4.0-py3-none-any.whl", hash = "sha256:1676d5a26e039189cf9a948dfdf5b7d6926ca00552ce84382720374fa99d6de1"},
+    {file = "pyaud-7.4.0.tar.gz", hash = "sha256:1a74d883d06b1c7fb582119e5658bd0ae07e54862616aeaf908aaf56f3d351bb"},
 ]
 
 [package.dependencies]
@@ -1527,7 +1527,7 @@ arcon = ">=0.3.1,<0.4.0"
 gitpython = ">=3.1.30,<4.0.0"
 lsfiles = ">=0.5"
 object-colors = ">=2.0.1,<3.0.0"
-pyaud-plugins = ">=0.19.1"
+pyaud-plugins = ">=0.21.0"
 rich = ">=13.5.2,<14.0.0"
 
 [[package]]
