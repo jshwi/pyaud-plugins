@@ -85,6 +85,7 @@ This package contains the following plugins on running `pyaud modules`
     change-logged   -- Check commits with loggable tags are added to CHANGELOG
     commit-policy   -- Test commit policy is up to date
     const           -- Check code for repeat use of strings
+    copyright-year  -- Test copyright year is up to date
     coverage        -- Run package unit-tests with `pytest` and `coverage`
     docs            -- Compile package documentation with `Sphinx`
     doctest         -- Run `doctest` on all code examples
