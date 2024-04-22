@@ -640,19 +640,19 @@ tomli = ["tomli (>=2.0.0,<3.0.0)"]
 
 [[package]]
 name = "docsig"
-version = "0.48.0"
+version = "0.50.0"
 description = "Check signature params for proper documentation"
 optional = false
 python-versions = "<4.0,>=3.8"
 files = [
-    {file = "docsig-0.48.0-py3-none-any.whl", hash = "sha256:07682b1786cc2f257d7e47bcf92e1420d68cc92ae2436885f1e7a770d80de5a7"},
-    {file = "docsig-0.48.0.tar.gz", hash = "sha256:429263dc542f0ad40aa2413624cbaeee5b738240f4550b3b5d56643a88bdb8c1"},
+    {file = "docsig-0.50.0-py3-none-any.whl", hash = "sha256:6dd8bb758559d65f1b06a9ae47aede10ac6bcadd092a159738628701233e1a94"},
+    {file = "docsig-0.50.0.tar.gz", hash = "sha256:e70155b6fe64b6092ddddf7d54cdf220189cd7fa6a5c6db6a1b19b088c8d99e3"},
 ]
 
 [package.dependencies]
 arcon = ">=0.4.0"
 astroid = ">=3.0.1,<4.0.0"
-object-colors = ">=2.1.0,<3.0.0"
+click = ">=8.1.7,<9.0.0"
 Pygments = ">=2.13.0,<3.0.0"
 Sphinx = ">=7.0.0,<8.0.0"
 
