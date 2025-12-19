@@ -23,7 +23,7 @@ jobs:
           - "3.11"
           - "3.12"
         os:
-          - macos-12
+          - macos-latest
           - ubuntu-latest
           - windows-latest
     steps:
